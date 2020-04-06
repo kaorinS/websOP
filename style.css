@@ -184,7 +184,7 @@ main {
   1.header
 --------------------------------*/
 .header {
-  border-bottom: solid 1px #aaa;
+  border-bottom: 1px solid #aaa;
   width: 100%;
   height: 80px;
 }
@@ -234,7 +234,162 @@ main {
 --------------------------------*/
 .main-container {
   overflow: hidden;
+  position: relative;
 }
 
 /* サイドバー
 --------------------------------*/
+.side {
+  background: #eee;
+  border-radius: 10px;
+  float: left;
+  height: 480px;
+  margin-top: 30px;
+  margin-right: 24px;
+  padding: 13px;
+  width: 200px;
+}
+
+.side-h2 {
+  /* 縦線案 border-leftに色と太さ入れるだけ、お手軽版 */
+  /* border-left: solid 4px #09c; */
+  font-size: 1.8rem;
+  margin-bottom: 3px;
+  padding-left: 8px;
+  position: relative;
+}
+
+/* 左側の縦線 */
+.side-h2::before {
+  background: #09c;
+  border-radius: 3px;
+  content: "";
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+}
+
+.side-title {
+  font-size: 1.7rem;
+}
+.side-group-wrap {
+  margin-bottom: 13px;
+}
+
+.side-group {
+  margin-left: 20px;
+  margin-bottom: 6px;
+}
+
+.side-border {
+  border: 1px solid #999;
+  border-radius: 3px;
+}
+
+/* セレクトボックス */
+.selectbox,
+.side-input-date {
+  position: relative;
+  width: 95%;
+}
+
+/* selectbox右の矢印みたいな記号 */
+.selectbox::before,
+.side-input-date::before {
+  border-right: 2px solid #333;
+  border-bottom: 2px solid #333;
+  content: "";
+  height: 10px;
+  pointer-events: none;
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  transform: rotate(+45deg);
+  width: 10px;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1.3rem;
+  outline: none;
+  padding: 3px 0 3px 10px;
+  text-overflow: "";
+  width: 100%;
+}
+
+/* 期間の「〜」 */
+.span-sidebar {
+  display: block;
+  position: relative;
+  left: 50px;
+  text-align: center;
+  transform: rotate(-90deg);
+  width: 20px;
+}
+
+/* カレンダー */
+.input-date {
+  font-size: 1.5rem;
+  padding: 0.5px 0 0.5px 5px;
+  width: 100%;
+}
+/* 日付リセット */
+.input-date::-webkit-clear-button {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* 上下矢印キー */
+.input-date::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+/* カレンダーを開く */
+.input-date::-webkit-calendar-picker-indicator {
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+  height: 100%;
+  margin: auto;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+/* チェックボックス */
+.sidebar-checkbox-font {
+  font-size: 1.55rem;
+}
+
+/* 検索ボタン */
+.sidebar-submit {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: 25px;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  float: right;
+  font-size: 1.35rem;
+  padding: 3px;
+  position: relative;
+  top: 7px;
+  right: 0;
+  width: 60px;
+}
+
+/* メイン
+--------------------------------*/
+.main {
+  float: left;
+  width: 736px;
+}
