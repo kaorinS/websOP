@@ -147,12 +147,19 @@ require('head.php');
         </aside>
         <!-- メイン -->
         <main class="main">
+          <div class="search-title">
+            <div class="search-left">
+              <h2 class="main-title">イベント一覧</h2>
+            </div>
+            <div class="search-right">
+              全45件中１〜20件
+            </div>
+          </div>
           <div class="panel-list">
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/bread1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/bread1.jpg" class="img">
+                <p class="panel-pref kanto">神奈川県</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   親子パン教室
@@ -160,10 +167,9 @@ require('head.php');
               </div>
             </a>
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/coffee1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/coffee1.jpg" class="img" alt="">
+                <p class="panel-pref tokai">愛知県</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   コーヒー試飲会
@@ -171,10 +177,9 @@ require('head.php');
               </div>
             </a>
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/pflower1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/pflower1.jpg" class="img" alt="">
+                <p class="panel-pref kyusyu">鹿児島県</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   プリザーブドフラワーレッスン
@@ -182,10 +187,9 @@ require('head.php');
               </div>
             </a>
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/yukata1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/yukata1.jpg" class="img" alt="">
+                <p class="panel-pref kinki">滋賀県</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   浴衣着付けレッスン
@@ -193,10 +197,9 @@ require('head.php');
               </div>
             </a>
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/bread1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/bread1.jpg" class="img" alt="">
+                <p class="panel-pref kinki">京都府</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   親子パン教室
@@ -204,10 +207,9 @@ require('head.php');
               </div>
             </a>
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/coffee1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/coffee1.jpg" class="img" alt="">
+                <p class="panel-pref hokkaido">北海道</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   コーヒー試飲会
@@ -215,10 +217,9 @@ require('head.php');
               </div>
             </a>
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/pflower1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/pflower1.jpg" class="img" alt="">
+                  <p class="panel-pref tohoku">山形県</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   プリザーブドフラワーレッスン
@@ -226,10 +227,9 @@ require('head.php');
               </div>
             </a>
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/yukata1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/yukata1.jpg" class="img" alt="">
+                <p class="panel-pref shikoku">香川県</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   浴衣着付けレッスン
@@ -237,10 +237,9 @@ require('head.php');
               </div>
             </a>
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/bread1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/bread1.jpg" class="img" alt="">
+                <p class="panel-pref koshinetsu-hokuriku">新潟県</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   親子パン教室
@@ -248,10 +247,9 @@ require('head.php');
               </div>
             </a>
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/coffee1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/coffee1.jpg" class="img" alt="">
+                <p class="panel-pref kanto">千葉県</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   コーヒー試飲会
@@ -259,10 +257,9 @@ require('head.php');
               </div>
             </a>
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/pflower1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/pflower1.jpg" class="img" alt="">
+                <p class="panel-pref kanto">東京都</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   プリザーブドフラワーレッスン
@@ -270,10 +267,9 @@ require('head.php');
               </div>
             </a>
             <a href="eventDetail.php" class="panel">
-              <div class="panel-head">
-                <img src="images/yukata1.jpg" alt="">
-              </div>
               <div class="panel-body">
+                <img src="images/yukata1.jpg" class="img" alt="">
+                <p class="panel-pref kinki">和歌山県</p>
                 <p class="panel-title">
                   <span class="panel-date">2020年4月1日</span><br>
                   浴衣着付けレッスン
@@ -283,13 +279,13 @@ require('head.php');
           </div>
           <div class="pagination">
             <ul class="pagination-list">
-              <li class="list-item">&lt;&lt;</li>
-              <li class="list-item">3</li>
-              <li class="list-item">4</li>
-              <li class="list-item">5</li>
-              <li class="list-item">6</li>
-              <li class="list-item">7</li>
-              <li class="list-item">&gt;&gt;</li>
+              <li class="list-item"><a href="#" class="a-pagination">&lt;&lt;</a></li>
+              <li class="list-item"><a href="#" class="a-pagination">3</a></li>
+              <li class="list-item"><a href="#" class="a-pagination">4</a></li>
+              <li class="list-item"><a href="#" class="a-pagination active">5</a></li>
+              <li class="list-item"><a href="#" class="a-pagination">6</a></li>
+              <li class="list-item"><a href="#" class="a-pagination">7</a></li>
+              <li class="list-item"><a href="#" class="a-pagination">&gt;&gt;</a></li>
             </ul>
           </div>
         </main>
