@@ -164,16 +164,16 @@ main {
 }
 
 /*--------------------------------
-  1.共通
+  共通
 --------------------------------*/
 
-/* 1-1.フォント
+/* フォント
 --------------------------------*/
 
 /*----- 使用中のgoogle fonts -----*/
 /* font-family: "Kosugi Maru", sans-serif; */
 
-/* 1-2.レイアウト
+/* レイアウト
 --------------------------------*/
 .site-width {
   margin: 0 auto;
@@ -181,7 +181,7 @@ main {
 }
 
 /*--------------------------------
-  1.header
+  header
 --------------------------------*/
 .header {
   border-bottom: 1px solid #aaa;
@@ -230,11 +230,12 @@ main {
 }
 
 /*--------------------------------
-  2.2colum
+  colum
 --------------------------------*/
 .main-container {
   overflow: hidden;
   position: relative;
+  padding-top: 30px;
 }
 
 /* サイドバー
@@ -244,7 +245,6 @@ main {
   border-radius: 10px;
   float: left;
   height: 480px;
-  margin-top: 30px;
   margin-right: 24px;
   padding: 13px;
   width: 200px;
@@ -390,7 +390,11 @@ main {
 
 /* メイン
 --------------------------------*/
-.main {
+.page-1colum .main {
+  width: 100%;
+}
+
+.page-2colum .main {
   float: left;
   width: 736px;
 }
@@ -400,10 +404,81 @@ main {
   letter-spacing: 0.05em;
 }
 
+.main-form-container {
+  margin: 80px auto;
+  margin-bottom: 0;
+  width: 500px;
+}
+
+/* ページネーション
+--------------------------------*/
+.pagination {
+  height: 50px;
+  margin-top: 40px;
+  position: relative;
+  width: 100%;
+}
+
+.pagination-list {
+  font-size: 1.8rem;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.list-item {
+  float: left;
+}
+
+.list-item:not(:last-child) {
+  margin-right: 15px;
+}
+
+.a-pagination {
+  background: #ccc;
+  display: block;
+  padding: 5px 10px;
+}
+
+.a-pagination.active {
+  color: #fff;
+  background: #444;
+}
+
+/*--------------------------------
+  footer
+--------------------------------*/
+.footer {
+  background: #333;
+  color: #eee;
+  font-size: 1.4rem;
+  padding: 10px 0;
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+  width: 100%;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.wrapper {
+  min-height: 100%;
+  padding-bottom: 100px;
+  position: relative;
+}
+
+/*--------------------------------
+  index
+--------------------------------*/
 .search-title {
   border-left: 5px solid #999;
   border-bottom: 1px dotted #999;
-  margin: 30px 5px 10px 5px;
+  margin: 0 5px 10px 5px;
   overflow: hidden;
   padding: 5px 8px 3px 10px;
 }
@@ -500,65 +575,40 @@ main {
   width: 100%;
 }
 
-/* ページネーション
+/*--------------------------------
+  login
 --------------------------------*/
-
-.pagination {
-  height: 50px;
-  margin-top: 40px;
-  position: relative;
-  width: 100%;
-}
-
-.pagination-list {
-  font-size: 1.8rem;
+.login-select {
   overflow: hidden;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
-.list-item {
+.login-ul {
+  overflow: hidden;
+}
+
+.login-li {
   float: left;
+  font-size: 1.7rem;
+  height: 40px;
+  letter-spacing: 10px;
+  line-height: 40px;
+  text-align: center;
+  width: 250px;
 }
 
-.list-item:not(:last-child) {
-  margin-right: 15px;
+.login-li.li-1 {
+  background-color: #ccc;
 }
 
-.a-pagination {
-  background: #ccc;
-  display: block;
-  padding: 5px 10px;
-}
-
-.a-pagination.active {
-  color: #fff;
+.login-li.li-2 {
   background: #444;
+  color: #fff;
 }
 
 /*--------------------------------
-  footer
+  js用
 --------------------------------*/
-.footer {
-  background: #333;
-  color: #eee;
-  font-size: 1.4rem;
-  padding: 10px 0;
-  position: absolute;
-  bottom: 0;
-  text-align: center;
-  width: 100%;
-}
-
-html,
-body {
-  height: 100%;
-}
-
-.wrapper {
-  min-height: 100%;
-  padding-bottom: 100px;
-  position: relative;
+.js-fixed {
+  position: fixed;
+  top: 0;
 }

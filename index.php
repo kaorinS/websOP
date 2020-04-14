@@ -11,7 +11,7 @@ require('head.php');
       <!-- メインコンテンツ  -->
       <div class="main-container site-width">
         <!-- サイドバー -->
-        <aside class="side">
+        <aside id="index-sidebar" class="side">
           <form method="get">
             <h2 class="title side-h2">地域</h2>
             <div class="side-group-wrap">
@@ -19,7 +19,7 @@ require('head.php');
               <h3 class="title side-title">エリア</h3>
               <div class="selectbox">
                 <select class="select side-border" name="area">
-                  <option value="" >選択してください</option>
+                  <option value="0" >選択してください</option>
                   <option value="北海道">北海道</option>
                   <option value="東北">東北</option>
                   <option value="甲信越・北陸">甲信越・北陸</option>
@@ -36,7 +36,7 @@ require('head.php');
             <h3 class="title side-title">都道府県</h3>
               <div class="selectbox">
                 <select class="select side-border" name="pref">
-                  <option value="">選択してください</option>
+                  <option value="0">選択してください</option>
 <optgroup label="北海道・東北">
 	<option value="北海道">北海道</option>
 	<option value="青森県">青森県</option>
@@ -110,7 +110,7 @@ require('head.php');
                 <h3 class="title side-title">開催月</h3>
                 <div class="selectbox">
                   <select class="select side-border" name="month">
-                    <option value="">選択してください</option>
+                    <option value="0">選択してください</option>
                     <option value="1">1月</option>
                     <option value="2">2月</option>
                     <option value="3">3月</option>
@@ -129,24 +129,24 @@ require('head.php');
               <div class="side-group">
                 <h3 class="title side-title">期間</h3>
                 <div class="side-input-date">
-                  <input type="date" class="input-date side-border">
+                  <input type="date" class="input-date side-border" name="start">
                 </div>
                 <span class="span-sidebar">〜</span>
                 <div class="side-input-date">
-                  <input type="date" class="input-date side-border">
+                  <input type="date" class="input-date side-border" name="end">
                 </div>
               </div>
               </div>
               <h2 class="title side-h2">会場形式</h2>
               <div class="side-group">
-                <input type="checkbox" class="checkbox" name="checkbox" value="1"><span class="sidebar-checkbox-font">屋内</span>
+                <input type="checkbox" class="checkbox" name="format" value="1"><span class="sidebar-checkbox-font">屋内</span>
                 <input type="checkbox"class="checkbox" name="checkbox" value="2"><span class="sidebar-checkbox-font">屋外</span>
                 </div>
               <input type="submit" class="submit sidebar-submit side-border" value="検索">
           </form>
         </aside>
         <!-- メイン -->
-        <main class="main">
+        <main id="index-main" class="main">
           <div class="search-title">
             <div class="search-left">
               <h2 class="main-title">イベント一覧</h2>
