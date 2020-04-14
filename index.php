@@ -19,7 +19,7 @@ require('head.php');
               <h3 class="title side-title">エリア</h3>
               <div class="selectbox">
                 <select class="select side-border" name="area">
-                  <option>選択してください</option>
+                  <option value="" >選択してください</option>
                   <option value="北海道">北海道</option>
                   <option value="東北">東北</option>
                   <option value="甲信越・北陸">甲信越・北陸</option>
@@ -110,7 +110,7 @@ require('head.php');
                 <h3 class="title side-title">開催月</h3>
                 <div class="selectbox">
                   <select class="select side-border" name="month">
-                    <option value="0">選択してください</option>
+                    <option value="">選択してください</option>
                     <option value="1">1月</option>
                     <option value="2">2月</option>
                     <option value="3">3月</option>
@@ -152,7 +152,7 @@ require('head.php');
               <h2 class="main-title">イベント一覧</h2>
             </div>
             <div class="search-right">
-              全45件中１〜20件
+              全45件中１〜30件
             </div>
           </div>
           <div class="panel-list">
