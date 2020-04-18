@@ -371,6 +371,10 @@ a {
   line-height: 40px;
 }
 
+.a-side-group-mypage.-active {
+  background: #988;
+}
+
 .a-side-group-mypage:hover {
   background: #988;
 }
@@ -379,6 +383,10 @@ a {
 .selectbox,
 .side-input-date {
   position: relative;
+}
+
+.selectbox.-index,
+.side-input-date {
   width: 95%;
 }
 
@@ -788,9 +796,9 @@ body {
   width: 100%;
 }
 
-.login-submit {
+.login-submit,
+.submit-mypage-edit {
   border-radius: 10px;
-  float: right;
   font-size: 1.8rem;
   height: 100%;
   position: absolute;
@@ -852,9 +860,14 @@ body {
   width: 100%;
 }
 
-.mypage-title.-created {
+.mypage-title.-area {
   background: #cff;
   color: #39f;
+}
+
+.mypage-title.-created {
+  background: #fec;
+  color: #f93;
 }
 
 .mypage-title.-favo {
@@ -881,8 +894,118 @@ body {
   width: 120px;
 }
 
+.mypage-title-jump.-area {
+  background: #36c;
+}
+
 .mypage-title-jump.-favo {
   background: #c36;
+}
+
+.mypage-number-display {
+  font-size: 1.4rem;
+  padding-right: 10px;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.selectbox.-mypage {
+  margin-top: 10px;
+  width: 150px;
+}
+
+/* mypage-edit
+--------------------------------*/
+.mypage-edit-title {
+  border-left: solid 8px #333;
+  font-size: 2rem;
+  margin-bottom: 24px;
+  padding: 5px 0 5px 10px;
+}
+
+.mypage-edit-body {
+  border: solid 2px #333;
+  border-radius: 28px;
+}
+
+.form-mypage-edit {
+  margin: 0 auto;
+  padding: 50px 20px;
+  width: 450px;
+}
+
+.label-mypage-edit {
+  font-size: 1.8rem;
+}
+
+.label-mypage-edit:not(:first-child) {
+  padding-top: 30px;
+}
+
+.input-text.-mypage-edit {
+  border: solid 1px #aaa;
+  border-radius: 10px;
+  height: 50px;
+  margin-top: 4px;
+  padding: 5px 10px;
+  width: 100%;
+}
+
+.selectbox.-mypage-edit {
+  height: 50px;
+  margin-top: 4px;
+  width: 200px;
+}
+
+.selectbox.-mypage-edit::before {
+  height: 10px;
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%) rotate(+45deg);
+  width: 10px;
+}
+
+.select-mypage-edit {
+  font-size: 1.6rem;
+  height: 100%;
+  width: 100%;
+}
+
+.submit-container-mypage-edit {
+  height: 50px;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  position: relative;
+  width: 100%;
+}
+
+.submit-container-mypage-edit.-withdraw {
+  margin: 0;
+}
+
+.submit-mypage-edit {
+  background: #333;
+  border: solid 1px #333;
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 1.9rem;
+  height: 50px;
+  right: -100px;
+  width: 130px;
+}
+
+.submit-mypage-edit.-withdraw {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.title-withdraw {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 35px;
 }
 
 /*--------------------------------

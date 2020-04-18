@@ -36,7 +36,7 @@ require('head.php');
                             <li class="li li-mypage-side">
                                 <a href="mypageCreated.php" class="a-side-group-mypage">作成したイベント</a></li>
                             <li class="li li-mypage-side">
-                                <a href="mypageFavo.php" class="a-side-group-mypage">お気に入り</a></li>
+                                <a href="mypageFavo.php" class="a-side-group-mypage -active">お気に入り</a></li>
                             <li class="li li-mypage-side">
                                 <a href="mypageComment.php" class="a-side-group-mypage">コメントしたイベント</a></li>
                         </ul>
@@ -53,85 +53,23 @@ require('head.php');
             </aside>
             <!-- メイン -->
             <main class="main">
-                <section class="sec-mypage -area">
-                    <div class="mypage-title-wrap">
-                        <h2 class="mypage-title -area">
-                            関東エリアの新着イベント
-                        </h2>
-                        <div class="mypage-title-jump -area">
-                            <a href="index.php" class="a-mypage-main -more">>> 一覧を見る</a>
-                        </div>
-                    </div>
-                    <div class="panel-list">
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/coffee1.jpg" class="img -index" alt="">
-                                <p class="panel-pref kanto">千葉県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    コーヒー試飲会
-                                </p>
-                            </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/bread1.jpg" class="img -index">
-                                <p class="panel-pref kanto">神奈川県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    親子パン教室
-                                </p>
-                            </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/pflower1.jpg" class="img -index" alt="">
-                                <p class="panel-pref kanto">東京都</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    プリザーブドフラワーレッスン
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                </section>
-                <section class="sec-mypage -created">
-                    <div class="mypage-title-wrap">
-                        <h2 class="mypage-title -created">
-                            作成したイベント
-                        </h2>
-                    </div>
-                    <div class="panel-list">
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/bread1.jpg" class="img -index">
-                                <p class="panel-pref kanto">神奈川県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    親子パン教室
-                                </p>
-                            </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/coffee1.jpg" class="img -index" alt="">
-                                <p class="panel-pref tokai">愛知県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    コーヒー試飲会
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                </section>
                 <section class="sec-mypage -favo">
                     <div class="mypage-title-wrap">
                         <h2 class="mypage-title -favo">
                             お気に入り
                         </h2>
-                        <div class="mypage-title-jump -favo">
-                            <a href="mypageFavo.php" class="a-mypage-main -more">>> 一覧を見る</a>
+                        <div class="mypage-number-display">
+                            全4件中 4件
                         </div>
+                    </div>
+                    <div class="selectbox -mypage">
+                        <select name="sort" id="" class="select -mypage">
+                            <option value="0">並び替え</option>
+                            <option value="1">登録順（昇順）</option>
+                            <option value="2">登録順（降順）</option>
+                            <option value="3">開催日（昇順）</option>
+                            <option value="4">開催日（降順）</option>
+                        </select>
                     </div>
                     <div class="panel-list">
                         <a href="eventDetail.php" class="panel">
@@ -164,15 +102,6 @@ require('head.php');
                                 </p>
                             </div>
                         </a>
-                    </div>
-                </section>
-                <section class="sec-mypage -comment">
-                    <div class="mypage-title-wrap">
-                        <h2 class="mypage-title -comment">
-                            コメントしたイベント
-                        </h2>
-                    </div>
-                    <div class="panel-list">
                         <a href="eventDetail.php" class="panel">
                             <div class="panel-body">
                                 <img src="images/coffee1.jpg" class="img -index" alt="">
