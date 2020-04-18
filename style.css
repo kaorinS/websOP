@@ -163,6 +163,11 @@ main {
   display: block;
 }
 
+/* aのカーソルを変更 */
+a {
+  cursor: pointer;
+}
+
 /*--------------------------------
   共通
 --------------------------------*/
@@ -178,6 +183,17 @@ main {
 .site-width {
   margin: 0 auto;
   width: 980px;
+}
+
+.label {
+  display: block;
+}
+
+.submit {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
 }
 
 /*--------------------------------
@@ -222,11 +238,13 @@ main {
   transform: translateY(-50%);
 }
 
-.header-ul-a {
-  background: #ccc;
-  border-radius: 0.5em;
+.header-li {
+  border: 2px solid #aaa;
+  border-radius: 10px;
   display: block;
   padding: 0.3em 0.5em;
+  text-align: center;
+  width: 190px;
 }
 
 /*--------------------------------
@@ -238,16 +256,60 @@ main {
   padding-top: 30px;
 }
 
-/* サイドバー
+/*--------------------------------
+  サイドバー
 --------------------------------*/
 .side {
-  background: #eee;
   border-radius: 10px;
   float: left;
-  height: 480px;
   margin-right: 24px;
-  padding: 13px;
   width: 200px;
+}
+
+.side.-index {
+  background: #eee;
+  height: 480px;
+  padding: 13px;
+}
+
+.side.-mypage {
+  background: #433;
+  color: #fff;
+}
+
+.side-group-mypage {
+  padding: 30px 10px;
+  position: relative;
+}
+
+/* .side-group-mypage:first-child {
+  padding-top: 20px;
+} */
+
+.side-group-line {
+  border-bottom: solid 1.5px #dcc;
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  width: 160px;
+}
+
+.group-user-profile {
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.group-user-profile-media {
+  float: left;
+  height: 50px;
+  margin-right: 10px;
+  width: 50px;
+}
+
+.group-user-profile-body {
+  float: left;
+  height: 50px;
+  padding-top: 5px;
 }
 
 .side-h2 {
@@ -274,6 +336,15 @@ main {
 .side-title {
   font-size: 1.7rem;
 }
+
+.p-group-user-profile {
+  font-size: 1.5rem;
+}
+
+.p-group-user-profile.-username {
+  margin-bottom: 2px;
+}
+
 .side-group-wrap {
   margin-bottom: 13px;
 }
@@ -286,6 +357,22 @@ main {
 .side-border {
   border: 1px solid #999;
   border-radius: 3px;
+}
+
+/* ul */
+.ul-mypage-side {
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.a-side-group-mypage {
+  display: block;
+  height: 40px;
+  line-height: 40px;
+}
+
+.a-side-group-mypage:hover {
+  background: #988;
 }
 
 /* セレクトボックス */
@@ -371,21 +458,48 @@ main {
   font-size: 1.55rem;
 }
 
+/* ボタン */
+.button {
+  width: 100%;
+}
+
+.button.-group-user {
+  background: #fc3;
+  border-radius: 15px;
+  border-style: none;
+  cursor: pointer;
+}
+
+.button.-group-user:hover {
+  background: #fda;
+}
+
 /* 検索ボタン */
 .sidebar-submit {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   border-radius: 25px;
   box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6);
-  cursor: pointer;
   float: right;
   font-size: 1.35rem;
   padding: 3px;
   position: relative;
   top: 7px;
-  right: 0;
   width: 60px;
+}
+
+/* 画像 */
+.img.-mypage-profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.a-group-user {
+  display: block;
+}
+
+.a-group-user:hover {
+  opacity: 0.6;
 }
 
 /* メイン
@@ -405,8 +519,9 @@ main {
 }
 
 .main-form-container {
-  margin: 80px auto;
+  margin: 0 auto;
   margin-bottom: 0;
+  padding-top: 50px;
   width: 500px;
 }
 
@@ -569,7 +684,7 @@ body {
   font-size: 1.3rem;
 }
 
-.img {
+.img.-index {
   object-fit: cover;
   height: 150px;
   width: 100%;
@@ -578,17 +693,19 @@ body {
 /*--------------------------------
   login
 --------------------------------*/
-.login-select {
+
+.login-main {
   overflow: hidden;
 }
 
-.login-ul {
+.ul-login {
   overflow: hidden;
 }
 
 .login-li {
+  cursor: pointer;
   float: left;
-  font-size: 1.7rem;
+  font-size: 1.9rem;
   height: 40px;
   letter-spacing: 10px;
   line-height: 40px;
@@ -596,13 +713,176 @@ body {
   width: 250px;
 }
 
-.login-li.li-1 {
+.login-li.li-entry {
   background-color: #ccc;
+  color: #000;
 }
 
-.login-li.li-2 {
+.login-li.li-login {
   background: #444;
   color: #fff;
+}
+
+.login-panel-group {
+  width: 100%;
+}
+
+.login-panel {
+  padding: 20px 50px;
+  display: none;
+}
+.login-panel.is-show {
+  display: block;
+}
+
+.login-panel.panel-entry {
+  background: #ccc;
+  border: solid 2px #ccc;
+}
+
+.login-panel.panel-login {
+  background: #444;
+  border: solid 2px #444;
+  color: #fff;
+}
+
+.login-label {
+  font-size: 1.8rem;
+  padding: 20px 0;
+}
+
+.login-label .input-text {
+  border-radius: 10px;
+  height: 50px;
+  margin-top: 4px;
+  padding: 5px 10px;
+  width: 100%;
+}
+
+.input-text.-entry {
+  border: solid 1.5px #ccc;
+}
+
+.input-text.-login {
+  border: solid 1.5px #444;
+}
+
+.input-text.-entry:focus,
+.input-text.-login:focus {
+  outline: 0;
+  border: solid 5px #9cf;
+}
+
+.login-span-pass {
+  font-size: 1.4rem;
+}
+
+.login-save {
+  margin-top: 10px;
+}
+
+.login-submit-container {
+  height: 45px;
+  margin: 20px 0;
+  position: relative;
+  width: 100%;
+}
+
+.login-submit {
+  border-radius: 10px;
+  float: right;
+  font-size: 1.8rem;
+  height: 100%;
+  position: absolute;
+  right: 0;
+}
+
+.login-submit.-entry {
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.3);
+  width: 80px;
+}
+
+.login-submit.-login {
+  border: 1px solid #fff;
+  box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.3);
+  letter-spacing: 2px;
+  width: 130px;
+}
+
+.login-span-passforget {
+  font-size: 1.4rem;
+}
+
+.login-span-passforget .login-a-passforget {
+  text-decoration: underline;
+}
+
+.return-top {
+  border: solid 1.5px #666;
+  border-radius: 20px;
+  float: right;
+  font-size: 1.4rem;
+  padding: 3px 0;
+  position: relative;
+  right: 20px;
+  text-align: center;
+  top: -30px;
+  width: 140px;
+}
+
+/*--------------------------------
+  mypage
+--------------------------------*/
+.sec-mypage {
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.mypage-title-wrap {
+  position: relative;
+}
+
+.mypage-title {
+  font-size: 1.8rem;
+  height: 40px;
+  letter-spacing: 0.03em;
+  line-height: 40px;
+  padding-left: 15px;
+  width: 100%;
+}
+
+.mypage-title.-created {
+  background: #cff;
+  color: #39f;
+}
+
+.mypage-title.-favo {
+  background: #fcf;
+  color: #c6c;
+}
+
+.mypage-title.-comment {
+  background: #cfc;
+  color: #393;
+}
+
+.mypage-title-jump {
+  border-radius: 15px;
+  color: #eee;
+  font-size: 1.3rem;
+  height: 60%;
+  line-height: 24px;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  text-align: center;
+  transform: translateY(-50%);
+  width: 120px;
+}
+
+.mypage-title-jump.-favo {
+  background: #c36;
 }
 
 /*--------------------------------
