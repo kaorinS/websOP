@@ -698,6 +698,10 @@ body {
   width: 100%;
 }
 
+.a.a-under {
+  text-decoration: underline;
+}
+
 /*--------------------------------
   login
 --------------------------------*/
@@ -796,6 +800,10 @@ body {
   width: 100%;
 }
 
+.login-submit-container.-pass_reissue {
+  margin-top: 80px;
+}
+
 .login-submit,
 .submit-mypage-edit {
   border-radius: 10px;
@@ -818,11 +826,12 @@ body {
   width: 130px;
 }
 
-.login-span-passforget {
+.login-passforget {
   font-size: 1.4rem;
+  padding-bottom: 20px;
 }
 
-.login-span-passforget .login-a-passforget {
+.login-passforget .login-a-passforget {
   text-decoration: underline;
 }
 
@@ -837,6 +846,22 @@ body {
   text-align: center;
   top: -30px;
   width: 140px;
+}
+
+/* パスワード再発行 */
+.title-pass_reissue {
+  font-size: 2rem;
+  margin-bottom: 35px;
+  text-align: center;
+}
+
+.p-login-form {
+  font-size: 1.4rem;
+  padding-bottom: 20px;
+}
+
+.p-login-form + .login-submit-container.-pass_reissue {
+  margin-top: 60px;
 }
 
 /*--------------------------------

@@ -17,8 +17,8 @@ require('head.php');
             <li class="login-li li-login">ログイン</li>
           </ul>
           <!-- パネル -->
-          <!-- 新規登録 -->
           <div class="login-panel-group">
+            <!-- 新規作成 -->
             <div class="login-panel panel-entry">
               <form method="post" class="login-form">
                 <label class="label login-label">
@@ -53,11 +53,11 @@ require('head.php');
                   パスワード<span class="login-span-pass">※6文字以上</span><br>
                   <input type="password" class="input-text -login" name="pass">
                 </label>
+                <p class="login-passforget">パスワードを忘れた方は<a href="passReissue.php" class="login-a-passforget">こちら</a>から再発行の手続きへ</p>
                 <label class="label login-save">
                   <input type="checkbox" name="login_save">次回ログインを省略する
                 </label>
                 <div class="login-submit-container"><input type="submit" class="submit login-submit -login" value="ログイン"></div>
-                <span class="login-span-passforget">パスワードを忘れた方は<a href="#" class="login-a-passforget">再発行の手続き</a>へ</span>
               </form>
             </div>
           </div>
