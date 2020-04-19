@@ -371,7 +371,7 @@ a {
   line-height: 40px;
 }
 
-.a-side-group-mypage.-active {
+.a-side-group-mypage.is-active {
   background: #988;
 }
 
@@ -471,14 +471,17 @@ a {
   width: 100%;
 }
 
-.button.-group-user {
+.group-user-regist_event {
   background: #fc3;
   border-radius: 15px;
   border-style: none;
+  color: #433;
   cursor: pointer;
+  text-align: center;
+  padding: 3px 0;
 }
 
-.button.-group-user:hover {
+.group-user-regist_event:hover {
   background: #fda;
 }
 
