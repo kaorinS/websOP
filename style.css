@@ -392,7 +392,8 @@ a {
 
 /* selectbox右の矢印みたいな記号 */
 .selectbox::before,
-.side-input-date::before {
+.side-input-date::before,
+.wrap-input-date-mypage::before {
   border-right: 2px solid #333;
   border-bottom: 2px solid #333;
   content: "";
@@ -964,12 +965,67 @@ body {
   width: 450px;
 }
 
-.label-mypage-edit {
+/* イベント作成用フォーム */
+.form-regist_event {
+  padding: 30px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.label-mypage-edit,
+.block-regist {
   font-size: 1.8rem;
 }
 
 .label-mypage-edit:not(:first-child) {
   padding-top: 30px;
+}
+
+.block-regist:not(:first-child) {
+  padding-top: 15px;
+}
+
+.block-regist {
+  padding-left: 15px;
+  position: relative;
+}
+
+.block-regist::before {
+  background: #f93;
+  border-radius: 3px;
+  content: "";
+  height: 30px;
+  position: absolute;
+  top: 12.5px;
+  left: 0;
+  width: 4px;
+}
+
+.block-regist.-first::before {
+  top: 0;
+  left: 0;
+}
+
+/* イベント作成 input type=date */
+.wrap-input-date-mypage {
+  position: relative;
+  width: 150px;
+}
+
+/* イベント作成 日付入力フォーム */
+.date-mypage-edit {
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+/* イベント作成　チェックボックス内フォントサイズ */
+.regist-checkbox-font {
+  font-size: 1.6rem;
+}
+
+.date-mypage-edit.-regist {
+  padding: 5px;
 }
 
 .input-text.-mypage-edit {
@@ -981,13 +1037,34 @@ body {
   width: 100%;
 }
 
+.input-text.-mypage-edit.-regist {
+  height: 40px;
+}
+
+.input-text.-mypage-edit.-regist_target {
+  height: 30px;
+  width: 140px;
+}
+
+/* input text の中身 */
+.input-text.-mypage-edit.-regist_target::-webkit-input-placeholder {
+  font-size: 1.3rem;
+}
+
 .selectbox.-mypage-edit {
   height: 50px;
   margin-top: 4px;
   width: 200px;
 }
 
-.selectbox.-mypage-edit::before {
+/* イベント登録用 */
+.selectbox.-mypage-edit.-regist {
+  height: 36px;
+}
+
+.selectbox.-mypage-edit::before,
+.wrap-input-date-mypage::before,
+.wrap-input-date-mypage::before {
   height: 10px;
   position: absolute;
   top: 50%;
@@ -1000,6 +1077,23 @@ body {
   font-size: 1.6rem;
   height: 100%;
   width: 100%;
+}
+
+/* イベント登録用textarea */
+.textarea-regist {
+  border: 1px solid #999;
+  border-radius: 20px;
+  font-size: 1.7rem;
+  line-height: 1.5;
+  padding: 0.5em;
+  resize: none;
+  width: 100%;
+}
+
+/* イベント登録用textarea下のカウンター */
+.regist-counter-text {
+  text-align: right;
+  padding-right: 5px;
 }
 
 .submit-container-mypage-edit {
@@ -1030,10 +1124,30 @@ body {
   transform: translateX(-50%);
 }
 
+.submit-mypage-edit.-regist {
+  right: 0;
+}
+
 .title-withdraw {
   font-size: 1.8rem;
   text-align: center;
   margin-bottom: 35px;
+}
+
+/* イベント作成 画像コンテナ */
+.img_drop-container {
+  overflow: hidden;
+}
+
+.area-img_drop.-regist {
+  float: left;
+  width: 30%;
+  margin-right: 25px;
+  height: 150px;
+}
+
+.area-img_drop.-regist:last-child {
+  margin-right: 0;
 }
 
 /*--------------------------------

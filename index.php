@@ -141,7 +141,7 @@ require('head.php');
           <h2 class="title side-h2">会場形式</h2>
           <div class="side-group">
             <input type="checkbox" class="checkbox" name="format" value="1"><span class="sidebar-checkbox-font">屋内</span>
-            <input type="checkbox" class="checkbox" name="checkbox" value="2"><span class="sidebar-checkbox-font">屋外</span>
+            <input type="checkbox" class="checkbox" name="format" value="2"><span class="sidebar-checkbox-font">屋外</span>
           </div>
           <input type="submit" class="submit sidebar-submit side-border" value="検索">
         </form>
