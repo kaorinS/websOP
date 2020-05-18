@@ -62,7 +62,7 @@ require('head.php');
             </div>
           </div>
         </div>
-        <div class="return-top">
+        <div class="back-index-login">
           <a href="index.php">TOPページに戻る</a>
         </div>
       </main>

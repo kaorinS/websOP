@@ -175,10 +175,9 @@ require('head.php');
                                     </div>
                                 </div>
                             </div>
-                            <label class="label block-regist">
+                            <div class=" block-regist">
                                 主催・問い合わせ・申込先<br>
-                                <textarea name="sponcer" cols="50" rows="10" class="textarea-regist"></textarea>
-                            </label>
+                            </div>
                             <div class="submit-container-mypage-edit">
                                 <input type="submit" class="submit submit-mypage-edit -regist" value="登録する">
                             </div>

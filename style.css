@@ -839,7 +839,7 @@ body {
   text-decoration: underline;
 }
 
-.return-top {
+.back-index-login {
   border: solid 1.5px #666;
   border-radius: 20px;
   float: right;
@@ -1151,9 +1151,201 @@ body {
 }
 
 /*--------------------------------
+  eventDetail
+--------------------------------*/
+.display-category {
+  font-size: 1.4rem;
+  line-height: 2;
+}
+
+.span-pref {
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.eventDetail-main {
+  margin-top: 20px;
+}
+
+.detail-header-heading {
+  border-bottom: solid 1px #ccc;
+}
+
+.detail-header-title {
+  font-size: 2.5rem;
+}
+
+.detail-header-box {
+  background: #eee;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+  padding: 10px;
+}
+
+.detail-header-box-period {
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+
+.detail-header-box-icon {
+  float: left;
+  margin-right: 20px;
+  width: 70px;
+}
+
+.span-detail-header-open {
+  background: #39f;
+  border-radius: 5px;
+  color: #fff;
+  display: inline-block;
+  font-size: 1.3rem;
+  min-width: 70px;
+  padding: 1px;
+  text-align: center;
+}
+
+.span-detail-header-text {
+  font-size: 1.4rem;
+}
+
+.detail-main {
+  margin-top: 30px;
+}
+
+.detail-main-header-mainimg {
+  margin: 0 auto;
+  max-height: 500px;
+  width: 80%;
+}
+
+.img-detail-main {
+  max-height: 500px;
+  object-fit: contain;
+  width: 100%;
+}
+
+.detail-main-header-subimg {
+  margin-top: 30px;
+}
+
+.ul-detail-main-subimg {
+  text-align: center;
+}
+
+.li-detail-main-subimg {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.img-detail-sub {
+  height: 150px;
+  object-fit: cover;
+  width: 150px;
+}
+
+.detail-main-body {
+  margin-top: 20px;
+}
+
+.detail-main-title {
+  color: #393;
+  font-size: 1.8rem;
+}
+
+.detail-main-info-body {
+  margin-top: 10px;
+}
+
+.detail-main-article {
+  line-height: 1.8;
+}
+
+.detail-main-footer {
+  margin-top: 40px;
+}
+
+.detail-date-info {
+  font-size: 1.8rem;
+  padding: 5px 10px;
+  border-top: solid 3px #aaa;
+  border-right: solid 1px #bbb;
+  border-left: solid 1px #bbb;
+}
+
+.detail-main-table {
+  border: solid 1px #bbb;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.detail-date-row:nth-child(odd) {
+  background: #eee;
+}
+
+.detail-date-th,
+.detail-date-td {
+  padding: 10px 0;
+}
+
+.detail-date-th {
+  width: 25%;
+}
+
+.detail-date-td {
+  padding-left: 30px;
+}
+
+.back-index-eventDetail {
+  margin-top: 30px;
+}
+
+.return-top-wrap {
+  position: fixed;
+  right: 50px;
+  bottom: 80px;
+}
+
+.return-top {
+  background: #ccc;
+  border-radius: 50%;
+  height: 50px;
+  position: relative;
+  width: 50px;
+}
+
+.return-top:hover {
+  cursor: pointer;
+}
+
+.return-top::before {
+  border-top: 6px solid #fff;
+  border-left: 6px solid #fff;
+  content: "";
+  height: 20px;
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translateX(-50%) rotate(+45deg);
+  width: 20px;
+}
+
+/*--------------------------------
   js用
 --------------------------------*/
 .js-fixed {
   position: fixed;
   top: 0;
+}
+
+.js-fadein {
+  opacity: 0;
+  transition: opacity 1s;
+  visibility: hidden;
+}
+
+.js-fadein.is-fadein {
+  opacity: 0.5;
+  visibility: visible;
 }
