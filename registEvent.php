@@ -157,10 +157,10 @@ require('head.php');
                                 </label>
                             </div>
                             <label class="label block-regist">
-                                詳細<br>
-                                <textarea name="detail" id="js-count-regist" cols="50" rows="10" class="textarea-regist"></textarea>
+                                詳細<span id="textAttention-detail" style="display:none; color:red;">入力文字数が多すぎます</span><br>
+                                <textarea name="detail" id="js-count-regist" cols="50" rows="10" class="textarea-regist" onkeyup="countLength(value,'js-counter-view-registEvent', 500, 'textAttention-detail');"></textarea>
                             </label>
-                            <p class="regist-counter-text"><span id="js-counter-view-regist">0</span>/500文字</p>
+                            <p class="regist-counter-text"><span id="js-counter-view-registEvent">0</span>/500文字</p>
                             <div class="block-regist">
                                 画像
                                 <div class="img_drop-container">
@@ -186,6 +186,7 @@ require('head.php');
                 </section>
             </main>
         </div>
+        <script type="text/javascript" src="js/registEvent.js"></script>
         <?php
         require('footer.php');
         ?>
