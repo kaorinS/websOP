@@ -4,9 +4,86 @@ require('function.php');
 
 // デバッグ
 debug('****************************************');
-debug('********** ログインページ **********');
+debug('********** ログイン & ユーザー登録ページ **********');
 debug('****************************************');
 debugLogStart();
+
+// ================================
+// ユーザー登録
+// ================================
+// POST送信されていた場合
+if (!empty($_POST)) {
+  debug('POSTの中身→→→' . print_r($_POST, true));
+  // 変数にユーザー情報を代入
+  $email_regist = $_POST['email_regist'];
+  $pass_regist = $_POST['pass_regist'];
+  $pass_re = $_POST['pass_re'];
+
+  // 未入力チェック
+  validRequired($email_regist, 'email_regist');
+  validRequired($pass_regist, 'pass_regist');
+  validRequired($pass_re, 'pass_re');
+
+  if (empty($err_msg)) {
+
+    // Email形式チェック
+    validEmail($email_regist, 'email_regist');
+    // Emailの最大文字数チェック
+    validMaxLen($email_regist, 'email_regist');
+    // Email重複チェック
+    validEmailDup($email_regist);
+
+    // パスワードの半角英数字チェック
+    validHalfAlphanumeric($pass_regist, 'pass_regist');
+    // パスワードの最大文字数チェック
+    validMaxLen($pass_regist, 'pass_regist');
+    // パスワードの最小文字数チェック
+    validMinLen($pass_regist, 'pass_regist');
+
+    // パスワード再入力の最大文字数チェック
+    validMaxLen($pass_re, 'pass_re');
+    // パスワード再入力の最小文字数チェック
+    validMinLen($pass_re, 'pass_re');
+
+    if (empty($err_msg)) {
+      // パスワードとパスワード再入力が同じか
+      validPassRe($pass_regist, $pass_re, 'pass_re');
+
+      if (empty($err_msg)) {
+        // 例外処理
+        try {
+          // DBへ接続
+          $dbh = dbConnect();
+          // SQL文作成
+          $sql = 'INSERT INTO users (email,password,login_time,created_at) VALUES (:email,:pass,:login_time,:created_at)';
+          $data = array(':email' => $email_regist, ':pass' => password_hash($pass_regist, PASSWORD_DEFAULT), ':login_time' => date('Y-m-d H:i:s'), ':created_at' => date('Y-m-d H:i:s'));
+          // クエリ実行
+          $stmt = queryPost($dbh, $sql, $data);
+
+          // クエリ成功の場合
+          if ($stmt) {
+            // ログイン有効期限(デフォルト=1時間)
+            $sesLimit = 60 * 60;
+            // 最終ログイン日時を現在日時に変更
+            $_SESSION['login_date'] = time();
+            // ログイン有効期限を変更
+            $_SESSION['login_limit'] = $sesLimit;
+            // ユーザーIDを格納
+            $_SESSION['user_id'] = $dbh->lastInsertId();
+
+            debug('$_SESSIONの中身→→→' . print_r($_SESSION, true));
+
+            header("Location:mypage.php");
+            exit;
+          }
+        } catch (Exception $e) {
+          error_log('***** エラー発生 *****' . $e->getMessage());
+          $err_msg['common'] = MSG07;
+        }
+      }
+    }
+  }
+}
 ?>
 
 <?php
@@ -29,24 +106,43 @@ require('head.php');
           </ul>
           <!-- パネル -->
           <div class="login-panel-group">
-            <!-- 新規作成 -->
+            <!-- 新規登録 -->
             <div class="login-panel panel-entry">
               <form method="post" class="login-form">
+                <div class="area-msg">
+                  <?php
+                  errorMsgCall('common');
+                  ?>
+                </div>
                 <label class="label login-label">
                   ユーザーネーム<br>
                   <input type="text" class="input-text -entry" name="username">
                 </label>
                 <label class="label login-label">
+                  <div class="area-msg">
+                    <?php
+                    errorMsgCall('email_regist');
+                    ?>
+                  </div>
                   メールアドレス<br>
-                  <input type="text" class="input-text -entry" name="mail">
+                  <input type="text" class="input-text -entry <?php classErrorCall('email_regist'); ?>" name="email_regist">
                 </label>
                 <label class="label login-label">
-                  パスワード<span>※6文字以上</span><br>
-                  <input type="password" class="input-text -entry" name="pass">
+                  <div class="area-msg">
+                    <?php
+                    errorMsgCall('pass_regist');
+                    ?>
+                  </div>
+                  パスワード<span>※英数字6文字以上</span><br>
+                  <input type="password" class="input-text -entry <?php classErrorCall('pass_regist'); ?>" name="pass_regist">
                 </label>
                 <label class="label login-label">
-                  パスワード再入力<br>
-                  <input type="password" class="input-text -entry" name="re_pass">
+                  <div class="area-msg">
+                    <?php
+                    errorMsgCall('pass_re');
+                    ?>
+                    パスワード再入力<br>
+                    <input type="password" class="input-text -entry <?php classErrorCall('pass_re'); ?>" name="pass_re">
                 </label>
                 <div class="login-submit-container">
                   <input type="submit" class="submit login-submit -entry" value="登録">

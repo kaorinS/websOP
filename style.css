@@ -868,6 +868,17 @@ body {
   margin-top: 60px;
 }
 
+/* エラーメッセージ */
+.area-msg {
+  padding: 0;
+  color: red;
+}
+
+/* エラー */
+.err-post {
+  background: #fcc;
+}
+
 /*--------------------------------
   mypage
 --------------------------------*/
