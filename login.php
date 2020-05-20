@@ -4,9 +4,95 @@ require('function.php');
 
 // デバッグ
 debug('****************************************');
-debug('********** ログインページ **********');
+debug('********** ログイン & 新規登録ページ **********');
 debug('****************************************');
 debugLogStart();
+
+// ================================
+// 新規登録
+// ================================
+// POST送信されているか
+if (!empty($POST)) {
+  debug('$_POSTの中身→→→' . print_r($_POST, true));
+  // 変数にユーザー情報代入
+  $username = $_POST['username'];
+  $email_regist = $_POST['email_regist'];
+  $pass_regist = $_POST['pass_regist'];
+  $pass_re = $_POST['pass_re'];
+
+  // 未入力チェック
+  validRequired($username, 'username');
+  validRequired($email_regist, 'email_regist');
+  validRequired($pass_regist, 'pass_regist');
+  validRequired($pass_re, 'pass_re');
+
+  // バリデーションチェック
+  if (empty($err_msg)) {
+    // ユーザーネーム
+    // 最大文字数チェック
+    validMaxLen($username, 'username');
+
+    // Email
+    // 形式チェック
+    validEmail($email_regist, 'email_regist');
+    // 最大文字数チェック
+    validMaxLen($email_regist, 'email_regist');
+    // 重複チェック
+    validEmailDup($email_regist);
+
+    // パスワード
+    // 半角英数字チェック
+    validHalfAlphanumeric($pass_regist, 'pass_regist');
+    // 最小文字数チェック
+    validMinLen($pass_regist, 'pass_regist');
+    // 最大文字数チェック
+    validMaxLen($pass_regist, 'pass_regist');
+
+    if (empty($err_msg)) {
+      // パスワード再入力
+      // 最小文字数チェック
+      validMinLen($pass_re, 'pass_re');
+      // 最大文字数チェック
+      validMaxLen($pass_re, 'pass_re');
+      // パスワードと同じか
+      validPassRe($pass_regist, $pass_re, 'pass_re');
+
+      // DB
+      if (empty($err_msg)) {
+        // 例外処理
+        try {
+          // DB接続
+          $dbh = dbConnect();
+          // SQL文作成
+          $sql = 'INSERT INTO users (username, email, password, login_time, created_at) VALUES (:username, :email, :pass, :login_time, :created_at)';
+          $data = array(':username' => $username, ':email' => $email_regist, ':pass' => password_hash($pass_regist, PASSWORD_DEFAULT), ':login_time' => date('Y-m-d H:i:s'), ':created_at' => date('Y-m-d H:i:s'));
+          // クエリ実行
+          $stmt = queryPost($dbh, $sql, $data);
+
+          // クエリ成功
+          if ($stmt) {
+            // ログイン有効期限設定
+            $sesLimit = 60 * 60;
+            // 最終ログイン日時を現在日時に
+            $_SESSION['login_date'] = time();
+            // ログインリミット設定
+            $_SESSION['login_limit'] = $sesLimit;
+            // ユーザーID格納
+            $_SESSION['user_id'] = $dbh->lastInsertId();
+
+            debug('$_SESSIONの中身→→→' . print_r($_SESSION, true));
+            // マイページへ遷移
+            header("Location:mypage.php");
+            exit;
+          }
+        } catch (Exception $e) {
+          error_log('***** エラー発生 *****' . $e->getMessage());
+          $err_msg['common'] = MSG07;
+        }
+      }
+    }
+  }
+}
 ?>
 
 <?php
@@ -32,21 +118,46 @@ require('head.php');
             <!-- 新規作成 -->
             <div class="login-panel panel-entry">
               <form method="post" class="login-form">
+                <div class="area-msg">
+                  <?php
+                  errorMsgCall('common');
+                  ?>
+                </div>
                 <label class="label login-label">
+                  <div class="area-msg">
+                    <?php
+                    errorMsgCall('username');
+                    ?>
+                  </div>
                   ユーザーネーム<br>
                   <input type="text" class="input-text -entry" name="username">
                 </label>
                 <label class="label login-label">
+                  <div class="area-msg">
+                    <?php
+                    errorMsgCall('email_regist');
+                    ?>
+                  </div>
                   メールアドレス<br>
-                  <input type="text" class="input-text -entry" name="mail">
+                  <input type="text" class="input-text -entry" name="email_regist">
                 </label>
                 <label class="label login-label">
+                  <div class="area-msg">
+                    <?php
+                    errorMsgCall('pass_regist');
+                    ?>
+                  </div>
                   パスワード<span>※6文字以上</span><br>
-                  <input type="password" class="input-text -entry" name="pass">
+                  <input type="password" class="input-text -entry" name="pass_regist">
                 </label>
                 <label class="label login-label">
+                  <div class="area-msg">
+                    <?php
+                    errorMsgCall('pass_re');
+                    ?>
+                  </div>
                   パスワード再入力<br>
-                  <input type="password" class="input-text -entry" name="re_pass">
+                  <input type="password" class="input-text -entry" name="pass_re">
                 </label>
                 <div class="login-submit-container">
                   <input type="submit" class="submit login-submit -entry" value="登録">
@@ -58,11 +169,11 @@ require('head.php');
               <form method="post" class="login-form">
                 <label class="label login-label">
                   メールアドレス<br>
-                  <input type="text" class="input-text -login" name="mail">
+                  <input type="text" class="input-text -login" name="email-">
                 </label>
                 <label class="label login-label">
                   パスワード<span class="login-span-pass">※6文字以上</span><br>
-                  <input type="password" class="input-text -login" name="pass">
+                  <input type="password" class="input-text -login" name="pass-">
                 </label>
                 <p class="login-passforget">パスワードを忘れた方は<a href="passReissue.php" class="login-a-passforget">こちら</a>から再発行の手続きへ</p>
                 <label class="label login-save">
@@ -73,9 +184,9 @@ require('head.php');
             </div>
           </div>
         </div>
-        <div class="back-index-login">
-          <a href="index.php">TOPページに戻る</a>
-        </div>
+        <a href="index.php">
+          <div class="back-index-login">TOPページに戻る</div>
+        </a>
       </main>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
