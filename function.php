@@ -46,7 +46,7 @@ function debugLogStart()
 {
     debug('>>>>>>>>>>>>>>> 画面表示処理開始 >>>>>>>>>>>>>>>');
     debug('セッションID →→→' . session_id());
-    debug('セッション変数の中身 →→→' . print_r($_SESSION, true));
+    debug('$_SESSIONの中身 →→→' . print_r($_SESSION, true));
     debug('現在日時タイムスタンプ →→→' . time());
     if (!empty($_SESSION['login_date']) && !empty($_SESSION['login_limit'])) {
         debug('ログイン期限日時タイムスタンプ →→→' . ($_SESSION['login_date'] + $_SESSION['login_limit']));
@@ -65,6 +65,7 @@ define('MSG05', '6文字以上で入力してください');
 define('MSG06', '255文字以内で入力してください');
 define('MSG07', 'エラーが発生しました。しばらく経ってからやり直してください');
 define('MSG08', 'そのEmailはすでに登録されています');
+define('MSG09', 'メールアドレスまたはパスワードが間違っています');
 
 // ================================
 // グローバル変数
@@ -148,7 +149,7 @@ function validMinLen($str, $key, $min = 6)
 // 最大文字数チェック(256文字以上)
 function validMaxLen($str, $key, $max = 255)
 {
-    if (mb_strlen($str) < $max) {
+    if (mb_strlen($str) > $max) {
         global $err_msg;
         $err_msg[$key] = MSG06;
     }
@@ -222,4 +223,10 @@ function classErrorCall($str)
     if (!empty($err_msg[$str])) {
         echo 'err-post';
     }
+}
+
+// <input value="">の値呼び出し
+function inputValueCall($str)
+{
+    if (!empty($_POST[$str])) echo $_POST[$str];
 }

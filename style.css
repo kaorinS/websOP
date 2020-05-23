@@ -875,8 +875,8 @@ body {
 }
 
 /* エラー */
-.err-post {
-  background: #fcc;
+.input-text.err-post {
+  border: 3px solid #f66;
 }
 
 /*--------------------------------
