@@ -7,7 +7,7 @@
                     <li class="header-li"><a href="login.php">新規登録 / ログイン</a></li>
                 <?php else : ?>
                     <li class="header-li -login"><a href="mypage.php">マイページ</a></li>
-                    <li class="header-li -login"><a href="#">ログアウト</a></li>
+                    <li class="header-li -login"><a href="logout.php">ログアウト</a></li>
                 <?php endif; ?>
             </ul>
         </nav>
