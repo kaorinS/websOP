@@ -228,10 +228,11 @@ a {
   float: right;
   height: 100%;
   position: relative;
-  width: 200px;
+  width: 300px;
 }
 
 .header-ul {
+  overflow: hidden;
   position: absolute;
   top: 50%;
   right: 0;
@@ -242,9 +243,13 @@ a {
   border: 2px solid #aaa;
   border-radius: 10px;
   display: block;
-  padding: 0.3em 0.5em;
+  float: left;
+  padding: 0.3em 1em;
   text-align: center;
-  width: 190px;
+}
+
+.header-li:not(:last-child) {
+  margin-right: 25px;
 }
 
 /*--------------------------------
