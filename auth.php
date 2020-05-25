@@ -14,6 +14,7 @@ if (!empty($_SESSION['login_date'])) {
         // セッションを削除する
         session_destroy();
         // ログインページへ遷移
+        debug('***** ログインページへ遷移 *****');
         header("Location:login.php");
         exit();
     } else {

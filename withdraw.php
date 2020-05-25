@@ -40,7 +40,7 @@ if (!empty($_POST)) {
             session_destroy();
 
             debug('$_SESSIONの中身→→→' . print_r($_SESSION, true));
-            debug('TOPページへ遷移');
+            debug('***** TOPページへ遷移 *****');
             header("Location:index.php");
             exit();
         } else {
