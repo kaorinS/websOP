@@ -192,8 +192,33 @@ function queryPost($dbh, $sql, $data)
         $err_msg['common'] = MSG07;
         return 0;
     }
-    debug('クエリ成功');
+    debug('***** queryPost クエリ成功 *****');
     return $stmt;
+}
+
+// ユーザー情報の取得
+function getUser($u_id)
+{
+    try {
+        // DB接続
+        $dbh = dbConnect();
+        // SQL文作成
+        $sql = 'SELECT * FROM users WHERE id = :id';
+        $data = array(':id' => $u_id);
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+
+        // クエリ成功判定
+        if ($stmt) {
+            debug('***** getUser クエリ成功 *****');
+        } else {
+            debug('!!!!! getUser クエリ失敗 !!!!!');
+        }
+    } catch (Exception $e) {
+        error_log('!!!!! エラー発生 !!!!!') . $e->getMessage();
+    }
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 //================================
@@ -225,8 +250,41 @@ function classErrorCall($str)
     }
 }
 
-// <input value="">の値呼び出し
-function inputValueCall($str)
+// フォーム入力保持
+function getFormData($str, $flg = false)
 {
-    if (!empty($_POST[$str])) echo $_POST[$str];
+    // GET送信かPOST送信か(デフォルトはPOST送信)
+    if ($flg) {
+        $method = $_GET;
+    } else {
+        $method = $_POST;
+    }
+
+    global $userInfo;
+    global $err_msg;
+    // ユーザー情報があるか
+    if (!empty($userInfo)) {
+        // フォームにエラーがあるか
+        if (!empty($err_msg[$str])) {
+            // $_POSTまたは$_GETにデータがあるか
+            if (isset($method[$str])) {
+                // ユーザー情報「有」、フォームエラー「有」、POSTにデータ「有」
+                return sanitize($method[$str]);
+            } else {
+                // ユーザー情報「有」、フォームエラー「有」、POSTにデータ「無」
+                return sanitize($userInfo[$str]);
+            }
+        } else {
+            // $_POSTにデータがある、かつDBの情報と違う場合
+            if (isset($method[$str]) && $method[$str] !== $userInfo[$str]) {
+                return sanitize($method[$str]);
+            } else {
+                // $_POSTのデータとDBの情報が同じ
+                return sanitize($userInfo[$str]);
+            }
+        }
+    } else {
+        // ユーザー情報がない場合
+        return sanitize($method[$str]);
+    }
 }

@@ -232,7 +232,7 @@ require('head.php');
                     ?>
                   </div>
                   ユーザーネーム<br>
-                  <input type="text" class="input-text -entry <?php classErrorCall('username'); ?>" name="username" value="<?php inputValueCall('username'); ?>">
+                  <input type="text" class="input-text -entry <?php classErrorCall('username'); ?>" name="username" value="<?php getFormData('username'); ?>">
                 </label>
                 <label class="label login-label">
                   <div class="area-msg">
@@ -241,7 +241,7 @@ require('head.php');
                     ?>
                   </div>
                   メールアドレス<br>
-                  <input type="text" class="input-text -entry <?php classErrorCall('email_regist'); ?>" name="email_regist" value="<?php inputValueCall('email_regist'); ?>">
+                  <input type="text" class="input-text -entry <?php classErrorCall('email_regist'); ?>" name="email_regist" value="<?php getFormData('email_regist'); ?>">
                 </label>
                 <label class="label login-label">
                   <div class="area-msg">
@@ -281,7 +281,7 @@ require('head.php');
                     ?>
                   </div>
                   メールアドレス<br>
-                  <input type="text" class="input-text -login <?php classErrorCall('email_login'); ?>" name="email_login" value="<?php inputValueCall('email_login'); ?>">
+                  <input type="text" class="input-text -login <?php classErrorCall('email_login'); ?>" name="email_login" value="<?php getFormData('email_login'); ?>">
                 </label>
                 <label class="label login-label">
                   <div class="area-msg">

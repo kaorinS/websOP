@@ -981,6 +981,11 @@ body {
   width: 450px;
 }
 
+.mypage-edit-caution {
+  color: #f33;
+  font-size: 1.6rem;
+}
+
 /* イベント作成用フォーム */
 .form-regist_event {
   padding: 30px 20px;

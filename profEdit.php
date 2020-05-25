@@ -1,6 +1,55 @@
 <?php
 // 共通変数・関数を読み込む
 require('function.php');
+
+// デバッグ
+debug('**********************************************');
+debug('*************** プロフィール編集 ***************');
+debug('**********************************************');
+debugLogStart();
+
+// ログイン認証
+require('auth.php');
+
+// ユーザー情報を取得
+$userInfo = getUser($_SESSION['user_id']);
+debug('$userInfoの中身→→→' . print_r($userInfo, true));
+
+// ================================
+// 画面処理
+// ================================
+// POST送信されてるか
+if (!empty($_POST)) {
+    debug('$_POSTの中身→→→' . print_r($_POST, true));
+
+    // $_POSTの中身を変数に代入
+    $username = $_POST['username'];
+    $pref = $_POST['pref'];
+    $age = $_POST['age'];
+    $email = $_POST['email'];
+
+    // 未入力チェック
+    validRequired($username, 'username');
+    validRequired($email, 'email');
+
+    // 登録情報と異なる場合、バリデーション
+    if (empty($err_msg)) {
+        // ユーザーネーム
+        if ($username !== $userInfo['username']) {
+            // 最大文字数チェック
+            validMaxLen($username, 'username');
+        }
+        // メールアドレス
+        if ($email !== $userInfo['email']) {
+            // 形式チェック
+            validEmail($email, 'email');
+            // 最大文字数チェック
+            validMaxLen($email, 'email');
+            // 重複チェック
+            validEmailDup($email, 'email');
+        }
+    }
+}
 ?>
 <?php
 $title = 'プロフィール編集　|　イベ探';
@@ -23,14 +72,24 @@ require('head.php');
             <!-- メイン -->
             <main class="main">
                 <section class="sec-mypage -prof_edit">
+                    <div class="area-msg">
+                        <?php
+                        errorMsgCall('common_regist');
+                        ?>
+                    </div>
                     <h2 class="mypage-edit-title">
                         プロフィール編集
                     </h2>
                     <div class="mypage-edit-body">
                         <form method="post" class="form-mypage-edit -prof">
                             <label class="label label-mypage-edit">
-                                ユーザーネーム<br>
-                                <input type="text" class="input-text -mypage-edit" name="username">
+                                <div class="area-msg">
+                                    <?php
+                                    errorMsgCall('username');
+                                    ?>
+                                </div>
+                                ユーザーネーム <span class="mypage-edit-caution">*必須</span><br>
+                                <input type="text" class="input-text -mypage-edit" name="username" value="<?php echo getFormData('username'); ?>">
                             </label>
                             <label class="label label-mypage-edit">
                                 都道府県<br>
@@ -125,8 +184,13 @@ require('head.php');
                                 </div>
                             </label>
                             <label class="label label-mypage-edit">
-                                メールアドレス<br>
-                                <input type="text" class="input-text -mypage-edit" name="mail">
+                                <div class="area-msg">
+                                    <?php
+                                    errorMsgCall('email');
+                                    ?>
+                                </div>
+                                メールアドレス <span class="mypage-edit-caution">*必須</span><br>
+                                <input type="text" class="input-text -mypage-edit" name="email" value="<?php echo getFormData('email'); ?>">
                             </label>
                             <div class="submit-container-mypage-edit">
                                 <input type="submit" class="submit submit-mypage-edit" value="変更する">
