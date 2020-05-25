@@ -1,6 +1,15 @@
 <?php
 // 共通変数・関数を読み込む
 require('function.php');
+
+// デバッグ
+debug('**********************************************');
+debug('********** マイページ **********');
+debug('**********************************************');
+debugLogStart();
+
+// ログイン認証
+require('auth.php');
 ?>
 <?php
 $title = 'マイページ　|　イベ探';
@@ -17,6 +26,7 @@ require('head.php');
         <div class="main-container site-width">
             <!-- サイドバー -->
             <?php
+            $pageName = '';
             require('sidebar_mypage.php');
             ?>
             <!-- メイン -->
