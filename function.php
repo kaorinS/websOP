@@ -66,6 +66,7 @@ define('MSG06', '255文字以内で入力してください');
 define('MSG07', 'エラーが発生しました。しばらく経ってからやり直してください');
 define('MSG08', 'そのEmailはすでに登録されています');
 define('MSG09', 'メールアドレスまたはパスワードが間違っています');
+define('MSG10', 'エラーが発生しました');
 
 // ================================
 // グローバル変数
@@ -155,6 +156,24 @@ function validMaxLen($str, $key, $max = 255)
     }
 }
 
+//半角数字とハイフンのみ 
+function validHalfNumberHyphen($str, $key)
+{
+    if (!preg_match("/^[0-9-]+$/", $str)) {
+        global $err_msg;
+        $err_msg[$key] = MSG10;
+    }
+}
+
+// 漢字が含まれている
+function validKanji($str, $key)
+{
+    if (!preg_match("/^[ぁ-んァ-ヶー一-龠]+$/u", $str)) {
+        global $err_msg;
+        $err_msg[$key] = MSG10;
+    }
+}
+
 // ================================
 // DB関係
 // ================================
@@ -224,6 +243,11 @@ function getUser($u_id)
 //================================
 // その他
 //================================
+// サニタイズ
+function sanitize($str)
+{
+    return htmlspecialchars($str, ENT_QUOTES);
+}
 // is-active呼び出し
 function addIsActive($str, $page_name)
 {
@@ -250,6 +274,12 @@ function classErrorCall($str)
     }
 }
 
+// <input value="">の値呼び出し
+function inputValueCall($str)
+{
+    if (!empty($_POST[$str])) echo sanitize($_POST[$str]);
+}
+
 // フォーム入力保持
 function getFormData($str, $flg = false)
 {
@@ -266,7 +296,7 @@ function getFormData($str, $flg = false)
     if (!empty($userInfo)) {
         // フォームにエラーがあるか
         if (!empty($err_msg[$str])) {
-            // $_POSTまたは$_GETにデータがあるか
+            // $_POSTにデータがあるか
             if (isset($method[$str])) {
                 // ユーザー情報「有」、フォームエラー「有」、POSTにデータ「有」
                 return sanitize($method[$str]);
@@ -284,7 +314,16 @@ function getFormData($str, $flg = false)
             }
         }
     } else {
-        // ユーザー情報がない場合
-        return sanitize($method[$str]);
+        // POST送信の有無
+        if (!empty($method[$str])) {
+            // ユーザー情報「無」、POSTデータ「有」
+            return sanitize($method[$str]);
+        }
     }
+}
+
+// optionタグselected呼び出し
+function optionSelectedCall($str1, $str2)
+{
+    if (getFormData($str1) == $str2) echo 'selected';
 }

@@ -986,6 +986,34 @@ body {
   font-size: 1.6rem;
 }
 
+/* プロフ編集 プロフ画像 */
+.mypage-edit-area-drop {
+  background: #ddd;
+  color: #aaa;
+  height: 250px;
+  line-height: 250px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.mypage-edit-input-file {
+  height: 250px;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+.mypage-edit-prev-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
 /* イベント作成用フォーム */
 .form-regist_event {
   padding: 30px 20px;
@@ -1169,6 +1197,10 @@ body {
 
 .area-img_drop.-regist:last-child {
   margin-right: 0;
+}
+
+.no-display {
+  display: none;
 }
 
 /*--------------------------------
