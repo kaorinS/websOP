@@ -1392,13 +1392,44 @@ body {
   top: 0;
 }
 
+/* イベント詳細ページ用フェードイン */
+@keyframes js-fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
 .js-fadein {
-  opacity: 0;
-  transition: opacity 1s;
-  visibility: hidden;
+  display: none;
 }
 
 .js-fadein.is-fadein {
-  opacity: 0.5;
+  display: block;
+  animation-name: js-fadein;
+  animation-duration: 1s;
+}
+
+/* サクセスメッセージ */
+.js-success-msg {
+  background: #333;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 1.8rem;
+  opacity: 0;
+  padding: 30px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition-duration: 1s;
+  visibility: hidden;
+  z-index: 3;
+}
+
+/* サクセスメッセージ用フェードイン */
+.js-success-msg.is-show {
+  opacity: 0.6;
   visibility: visible;
 }

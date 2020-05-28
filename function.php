@@ -57,7 +57,7 @@ function debugLogStart()
 // 定数
 // ================================
 // エラーメッセージ
-define('MSG01', '必須項目です');
+define('MSG01', '入力してください');
 define('MSG02', 'Emailの形式で入力してください');
 define('MSG03', 'パスワード（再入力）が合っていません');
 define('MSG04', '半角英数字のみご利用いただけます');
@@ -67,6 +67,12 @@ define('MSG07', 'エラーが発生しました。しばらく経ってからや
 define('MSG08', 'そのEmailはすでに登録されています');
 define('MSG09', 'メールアドレスまたはパスワードが間違っています');
 define('MSG10', 'エラーが発生しました');
+define('MSG11', '現在のパスワードが間違っています');
+define('MSG12', '現在のパスワードと同じです');
+
+// サクセスメッセージ
+define('SUC01', 'パスワードを変更しました');
+define('SUC02', 'プロフィールを編集しました');
 
 // ================================
 // グローバル変数
@@ -129,6 +135,14 @@ function validPassRe($str1, $str2, $key)
     }
 }
 
+// 新しいパスワードチェック
+function validNewPass($str1, $str2, $key)
+{
+    if ($str1 === $str2) {
+        global $err_msg;
+        $err_msg[$key] = MSG12;
+    }
+}
 // 半角英数字チェック
 function validHalfAlphanumeric($str, $key)
 {
@@ -172,6 +186,17 @@ function validKanji($str, $key)
         global $err_msg;
         $err_msg[$key] = MSG10;
     }
+}
+
+// パスワードチェック
+function validPass($str, $key)
+{
+    // 半角英数字チェック
+    validHalfAlphanumeric($str, $key);
+    // 最小文字数チェック
+    validMinLen($str, $key);
+    // 最大文字数チェック
+    validMaxLen($str, $key);
 }
 
 // ================================
@@ -238,6 +263,27 @@ function getUser($u_id)
     }
 
     return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+//================================
+// メール送信
+//================================
+function sendMail($from, $to, $subject, $comment)
+{
+    if (!empty($to) && !empty($subject) && !empty($comment)) {
+        // 文字化けしないように設定する（決まったパターン）
+        mb_language("Japanese");
+        mb_internal_encoding("UTF-8");
+
+        // メールを送信する
+        $result = mb_send_mail($to, $subject, $comment, "From:" . $from);
+        // 送信結果を判定
+        if ($result) {
+            debug('***** メールを送信しました *****');
+        } else {
+            debug('!!!!! メールを送信できませんでした !!!!!');
+        }
+    }
 }
 
 //================================
@@ -326,4 +372,16 @@ function getFormData($str, $flg = false)
 function optionSelectedCall($str1, $str2)
 {
     if (getFormData($str1) == $str2) echo 'selected';
+}
+
+// 1回きりのセッションを呼び出す
+function getSessionOnce($key)
+{
+    if (!empty($_SESSION[$key])) {
+        $data = $_SESSION[$key];
+        // セッションの中身を空っぽにする
+        $_SESSION[$key] = '';
+        // 最初に代入した変数を返す
+        return $data;
+    }
 }

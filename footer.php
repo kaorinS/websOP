@@ -1,4 +1,6 @@
       <footer class="footer">©️ 2020 かおりん</footer>
-    </div>
-  </body>
-</html>
+      <script type="text/javascript" src="js/common.js"></script>
+      </div>
+      </body>
+
+      </html>

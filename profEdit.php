@@ -74,6 +74,9 @@ if (!empty($_POST)) {
                 $stmt = queryPost($dbh, $sql, $data);
 
                 if ($stmt) {
+                    // サクセスメッセージ設定
+                    $_SESSION['msg_success'] = SUC02;
+
                     debug('***** 登録したので、マイページへ遷移します *****');
                     header("Location:mypage.php");
                     exit();

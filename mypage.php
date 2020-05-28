@@ -18,6 +18,10 @@ require('head.php');
 
 <body class="page-mypage page-2colum">
     <div class="wrapper">
+        <!-- サクセスメッセージ -->
+        <div id="js-show-msg" class="js-success-msg">
+            <?php echo getSessionOnce('msg_success'); ?>
+        </div>
         <!-- header -->
         <?php
         require('header.php');
