@@ -203,10 +203,16 @@ require('head.php');
 ?>
 
 <body class="page-login page-1colum">
+  <!-- サクセスメッセージ -->
+  <div id="js-show-msg" class="js-success-msg">
+    <?php echo getSessionOnce('msg_success'); ?>
+  </div>
+  <!-- ヘッダー -->
   <div class="wrapper">
     <?php
     require('header.php');
     ?>
+    <!-- メインコンテンツ -->
     <div class="main-container site-width">
       <main class="main login-main">
         <div class="main-form-container">

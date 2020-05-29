@@ -69,6 +69,9 @@ define('MSG09', 'メールアドレスまたはパスワードが間違ってい
 define('MSG10', 'エラーが発生しました');
 define('MSG11', '現在のパスワードが間違っています');
 define('MSG12', '現在のパスワードと同じです');
+define('MSG13', '文字で入力してください');
+define('MSG14', '認証キーが誤っています');
+define('MSG15', '有効期限が切れています。認証キーを再取得してください');
 
 // サクセスメッセージ
 define('SUC01', 'パスワードを変更しました');
@@ -198,6 +201,15 @@ function validPass($str, $key)
     validMinLen($str, $key);
     // 最大文字数チェック
     validMaxLen($str, $key);
+}
+
+// 固定長チェック
+function validLength($str, $key, $length)
+{
+    if (mb_strlen($str) !== $length) {
+        global $err_msg;
+        $err_msg[$key] = $length . MSG13;
+    }
 }
 
 // ================================

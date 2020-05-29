@@ -1123,6 +1123,8 @@ body {
 }
 
 .select-mypage-edit {
+  border: solid 1px #aaa;
+  border-radius: 10px;
   font-size: 1.6rem;
   height: 100%;
   width: 100%;
@@ -1413,10 +1415,10 @@ body {
 
 /* サクセスメッセージ */
 .js-success-msg {
-  background: #333;
+  background: #fff;
   border-radius: 20px;
-  color: #fff;
-  font-size: 1.8rem;
+  color: #333;
+  font-size: 1.9rem;
   opacity: 0;
   padding: 30px;
   position: fixed;
@@ -1430,6 +1432,6 @@ body {
 
 /* サクセスメッセージ用フェードイン */
 .js-success-msg.is-show {
-  opacity: 0.7;
+  opacity: 0.9;
   visibility: visible;
 }

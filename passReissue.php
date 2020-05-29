@@ -80,7 +80,7 @@ EOT;
                     // 認証可能時間は30分（60s ＊ 30m)
                     $_SESSION['auth_key_limit'] = time() + (60 * 30);
                     debug('$_SESSIONの中身→→→' . print_r($_SESSION, true));
-                    debug('***** 認証キー送信ページえへ遷移 *****');
+                    debug('***** 認証キー送信ページへ遷移 *****');
                     header("Location:passReissueAuth.php");
                     exit;
                 }
