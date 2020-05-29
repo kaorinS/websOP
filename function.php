@@ -349,10 +349,10 @@ function getFormData($str, $flg = false)
         $method = $_POST;
     }
 
-    global $userInfo;
+    global $dbInfo;
     global $err_msg;
     // ユーザー情報があるか
-    if (!empty($userInfo)) {
+    if (!empty($dbInfo)) {
         // フォームにエラーがあるか
         if (!empty($err_msg[$str])) {
             // $_POSTにデータがあるか
@@ -361,15 +361,15 @@ function getFormData($str, $flg = false)
                 return sanitize($method[$str]);
             } else {
                 // ユーザー情報「有」、フォームエラー「有」、POSTにデータ「無」
-                return sanitize($userInfo[$str]);
+                return sanitize($dbInfo[$str]);
             }
         } else {
             // $_POSTにデータがある、かつDBの情報と違う場合
-            if (isset($method[$str]) && $method[$str] !== $userInfo[$str]) {
+            if (isset($method[$str]) && $method[$str] !== $dbInfo[$str]) {
                 return sanitize($method[$str]);
             } else {
                 // $_POSTのデータとDBの情報が同じ
-                return sanitize($userInfo[$str]);
+                return sanitize($dbInfo[$str]);
             }
         }
     } else {

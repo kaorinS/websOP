@@ -15,9 +15,9 @@ require('auth.php');
 // 画面処理
 // ================================
 // DBからユーザー情報を取得
-$userInfo = getUser($_SESSION['user_id']);
+$dbInfo = getUser($_SESSION['user_id']);
 debug('***** ユーザー情報を取得 *****');
-debug('$userInfoの中身→→→' . print_r($userInfo, true));
+debug('$dbInfoの中身→→→' . print_r($dbInfo, true));
 
 // POST送信されているか
 if (!empty($_POST)) {
@@ -42,7 +42,7 @@ if (!empty($_POST)) {
         validPass($pass_new, 'pass_new');
 
         // 現在のパスワードとDBに登録されたパスワードを照合する
-        if (!password_verify($pass_old, $userInfo['password'])) {
+        if (!password_verify($pass_old, $dbInfo['password'])) {
             global $err_msg;
             $err_msg['pass_old'] = MSG11;
         }
@@ -65,7 +65,7 @@ if (!empty($_POST)) {
                 $dbh = dbConnect();
                 // sql文作成
                 $sql = 'UPDATE users SET `password` = :password WHERE id = :id';
-                $data = array(':password' => password_hash($pass_new, PASSWORD_DEFAULT), ':id' => $userInfo['id']);
+                $data = array(':password' => password_hash($pass_new, PASSWORD_DEFAULT), ':id' => $dbInfo['id']);
                 // クエリ実行
                 $stmt = queryPost($dbh, $sql, $data);
 
@@ -76,9 +76,9 @@ if (!empty($_POST)) {
                     debug('***** メールを送信します *****');
 
                     // メールを送信
-                    $username = ($userInfo['username']);
+                    $username = ($dbInfo['username']);
                     $from = 'pluvia.kk@gmail.com';
-                    $to = $userInfo['email'];
+                    $to = $dbInfo['email'];
                     $subject = 'パスワード変更通知 | イベ探';
                     // EOTはEndOfTextの略。任意の文字可能（ABCとかTEXTとか)。ただし、先頭の<<<は必須。前後に空白を入れるのもダメ
                     // 注意!EOT内は半角空白も全てそのまま扱われるため、インデントしてはいけない!!!!
