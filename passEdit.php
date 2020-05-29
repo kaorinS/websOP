@@ -144,7 +144,7 @@ require('head.php');
                                     ?>
                                 </div>
                                 現在のパスワード<br>
-                                <input type="password" class="input-text -mypage-edit" name="pass_old">
+                                <input type="password" class="input-text -mypage-edit <?php classErrorCall('pass_old'); ?>" name="pass_old">
                             </label>
                             <label class="label label-mypage-edit">
                                 <div class="area-msg">
@@ -153,7 +153,7 @@ require('head.php');
                                     ?>
                                 </div>
                                 新しいパスワード<br>
-                                <input type="password" class="input-text -mypage-edit" name="pass_new">
+                                <input type="password" class="input-text -mypage-edit <?php classErrorCall('pass_new'); ?>" name="pass_new">
                             </label>
                             <label class="label label-mypage-edit">
                                 <div class="area-msg">
@@ -162,7 +162,7 @@ require('head.php');
                                     ?>
                                 </div>
                                 新しいパスワード（再入力）<br>
-                                <input type="password" class="input-text -mypage-edit" name="pass_new_re">
+                                <input type="password" class="input-text -mypage-edit <?php classErrorCall('pass_new_re'); ?>" name="pass_new_re">
                             </label>
                             <div class="submit-container-mypage-edit">
                                 <input type="submit" class="submit submit-mypage-edit" value="変更する">

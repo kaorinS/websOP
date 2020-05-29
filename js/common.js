@@ -10,5 +10,7 @@ function jsShowMsgFadeout() {
 //取得したテキストからスペースを除去し、文字が残っていた場合、処理を行う
 if (msg.replace(/\s+/g, "").length) {
   jsShowMsg.classList.add("is-show");
-  setTimeout(jsShowMsgFadeout, 3000);
+  setTimeout(() => {
+    jsShowMsg.classList.remove("is-show");
+  }, 3000);
 }

@@ -247,7 +247,7 @@ require('head.php');
                                     ?>
                                 </div>
                                 メールアドレス <span class="mypage-edit-caution">*必須</span><br>
-                                <input type="text" class="input-text -mypage-edit <?php classErrorCall('username'); ?>" name="email" value="<?php echo getFormData('email'); ?>">
+                                <input type="text" class="input-text -mypage-edit <?php classErrorCall('email'); ?>" name="email" value="<?php echo getFormData('email'); ?>">
                             </label>
                             <div class="submit-container-mypage-edit">
                                 <input type="submit" class="submit submit-mypage-edit" value="変更する">

@@ -292,7 +292,7 @@ require('head.php');
                   パスワード<span class="login-span-pass">※6文字以上</span><br>
                   <input type="password" class="input-text -login <?php classErrorCall('pass_login'); ?>" name="pass_login">
                 </label>
-                <p class="login-passforget">パスワードを忘れた方は<a href="passReissue.php" class="login-a-passforget">こちら</a>から再発行の手続きへ</p>
+                <p class="login-passforget">パスワードを忘れた方は<a href="passReissue.php" class="login-a-passforget">こちらから再発行の手続きへ</a></p>
                 <label class="label login-save">
                   <input type="checkbox" name="login_save">次回ログインを省略する
                 </label>

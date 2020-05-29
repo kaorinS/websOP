@@ -73,6 +73,7 @@ define('MSG12', '現在のパスワードと同じです');
 // サクセスメッセージ
 define('SUC01', 'パスワードを変更しました');
 define('SUC02', 'プロフィールを編集しました');
+define('SUC03', 'メールを送信しました');
 
 // ================================
 // グローバル変数
@@ -384,4 +385,15 @@ function getSessionOnce($key)
         // 最初に代入した変数を返す
         return $data;
     }
+}
+
+// 認証キー作成
+function makeRandKey($length = 8)
+{
+    static $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    $str = '';
+    for ($i = 0; $i < $length; ++$i) {
+        $str .= $chars[mt_rand(0, 61)];
+    }
+    return $str;
 }
