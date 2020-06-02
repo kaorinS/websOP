@@ -72,6 +72,7 @@ define('MSG12', '現在のパスワードと同じです');
 define('MSG13', '文字で入力してください');
 define('MSG14', '認証キーが誤っています');
 define('MSG15', '有効期限が切れています。認証キーを再取得してください');
+define('MSG16', '選択してください');
 
 // サクセスメッセージ
 define('SUC01', 'パスワードを変更しました');
@@ -93,6 +94,15 @@ function validRequired($str, $key)
     if (empty($str)) {
         global $err_msg;
         $err_msg[$key] = MSG01;
+    }
+}
+
+// セレクトボックス未選択チェック
+function validSelectboxRequired($str, $key)
+{
+    if ($str == 0) {
+        global $err_msg;
+        $err_msg[$key] = MSG16;
     }
 }
 
@@ -278,6 +288,81 @@ function getUser($u_id)
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+// イベント情報の取得
+function getEventData($u_id, $e_id)
+{
+    debug('***** イベント情報を取得 *****');
+    debug('ユーザーID→→→' . $u_id);
+    debug('イベントID→→→' . $e_id);
+    // 例外処理
+    try {
+        // DB接続
+        $dbh = dbConnect();
+        // SQL文作成
+        $sql = 'SELECT * FROM festival WHERE id = :e_id AND u_id = :u_id AND is_deleted = 0';
+        $data = array(':e_id' => $e_id, ':u_id' => $u_id);
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if ($stmt) {
+            // クエリ結果のデータを１レコード返却
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return false;
+        }
+    } catch (Exception $e) {
+        error_log('!!!!! エラー発生 !!!!!' . $e->getMessage());
+    }
+}
+
+// カテゴリーデータの取得
+function getCategoryData()
+{
+    debug('***** カテゴリーデータを取得 *****');
+    // 例外処理
+    try {
+        // DB接続
+        $dbh = dbConnect();
+        // SQL文作成
+        $sql = 'SELECT * FROM category';
+        $data = array();
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if ($stmt) {
+            // クエリ結果の全データを返却
+            return $stmt->fetchAll();
+            return false;
+        }
+    } catch (Exception $e) {
+        error_log('!!!!! エラー発生 !!!!!' . $e->getMessage());
+    }
+}
+
+// 参加対象の取得
+function getTargetData()
+{
+    debug('***** 参加対象のデータを取得 *****');
+    // 例外処理
+    try {
+        // DB接続
+        $dbh = dbConnect();
+        // SQL文作成
+        $sql = 'SELECT * FROM `target`';
+        $data = array();
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if ($stmt) {
+            // クエリ結果の全データを返却
+            return $stmt->fetchAll();
+            return false;
+        }
+    } catch (Exception $e) {
+        error_log('!!!!! エラー発生 !!!!!' . $e->getMessage());
+    }
+}
+
 //================================
 // メール送信
 //================================
@@ -381,6 +466,7 @@ function getFormData($str, $flg = false)
     }
 }
 
+
 // optionタグselected呼び出し
 function optionSelectedCall($str1, $str2)
 {
@@ -408,4 +494,64 @@ function makeRandKey($length = 8)
         $str .= $chars[mt_rand(0, 61)];
     }
     return $str;
+}
+
+// 画像処理
+function uploadImg($file, $key)
+{
+    debug('***** 画像アップロード処理開始 *****');
+    debug('FILE情報→→→' . print_r($file, true));
+
+    if (isset($file['error']) && is_int($file['error'])) {
+        // 例外処理
+        try {
+            // バリデーション
+            switch ($file['error']) {
+                    // OK
+                case UPLOAD_ERR_OK:
+                    break;
+                    // ファイル未選択
+                case UPLOAD_ERR_NO_FILE:
+                    throw new RuntimeException('ファイルが選択されていません');
+                    // php.ini定義の最大サイズ超過
+                case UPLOAD_ERR_INI_SIZE:
+                    throw new RuntimeException('ファイルサイズが大きすぎます');
+                    // フォーム定義の最大サイズ超過
+                case UPLOAD_ERR_FORM_SIZE:
+                    throw new RuntimeException('ファルサイズが大きすぎます');
+                    // その他
+                default:
+                    throw new RuntimeException('エラーが発生しました');
+            }
+
+            // $file['mine]の値は偽装可能のため、MINEタイプを自前でチェック
+            // exif_imagetype関数は「IMAGETYPE_GIF」「IMAGETYPE_JPEG」などの定数を返す
+            // 第三引数にはtrueを設定する（厳密にチェックしてくれる）
+            $type = @exif_imagetype($file['tmp_name']);
+            if (!in_array($type, [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG], true)) {
+                throw new RuntimeException('画像形式が未対応です');
+            }
+
+            // ファイルデータからSHA-1ハッシュを取り、ファイル名を決定し、ファイルを保存する
+            // ハッシュ化しないと、同じファイル名がアップされる可能性があり、DBで判別できないと困るため
+            // image_type_to_extension関数は、ファイルの拡張子を取得するもの
+            $path = 'uploads/' . sha1_file($file['tmp_name']) . image_type_to_extension($type);
+
+            if (!move_uploaded_file($file['tmp_name'], $path)) {
+                // ファイルを移動する
+                throw new RuntimeException('ファイル保存時にエラーが発生しました');
+            }
+            // 保存したファイルパスの権限を変更する
+            // 所有者に読み込み、書き込みの権限を与え、その他には読み込みだけ許可する。(0644)
+            chmod($path, 0644);
+
+            debug('***** ファイルは正常にアップロードされました *****');
+            debug('ファイルパス→→→' . $path);
+            return $path;
+        } catch (RuntimeException $e) {
+            debug('!!!!! エラー発生 !!!!!' . $e->getMessage());
+            global $err_msg;
+            $err_msg[$key] = $e->getMessage();
+        }
+    }
 }

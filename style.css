@@ -493,6 +493,7 @@ a {
 
 /* 検索ボタン */
 .sidebar-submit {
+  background: #fff;
   border-radius: 25px;
   box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6);
   float: right;
@@ -984,6 +985,7 @@ body {
 .mypage-edit-caution {
   color: #f33;
   font-size: 1.6rem;
+  padding-left: 15px;
 }
 
 /* プロフ編集 プロフ画像 */
@@ -997,7 +999,8 @@ body {
   width: 100%;
 }
 
-.mypage-edit-input-file {
+.mypage-edit-input-file,
+.regist-input-file {
   height: 250px;
   opacity: 0;
   position: absolute;
@@ -1055,16 +1058,28 @@ body {
   left: 0;
 }
 
+.block-regist.-event_date {
+  overflow: hidden;
+}
+
 /* イベント作成 input type=date */
 .wrap-input-date-mypage {
+  float: left;
   position: relative;
+  margin-right: 20px;
   width: 150px;
+}
+
+.event_date-span {
+  float: left;
+  margin-right: 20px;
+  padding-top: 5px;
 }
 
 /* イベント作成 日付入力フォーム */
 .date-mypage-edit {
   border: 1px solid #999;
-  border-radius: 3px;
+  border-radius: 10px;
   padding: 10px;
 }
 
@@ -1194,13 +1209,29 @@ body {
   float: left;
   width: 30%;
   margin-right: 25px;
-  height: 150px;
 }
 
 .area-img_drop.-regist:last-child {
   margin-right: 0;
 }
 
+.img-drop.-regist {
+  border: 1px dotted #aaa;
+  border-radius: 10px;
+  color: #666;
+  font-size: 1.5rem;
+  height: 150px;
+  line-height: 150px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.regist-input-file {
+  height: 150px;
+}
+
+/* display非表示 */
 .no-display {
   display: none;
 }
