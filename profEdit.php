@@ -53,8 +53,8 @@ if (!empty($_POST)) {
         }
 
         // 都道府県
-        // 漢字を含んでいるかチェック
-        validKanji($pref, 'pref');
+        // 1~47かどうかチェック
+        validPref($pref, 'pref');
 
         // 年齢
         // 半角数字とハイフンだけかチェック
@@ -149,67 +149,67 @@ require('head.php');
                                     <select class="select select-mypage-edit" name="pref">
                                         <option value="0" <?php if ($userInfo['pref'] == '' || $userInfo['pref'] == 0) echo 'selected'; ?>>選択してください</option>
                                         <optgroup label="北海道・東北">
-                                            <option value="北海道" <?php optionSelectedCall('pref', '北海道'); ?>>北海道</option>
-                                            <option value="青森県" <?php optionSelectedCall('pref', '青森県'); ?>>青森県</option>
-                                            <option value="秋田県" <?php optionSelectedCall('pref', '秋田県'); ?>>秋田県</option>
-                                            <option value="岩手県" <?php optionSelectedCall('pref', '岩手県'); ?>>岩手県</option>
-                                            <option value="山形県" <?php optionSelectedCall('pref', ' 山形県'); ?>>山形県</option>
-                                            <option value="宮城県" <?php optionSelectedCall('pref', '宮城県'); ?>>宮城県</option>
-                                            <option value="福島県" <?php optionSelectedCall('pref', '福島県'); ?>>福島県</option>
+                                            <option value="1" <?php optionSelectedCall('pref', 1); ?>>北海道</option>
+                                            <option value="2" <?php optionSelectedCall('pref', 2); ?>>青森県</option>
+                                            <option value="3" <?php optionSelectedCall('pref', 3); ?>>秋田県</option>
+                                            <option value="4" <?php optionSelectedCall('pref', 4); ?>>岩手県</option>
+                                            <option value="5" <?php optionSelectedCall('pref', 5); ?>>山形県</option>
+                                            <option value="6" <?php optionSelectedCall('pref', 6); ?>>宮城県</option>
+                                            <option value="7" <?php optionSelectedCall('pref', 7); ?>>福島県</option>
                                         </optgroup>
                                         <optgroup label="甲信越・北陸">
-                                            <option value="山梨県" <?php optionSelectedCall('pref', '山梨県'); ?>>山梨県</option>
-                                            <option value="長野県" <?php optionSelectedCall('pref', '長野県'); ?>>長野県</option>
-                                            <option value="新潟県" <?php optionSelectedCall('pref', '新潟県'); ?>>新潟県</option>
-                                            <option value="富山県" <?php optionSelectedCall('pref', '富山県'); ?>>富山県</option>
-                                            <option value="石川県" <?php optionSelectedCall('pref', '石川県'); ?>>石川県</option>
-                                            <option value="福井県" <?php optionSelectedCall('pref', '福井県'); ?>>福井県</option>
+                                            <option value="8" <?php optionSelectedCall('pref', 8); ?>>山梨県</option>
+                                            <option value="9" <?php optionSelectedCall('pref', 9); ?>>長野県</option>
+                                            <option value="10" <?php optionSelectedCall('pref', 10); ?>>新潟県</option>
+                                            <option value="11" <?php optionSelectedCall('pref', 11); ?>>富山県</option>
+                                            <option value="12" <?php optionSelectedCall('pref', 12); ?>>石川県</option>
+                                            <option value="13" <?php optionSelectedCall('pref', 13); ?>>福井県</option>
                                         </optgroup>
                                         <optgroup label="関東">
-                                            <option value="茨城県" <?php optionSelectedCall('pref', '茨城県'); ?>>茨城県</option>
-                                            <option value="栃木県" <?php optionSelectedCall('pref', '栃木県'); ?>>栃木県</option>
-                                            <option value="群馬県" <?php optionSelectedCall('pref', '群馬県'); ?>>群馬県</option>
-                                            <option value="埼玉県" <?php optionSelectedCall('pref', '埼玉県'); ?>>埼玉県</option>
-                                            <option value="千葉県" <?php optionSelectedCall('pref', '千葉県'); ?>>千葉県</option>
-                                            <option value="東京都" <?php optionSelectedCall('pref', '東京都'); ?>>東京都</option>
-                                            <option value="神奈川県" <?php optionSelectedCall('pref', '神奈川県'); ?>>神奈川県</option>
+                                            <option value="14" <?php optionSelectedCall('pref', 14); ?>>茨城県</option>
+                                            <option value="15" <?php optionSelectedCall('pref', 15); ?>>栃木県</option>
+                                            <option value="16" <?php optionSelectedCall('pref', 16); ?>>群馬県</option>
+                                            <option value="17" <?php optionSelectedCall('pref', 17); ?>>埼玉県</option>
+                                            <option value="18" <?php optionSelectedCall('pref', 18); ?>>千葉県</option>
+                                            <option value="19" <?php optionSelectedCall('pref', 19); ?>>東京都</option>
+                                            <option value="20" <?php optionSelectedCall('pref', 20); ?>>神奈川県</option>
                                         </optgroup>
                                         <optgroup label="東海">
-                                            <option value="愛知県" <?php optionSelectedCall('pref', '愛知県'); ?>>愛知県</option>
-                                            <option value="静岡県" <?php optionSelectedCall('pref', '静岡県'); ?>>静岡県</option>
-                                            <option value="岐阜県" <?php optionSelectedCall('pref', '岐阜県'); ?>>岐阜県</option>
-                                            <option value="三重県" <?php optionSelectedCall('pref', '三重県'); ?>>三重県</option>
+                                            <option value="21" <?php optionSelectedCall('pref', 21); ?>>愛知県</option>
+                                            <option value="22" <?php optionSelectedCall('pref', 22); ?>>静岡県</option>
+                                            <option value="23" <?php optionSelectedCall('pref', 23); ?>>岐阜県</option>
+                                            <option value="24" <?php optionSelectedCall('pref', 24); ?>>三重県</option>
                                         </optgroup>
                                         <optgroup label="関西">
-                                            <option value="大阪府" <?php optionSelectedCall('pref', '大阪府'); ?>>大阪府</option>
-                                            <option value="兵庫県" <?php optionSelectedCall('pref', '兵庫県'); ?>>兵庫県</option>
-                                            <option value="京都府" <?php optionSelectedCall('pref', '京都府'); ?>>京都府</option>
-                                            <option value="滋賀県" <?php optionSelectedCall('pref', '滋賀県'); ?>>滋賀県</option>
-                                            <option value="奈良県" <?php optionSelectedCall('pref', '奈良県'); ?>>奈良県</option>
-                                            <option value="和歌山県" <?php optionSelectedCall('pref', '和歌山県'); ?>>和歌山県</option>
+                                            <option value="25" <?php optionSelectedCall('pref', 25); ?>>大阪府</option>
+                                            <option value="26" <?php optionSelectedCall('pref', 26); ?>>兵庫県</option>
+                                            <option value="27" <?php optionSelectedCall('pref', 27); ?>>京都府</option>
+                                            <option value="28" <?php optionSelectedCall('pref', 28); ?>>滋賀県</option>
+                                            <option value="29" <?php optionSelectedCall('pref', 29); ?>>奈良県</option>
+                                            <option value="30" <?php optionSelectedCall('pref', 30); ?>>和歌山県</option>
                                         </optgroup>
                                         <optgroup label="中国">
-                                            <option value="岡山県" <?php optionSelectedCall('pref', '岡山県'); ?>>岡山県</option>
-                                            <option value="広島県" <?php optionSelectedCall('pref', '広島県'); ?>>広島県</option>
-                                            <option value="鳥取県" <?php optionSelectedCall('pref', '鳥取県'); ?>>鳥取県</option>
-                                            <option value="島根県" <?php optionSelectedCall('pref', '島根県'); ?>>島根県</option>
-                                            <option value="山口県" <?php optionSelectedCall('pref', '山口県'); ?>>山口県</option>
+                                            <option value="31" <?php optionSelectedCall('pref', 31); ?>>岡山県</option>
+                                            <option value="32" <?php optionSelectedCall('pref', 32); ?>>広島県</option>
+                                            <option value="33" <?php optionSelectedCall('pref', 33); ?>>鳥取県</option>
+                                            <option value="34" <?php optionSelectedCall('pref', 34); ?>>島根県</option>
+                                            <option value="35" <?php optionSelectedCall('pref', 35); ?>>山口県</option>
                                         </optgroup>
                                         <optgroup label="四国">
-                                            <option value="徳島県" <?php optionSelectedCall('pref', '徳島県'); ?>>徳島県</option>
-                                            <option value="香川県" <?php optionSelectedCall('pref', '香川県'); ?>>香川県</option>
-                                            <option value="愛媛県" <?php optionSelectedCall('pref', '愛媛県'); ?>>愛媛県</option>
-                                            <option value="高知県" <?php optionSelectedCall('pref', '高知県'); ?>>高知県</option>
+                                            <option value="36" <?php optionSelectedCall('pref', 36); ?>>徳島県</option>
+                                            <option value="37" <?php optionSelectedCall('pref', 37); ?>>香川県</option>
+                                            <option value="38" <?php optionSelectedCall('pref', 38); ?>>愛媛県</option>
+                                            <option value="39" <?php optionSelectedCall('pref', 39); ?>>高知県</option>
                                         </optgroup>
                                         <optgroup label="九州・沖縄">
-                                            <option value="福岡県" <?php optionSelectedCall('pref', '福岡県'); ?>>福岡県</option>
-                                            <option value="佐賀県" <?php optionSelectedCall('pref', '佐賀県'); ?>>佐賀県</option>
-                                            <option value="長崎県" <?php optionSelectedCall('pref', '長崎県'); ?>>長崎県</option>
-                                            <option value="熊本県" <?php optionSelectedCall('pref', '熊本県'); ?>>熊本県</option>
-                                            <option value="大分県" <?php optionSelectedCall('pref', '大分県'); ?>>大分県</option>
-                                            <option value="宮崎県" <?php optionSelectedCall('pref', '宮崎県'); ?>>宮崎県</option>
-                                            <option value="鹿児島県" <?php optionSelectedCall('pref', '鹿児島県'); ?>>鹿児島県</option>
-                                            <option value="沖縄県" <?php optionSelectedCall('pref', '沖縄県'); ?>>沖縄県</option>
+                                            <option value="40" <?php optionSelectedCall('pref', 40); ?>>福岡県</option>
+                                            <option value="41" <?php optionSelectedCall('pref', 41); ?>>佐賀県</option>
+                                            <option value="42" <?php optionSelectedCall('pref', 42); ?>>長崎県</option>
+                                            <option value="43" <?php optionSelectedCall('pref', 43); ?>>熊本県</option>
+                                            <option value="44" <?php optionSelectedCall('pref', 44); ?>>大分県</option>
+                                            <option value="45" <?php optionSelectedCall('pref', 45); ?>>宮崎県</option>
+                                            <option value="46" <?php optionSelectedCall('pref', 46); ?>>鹿児島県</option>
+                                            <option value="47" <?php optionSelectedCall('pref', 47); ?>>沖縄県</option>
                                         </optgroup>
                                     </select>
                                 </div>

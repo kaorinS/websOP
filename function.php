@@ -73,11 +73,15 @@ define('MSG13', '文字で入力してください');
 define('MSG14', '認証キーが誤っています');
 define('MSG15', '有効期限が切れています。認証キーを再取得してください');
 define('MSG16', '選択してください');
+define('MSG17', '日付が正しくありません');
+define('MSG18', '不正な値が入力されました');
+define('MSG19', '半角数字で入力してください');
 
 // サクセスメッセージ
 define('SUC01', 'パスワードを変更しました');
 define('SUC02', 'プロフィールを編集しました');
 define('SUC03', 'メールを送信しました');
+define('SUC04', '登録しました');
 
 // ================================
 // グローバル変数
@@ -88,21 +92,21 @@ $err_msg = array();
 // ================================
 // バリデーション関数
 // ================================
-// 未入力チェック
-function validRequired($str, $key)
+// 入力チェック
+function validRequired($str, $key, $comment = "")
 {
-    if (empty($str)) {
+    if (empty($str) ||  $str === false) {
         global $err_msg;
-        $err_msg[$key] = MSG01;
+        $err_msg[$key] = $comment . MSG01;
     }
 }
 
-// セレクトボックス未選択チェック
-function validSelectboxRequired($str, $key)
+// 未選択チェック
+function validSelectRequired($str, $key, $comment = '')
 {
-    if ($str == 0) {
+    if ($str == 0 || $str = "" || empty($str)) {
         global $err_msg;
-        $err_msg[$key] = MSG16;
+        $err_msg[$key] = $comment . MSG16;
     }
 }
 
@@ -157,30 +161,22 @@ function validNewPass($str1, $str2, $key)
         $err_msg[$key] = MSG12;
     }
 }
+
+// 半角数字チェック
+function validHalfNumber($str, $key)
+{
+    if (!preg_match("/^[0-9]+$/", $str)) {
+        global $err_msg;
+        $err_msg[$key] = MSG19;
+    }
+}
+
 // 半角英数字チェック
 function validHalfAlphanumeric($str, $key)
 {
     if (!preg_match("/^[a-zA-Z0-9]+$/", $str)) {
         global $err_msg;
         $err_msg[$key] = MSG04;
-    }
-}
-
-// 最小文字数チェック(６文字未満)
-function validMinLen($str, $key, $min = 6)
-{
-    if (mb_strlen($str) < $min) {
-        global $err_msg;
-        $err_msg[$key] = MSG05;
-    }
-}
-
-// 最大文字数チェック(256文字以上)
-function validMaxLen($str, $key, $max = 255)
-{
-    if (mb_strlen($str) > $max) {
-        global $err_msg;
-        $err_msg[$key] = MSG06;
     }
 }
 
@@ -202,6 +198,33 @@ function validKanji($str, $key)
     }
 }
 
+// 日付チェック
+function validDate($str, $key)
+{
+    if (!preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $str)) {
+        global $err_msg;
+        $err_msg[$key] =  MSG17;
+    }
+}
+
+// 最小文字数チェック(６文字未満)
+function validMinLen($str, $key, $min = 6)
+{
+    if (mb_strlen($str) < $min) {
+        global $err_msg;
+        $err_msg[$key] = MSG05;
+    }
+}
+
+// 最大文字数チェック(256文字以上)
+function validMaxLen($str, $key, $max = 255)
+{
+    if (mb_strlen($str) > $max) {
+        global $err_msg;
+        $err_msg[$key] = MSG06;
+    }
+}
+
 // パスワードチェック
 function validPass($str, $key)
 {
@@ -220,6 +243,32 @@ function validLength($str, $key, $length)
         global $err_msg;
         $err_msg[$key] = $length . MSG13;
     }
+}
+
+// セレクトボックスチェック(1以上の半角数字)
+function validSelect($str, $key)
+{
+    if ($str === 0 || !preg_match("/^[0-9]+$/", $str)) {
+        global $err_msg;
+        $err_msg[$key] = MSG18;
+    }
+}
+
+// 都道府県チェック
+function validPref($str, $key)
+{
+    if (!preg_match("/^([0-9]{1,2})$/", $str) || !preg_match("/^([1-9]|[1-3][0-9]|4[0-7])$/", $str)) {
+        global $err_msg;
+        $err_msg[$key] = MSG18;
+    }
+}
+
+// 日付時刻チェック
+function validDateTime($date, $format = 'Y-m-d H:i:s')
+{
+    // 入力値は日付けとして扱える値なのかのチェック
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
 }
 
 // ================================
@@ -473,6 +522,12 @@ function optionSelectedCall($str1, $str2)
     if (getFormData($str1) == $str2) echo 'selected';
 }
 
+// inputタグchecked呼び出し
+function inputCheckedCall($str1, $str2)
+{
+    if (getFormData($str1) == $str2) echo 'checked';
+}
+
 // 1回きりのセッションを呼び出す
 function getSessionOnce($key)
 {
@@ -553,5 +608,35 @@ function uploadImg($file, $key)
             global $err_msg;
             $err_msg[$key] = $e->getMessage();
         }
+    }
+}
+
+// エリア判定
+function areaDecided($str)
+{
+    if ($str >= 1 && $str <= 7) {
+        // 北海道・東北
+        return 1;
+    } elseif ($str >= 8 && $str <= 13) {
+        // 甲信越・北陸
+        return 2;
+    } elseif ($str >= 14 && $str <= 20) {
+        // 関東
+        return 3;
+    } elseif ($str >= 21 && $str <= 24) {
+        // 東海
+        return 4;
+    } elseif ($str >= 25 && $str <= 30) {
+        // 関西
+        return 5;
+    } elseif ($str >= 31 && $str <= 35) {
+        // 中国
+        return 6;
+    } elseif ($str >= 36 && $str <= 39) {
+        // 四国
+        return 7;
+    } elseif ($str >= 40 && $str <= 47) {
+        // 九州・沖縄
+        return 8;
     }
 }
