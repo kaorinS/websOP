@@ -76,6 +76,7 @@ define('MSG16', '選択してください');
 define('MSG17', '日付が正しくありません');
 define('MSG18', '不正な値が入力されました');
 define('MSG19', '半角数字で入力してください');
+define('MSG20', '終了日時が過去のものは登録できません');
 
 // サクセスメッセージ
 define('SUC01', 'パスワードを変更しました');
@@ -269,6 +270,25 @@ function validDateTime($date, $format = 'Y-m-d H:i:s')
     // 入力値は日付けとして扱える値なのかのチェック
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
+}
+
+// 終了日時チェック
+function validEndDate($date, $key)
+{
+    $today = date('Y-m-d');
+    if (strtotime($today) > strtotime($date)) {
+        global $err_msg;
+        $err_msg[$key] = MSG20;
+    }
+}
+
+// 日付順序チェック
+function validDateOrder($start, $end, $key)
+{
+    if (strtotime($start) >= strtotime($end)) {
+        global $err_msg;
+        $err_msg[$key] = MSG17;
+    }
 }
 
 // ================================

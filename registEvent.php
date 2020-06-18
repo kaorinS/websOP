@@ -108,6 +108,8 @@ if (!empty($_POST)) {
             // 日付形式チェック
             validDate($eventStart, 'event_date');
             validDate($eventEnd, 'event_date');
+            validEndDate($eventEnd, 'event_date');
+            validDateOrder($eventStart, $eventEnd, 'event_date');
             // 時刻形式チェック
             $checkedTimeStart = validDateTime($timeStart, 'H:i');
             validRequired($checkedTimeStart, 'event_time', '正しい時刻を');
@@ -169,6 +171,10 @@ if (!empty($_POST)) {
             $checkedtime = validDateTime($timeEnd, 'H:i');
             validRequired($checkedtime, 'event_time', '正しい時刻を');
         }
+        // 日時チェック
+        validEndDate($eventEnd, 'event_date');
+        validDateOrder($eventStart, $eventEnd, 'event_date');
+
         // カテゴリー
         if ($dbInfo['c_id'] !==  $category) {
             // セレクトボックスチェック
