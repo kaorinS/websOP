@@ -15,18 +15,24 @@ require('auth.php');
 // 画面処理
 // ================================
 // ユーザー情報を取得
-$userInfo = getUser($_SESSION['user_id']);
-debug('$userInfo(DB情報)の中身→→→' . print_r($userInfo, true));
+$dbInfo = getUser($_SESSION['user_id']);
+debug('$dbInfo(DB情報)の中身→→→' . print_r($dbInfo, true));
 
 // POST送信されてるか
 if (!empty($_POST)) {
     debug('$_POSTの中身→→→' . print_r($_POST, true));
+    debug('$_FILESの中身→→→' . print_r($_FILES, true));
 
     // $_POSTの中身を変数に代入
     $username = $_POST['username'];
     $pref = $_POST['pref'];
     $age = $_POST['age'];
     $email = $_POST['email'];
+    $pic = $_POST['pic'];
+    // 画像をアップロードして、パスを格納
+    $pic = (!empty($_FILES['pic']['name'])) ? uploadImg($_FILES['pic'], 'pic') : '';
+    // 画像をPOSTしていないが、すでにDBに登録されてる場合、DBのパスを格納
+    $pic = (empty($pic) && !empty($dbInfo['pic'])) ? $dbInfo['pic'] : $pic;
 
     // 未入力チェック
     validRequired($username, 'username');
@@ -36,14 +42,14 @@ if (!empty($_POST)) {
     if (empty($err_msg)) {
         // 登録情報と異なる場合、バリデーション
         // ユーザーネーム
-        if ($username !== $userInfo['username']) {
+        if ($username !== $dbInfo['username']) {
             // 最大文字数チェック
             validMaxLen($username, 'username');
         }
 
         // 登録情報と異なる場合、バリデーション
         // メールアドレス
-        if ($email !== $userInfo['email']) {
+        if ($email !== $dbInfo['email']) {
             // 形式チェック
             validEmail($email, 'email');
             // 最大文字数チェック
@@ -68,8 +74,8 @@ if (!empty($_POST)) {
                 // DB接続
                 $dbh = dbConnect();
                 // SQL文作成
-                $sql = 'UPDATE users SET username = :username, pref = :pref, age = :age, email = :email WHERE id = :id';
-                $data = array(':username' => $username, ':pref' => $pref, ':age' => $age, ':email' => $email, ':id' => $userInfo['id']);
+                $sql = 'UPDATE users SET username = :username, pref = :pref, age = :age, email = :email, pic = :pic WHERE id = :id';
+                $data = array(':username' => $username, ':pref' => $pref, ':age' => $age, ':email' => $email, ':pic' => $pic, ':id' => $dbInfo['id']);
                 // クエリ実行
                 $stmt = queryPost($dbh, $sql, $data);
 
@@ -129,15 +135,15 @@ require('head.php');
                                 ユーザーネーム <span class="mypage-edit-caution">*必須</span><br>
                                 <input type="text" class="input-text -mypage-edit <?php classErrorCall('username'); ?>" name="username" value="<?php echo getFormData('username'); ?>">
                             </label>
-                            <!-- <div class="label-mypage-edit">
+                            <div class="label-mypage-edit">
                                 プロフィール画像
                             </div>
-                            <label class=" label mypage-edit-area-drop">
-                                <input type="hidden" name="MAX_FILE_SIZE" value="3145278">
-                                <input type="file" class="mypage-edit-input-file" name="pic">
-                                <img src="<?php echo getFormData('pic'); ?>" class="mypage-edit-prev-img <?php if (empty(getFormData('pic'))) echo 'no-display'; ?>">
-                                ドラッグ&ドロップ
-                            </label> -->
+                            <label class="label img-drop -prof_edit">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
+                                <input type="file" class="regist-input-file input-file" name="pic1">
+                                <img src="<?php  ?>" class="prev-img -prof_edit <?php if (empty(getFormData('pic'))) echo "no-display"; ?>">
+                                ドラッグ＆ドロップ
+                            </label>
                             <label class="label label-mypage-edit">
                                 <div class="area-msg">
                                     <?php
@@ -147,7 +153,7 @@ require('head.php');
                                 都道府県<br>
                                 <div class="selectbox -mypage-edit">
                                     <select class="select select-mypage-edit" name="pref">
-                                        <option value="0" <?php if ($userInfo['pref'] == '' || $userInfo['pref'] == 0) echo 'selected'; ?>>選択してください</option>
+                                        <option value="0" <?php if ($dbInfo['pref'] == '' || $dbInfo['pref'] == 0) echo 'selected'; ?>>選択してください</option>
                                         <optgroup label="北海道">
                                             <option value="1" <?php optionSelectedCall('pref', 1); ?>>北海道</option>
                                         </optgroup>
@@ -198,7 +204,7 @@ require('head.php');
                                 年齢<br>
                                 <div class="selectbox -mypage-edit">
                                     <select class="select select-mypage-edit" name="age">
-                                        <option value="0" <?php if ($userInfo['age'] == '' || $userInfo['age'] == 0) echo 'selected'; ?>>選択してください</option>
+                                        <option value="0" <?php if ($dbInfo['age'] == '' || $dbInfo['age'] == 0) echo 'selected'; ?>>選択してください</option>
                                         <option value="-15" <?php optionSelectedCall('age', '-15'); ?>>〜15歳</option>
                                         <option value="16-20" <?php optionSelectedCall('age', '16-20'); ?>>16歳〜20歳</option>
                                         <option value="21-25" <?php optionSelectedCall('age', '21-25'); ?>>21歳〜25歳</option>
@@ -232,6 +238,8 @@ require('head.php');
                 </section>
             </main>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" src="js/profEdit.js"></script>
         <?php
         require('footer.php');
         ?>

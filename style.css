@@ -1252,17 +1252,30 @@ body {
   margin-right: 0;
 }
 
-.img-drop.-regist {
-  border: 1px dotted #aaa;
+.img-drop {
   border-radius: 10px;
-  color: #666;
   font-size: 1.5rem;
-  height: 133px;
-  line-height: 133px;
   overflow: hidden;
   position: relative;
   text-align: center;
   width: 100%;
+}
+
+.img-drop.-regist {
+  border: 1px dotted #aaa;
+  color: #666;
+  height: 133px;
+  line-height: 133px;
+}
+
+.img-drop.-prof_edit {
+  border: 1px solid #aaa;
+  border-radius: 50%;
+  color: #666;
+  height: 150px;
+  line-height: 150px;
+  margin-top: 5px;
+  width: 150px;
 }
 
 .regist-input-file {
@@ -1274,6 +1287,10 @@ body {
   height: 100%;
   object-fit: contain;
   width: 100%;
+}
+
+.prev-img.-prof_edit {
+  object-fit: cover;
 }
 
 /* display非表示 */
