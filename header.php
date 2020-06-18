@@ -4,10 +4,10 @@
         <nav class="header-nav">
             <ul class="header-ul">
                 <?php if (empty($_SESSION['user_id'])) : ?>
-                    <li class="header-li"><a href="login.php">新規登録 / ログイン</a></li>
+                    <li class="header-li"><a href="login.php" class="spread-a">新規登録 / ログイン</a></li>
                 <?php else : ?>
-                    <li class="header-li -login"><a href="mypage.php">マイページ</a></li>
-                    <li class="header-li -login"><a href="logout.php">ログアウト</a></li>
+                    <li class="header-li -login"><a href="mypage.php" class="header-a">マイページ</a></li>
+                    <li class="header-li -login"><a href="logout.php" class="header-a">ログアウト</a></li>
                 <?php endif; ?>
             </ul>
         </nav>

@@ -302,7 +302,7 @@ function queryPost($dbh, $sql, $data)
     $stmt = $dbh->prepare($sql);
     // プレースホルダに値をセット、SQL文を実行
     if (!$stmt->execute($data)) {
-        debug('クエリに失敗');
+        debug('!!!!! クエリに失敗 !!!!!');
         debug('失敗したSQL→→→' . print_r($stmt, true));
         global $err_msg;
         $err_msg['common'] = MSG07;
@@ -356,6 +356,48 @@ function getEventData($u_id, $e_id)
         if ($stmt) {
             // クエリ結果のデータを１レコード返却
             return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return false;
+        }
+    } catch (Exception $e) {
+        error_log('!!!!! エラー発生 !!!!!' . $e->getMessage());
+    }
+}
+
+// イベント情報
+function getEventList($currentMinNum = 1, $span = 20)
+{
+    debug('***** イベント情報を取得 *****');
+    // 例外処理
+    try {
+        // DBヘ接続
+        $dbh = dbConnect();
+        // SQL作成
+        $sql = 'SELECT id FROM festival';
+        $data = array();
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+        // 総レコード数をカウント
+        $rst['total'] = $stmt->rowCount();
+        // 総ページ数を取得
+        $rst['total_page'] = ceil($rst['total'] / $span);
+        debug('$rstの中身→→→' . print_r($rst, true));
+        if (!$stmt) {
+            return false;
+        }
+
+        // ページング用のSQL文作成
+        $sql = 'SELECT * FROM festival';
+        $sql .= ' LIMIT ' . $span . ' OFFSET ' . $currentMinNum;
+        $data = array();
+        debug('ページングSQLの中身→→→' . $sql);
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if ($stmt) {
+            // クエリ結果のデータ全レコードを格納
+            $rst['data'] = $stmt->fetchAll();
+            return $rst;
         } else {
             return false;
         }
@@ -441,6 +483,7 @@ function sanitize($str)
 {
     return htmlspecialchars($str, ENT_QUOTES);
 }
+
 // is-active呼び出し
 function addIsActive($str, $page_name)
 {
@@ -614,20 +657,20 @@ function uploadImg($file, $key)
 // エリア判定
 function areaDecided($str)
 {
-    if ($str >= 1 && $str <= 7) {
-        // 北海道・東北
+    if ($str === 1) {
+        // 北海道
         return 1;
-    } elseif ($str >= 8 && $str <= 13) {
-        // 甲信越・北陸
+    } elseif ($str >= 2 && $str <= 7) {
+        // 東北
         return 2;
-    } elseif ($str >= 14 && $str <= 20) {
+    } elseif ($str >= 8 && $str <= 14) {
         // 関東
         return 3;
-    } elseif ($str >= 21 && $str <= 24) {
-        // 東海
+    } elseif ($str >= 15 && $str <= 23) {
+        // 中部
         return 4;
-    } elseif ($str >= 25 && $str <= 30) {
-        // 関西
+    } elseif ($str >= 24 && $str <= 30) {
+        // 近畿
         return 5;
     } elseif ($str >= 31 && $str <= 35) {
         // 中国
@@ -638,5 +681,163 @@ function areaDecided($str)
     } elseif ($str >= 40 && $str <= 47) {
         // 九州・沖縄
         return 8;
+    }
+}
+
+// エリア名呼び出し(クラス)
+function areaClassCalled($str)
+{
+    $area_array = array(
+        'hokkaido',
+        'tohoku',
+        'kanto',
+        'chubu',
+        'kinki',
+        'chugoku',
+        'shikoku',
+        'kyusyu'
+    );
+
+    return $area_array[$str - 1];
+}
+
+// エリア名呼び出し(漢字)
+function areaNameCalled($str)
+{
+    $area_array = array(
+        '北海道',
+        '東北',
+        '関東',
+        '中部',
+        '近畿',
+        '中国',
+        '四国',
+        '九州'
+    );
+
+    return $area_array[$str - 1];
+}
+
+// 都道府県名呼び出し
+function prefNameCalled($str)
+{
+    // 都道府県配列
+    $pref_array = array(
+        '北海道',
+        '青森県',
+        '岩手県',
+        '宮城県',
+        '秋田県',
+        '山形県',
+        '福島県',
+        '茨城県',
+        '栃木県',
+        '群馬県',
+        '埼玉県',
+        '千葉県',
+        '東京都',
+        '神奈川県',
+        '新潟県',
+        '富山県',
+        '石川県',
+        '福井県',
+        '山梨県',
+        '長野県',
+        '岐阜県',
+        '静岡県',
+        '愛知県',
+        '三重県',
+        '滋賀県',
+        '京都府',
+        '大阪府',
+        '兵庫県',
+        '奈良県',
+        '和歌山県',
+        '鳥取県',
+        '島根県',
+        '岡山県',
+        '広島県',
+        '山口県',
+        '徳島県',
+        '香川県',
+        '愛媛県',
+        '高知県',
+        '福岡県',
+        '佐賀県',
+        '長崎県',
+        '熊本県',
+        '大分県',
+        '宮崎県',
+        '鹿児島県',
+        '沖縄県'
+    );
+    return $pref_array[$str];
+}
+
+// ページング
+function pagination($currentPageNum, $totalPageNum, $link = '', $pageColNum = 5)
+{
+    $pageNumHalf = floor($pageColNum / 2);
+    // 現在のページが総ページ数と同じ、かつ、総ページ数が表示項目数以上なら、左にリンク４個出す
+    if ($currentPageNum == $totalPageNum && $totalPageNum >= $pageColNum) {
+        $minPageNum = $currentPageNum - 4;
+        $maxPageNum = $currentPageNum;
+        // 現在のページ数が、総ページ数の1ページ前なら、左にリンク3個、右に1個出す
+    } elseif ($currentPageNum == ($totalPageNum - 1) && $totalPageNum >= $pageColNum) {
+        $minPageNum = $currentPageNum - 3;
+        $maxPageNum = $currentPageNum + 1;
+        // 現在のページが２の場合は、左にリンク1個、右にリンク3個出す
+    } elseif ($currentPageNum == 2 && $totalPageNum >= $pageColNum) {
+        $minPageNum = $currentPageNum - 1;
+        $maxPageNum = $currentPageNum + 3;
+        // 現在のページが１の場合は、右にリンク4個出す
+    } elseif ($currentPageNum == 1 && $totalPageNum >= $pageColNum) {
+        $minPageNum = $currentPageNum;
+        $maxPageNum = 5;
+        // 総ページ数が、表示項目数より少ない場合は、総ページ数をループのMax、ループのMinを１に設定
+    } elseif ($totalPageNum < $pageColNum) {
+        $minPageNum = 1;
+        $maxPageNum = $totalPageNum;
+        // それ以外は左に2個、右に2個出す
+    } else {
+        $minPageNum = $currentPageNum - 2;
+        $maxPageNum = $currentPageNum + 2;
+    }
+
+    echo '<div class="pagination">';
+    echo '<ul class="pagination-list">';
+    if ($currentPageNum != 1 && $totalPageNum > $pageColNum && $currentPageNum > $pageNumHalf + 1) {
+        echo '<li class="list-item"><a href="?p=1' . $link . '" class="a-pagination">&lt;&lt;</a></li>';
+    }
+    for ($i = $minPageNum; $i <= $maxPageNum; $i++) {
+        echo '<li class="list-item ';
+        if ($currentPageNum == $i) {
+            echo 'active';
+        }
+        echo '"><a href="?p=' . $i . $link . '" class="a-pagination">' . $i . '</a></li>';
+    }
+    if ($currentPageNum != $maxPageNum && $totalPageNum > $pageColNum && $currentPageNum < $totalPageNum - $pageNumHalf) {
+        echo '<li class="list-item"><a href="?p=' . $totalPageNum . $link . '" class="a-pagination">&gt;&gt;</a></li>';
+    }
+    echo '</ul>';
+    echo '</div>';
+}
+
+// GETパラメータ付与
+function appendGetParam($arr_del_key = array(), $flg = false)
+{
+    if ($flg) {
+        $str = '&';
+    } else {
+        $str = '?';
+    }
+    if (!empty($_GET)) {
+        foreach ($_GET as $key => $val) {
+            if (!in_array($key, $arr_del_key, true)) {
+                $str .= $key . '=' . $val . '&';
+            }
+        }
+        $str = mb_strlen($str, 0, -1, "UTF=8");
+        return $str;
     }
 }
