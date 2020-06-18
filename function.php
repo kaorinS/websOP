@@ -385,7 +385,7 @@ function getEventData($u_id, $e_id)
 }
 
 // イベント情報
-function getEventList($currentMinNum = 1, $span = 20)
+function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $format, $span = 20)
 {
     debug('***** イベント情報を取得 *****');
     // 例外処理
@@ -394,6 +394,13 @@ function getEventList($currentMinNum = 1, $span = 20)
         $dbh = dbConnect();
         // SQL作成
         $sql = 'SELECT id FROM festival';
+        if (!empty($cat)) $sql .= ' WHERE c_id = ' . $cat;
+        if (!empty($area)) $sql .= ' WHERE area = ' . $area;
+        if (!empty($pref)) $sql .= ' WHERE pref = ' . $pref;
+        if (!empty($start) && empty($end)) $sql .= ' WHERE date_start >= ' . $start;
+        if (!empty($start) && !empty($end)) $sql .= ' WHERE date_start >= ' . $start . ' AND date_end <= ' . $end;
+        if (empty($start) && !empty($end)) $sql .= ' WHERE date_end <= ' . $end;
+        if (!empty($format)) $sql  .= ' WHERE format = ' . $format;
         $data = array();
         // クエリ実行
         $stmt = queryPost($dbh, $sql, $data);
@@ -860,4 +867,11 @@ function appendGetParam($arr_del_key = array(), $flg = false)
         $str = mb_strlen($str, 0, -1, "UTF=8");
         return $str;
     }
+}
+
+// GET呼び出し
+function calledGet($key, $val = '')
+{
+    $str = (!empty($_GET[$key])) ? $_GET[$key] : $val;
+    return $str;
 }
