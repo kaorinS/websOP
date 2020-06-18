@@ -115,21 +115,9 @@ require('head.php');
               </div>
             </div>
           </div>
-          <h2 class="title side-h2">日付</h2>
+          <h2 class="title side-h2">期間</h2>
           <div class="side-group-wrap">
             <div class="side-group">
-              <h3 class="title side-title">開催月</h3>
-              <div class="selectbox -index">
-                <select class="select side-border" name="month">
-                  <option value="0">未選択</option>
-                  <?php for ($i = 1; $i <= 12; $i++) : ?>
-                    <option value="<?= $i ?>"><?= $i ?>月</option>
-                  <?php endfor; ?>
-                </select>
-              </div>
-            </div>
-            <div class="side-group">
-              <h3 class="title side-title">期間</h3>
               <div class="side-input-date">
                 <input type="date" class="input-date side-border" name="start">
               </div>
@@ -159,16 +147,20 @@ require('head.php');
         </div>
         <div class="panel-list">
           <?php foreach ($dbEventData['data'] as $key => $val) : ?>
-            <a href="eventDetail.php?p_id=<?= $val['id'] ?>" class="panel">
-              <div class="panel-body">
-                <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
-                <p class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= areaNameCalled($val['area']) ?></p>
-                <p class="panel-title">
-                  <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) '〜' . date("n月j日", strtotime($val['date_end'])) ?></span><br>
-                  <?= $val['name'] ?>
-                </p>
-              </div>
-            </a>
+            <div class="panel">
+              <a href="#">
+                <span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= areaNameCalled($val['area']) ?></span>
+              </a>
+              <a href="eventDetail.php?p_id=<?= $val['id'] ?>">
+                <div class="panel-body">
+                  <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
+                  <p class="panel-title">
+                    <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) '〜' . date("n月j日", strtotime($val['date_end'])) ?></span><br>
+                    <?= $val['name'] ?>
+                  </p>
+                </div>
+              </a>
+            </div>
           <?php endforeach; ?>
         </div>
         <?php pagination($currentPageNum, $dbEventData['total_page']); ?>

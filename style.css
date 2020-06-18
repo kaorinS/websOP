@@ -280,8 +280,8 @@ a {
 
 .side.-index {
   background: #eee;
-  height: 480px;
-  padding: 13px;
+  padding: 15px 13px;
+  padding-bottom: 25px;
 }
 
 .side.-mypage {
@@ -649,27 +649,31 @@ body {
   margin-right: -25px;
 }
 
+.panel {
+  float: left;
+  margin: 40px 25px 10px 0;
+  width: 30%;
+}
+
 /* 画像 */
 .panel-body {
   border-radius: 5px;
-  float: left;
+  border-top-left-radius: 0;
   height: 150px;
-  margin: 40px 25px 10px 0;
   overflow: hidden;
   position: relative;
-  width: 30%;
+  width: 100%;
 }
 
 .panel-pref {
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
   color: #fff;
+  display: inline-block;
   font-family: "Kosugi Maru", sans-serif;
   font-size: 1.5rem;
-  letter-spacing: 0.08em;
-  padding: 3px 6px 0 6px;
-  position: absolute;
-  top: -24px;
+  letter-spacing: 0.1em;
+  padding: 3px 7px 0px 7px;
 }
 
 .kanto {
