@@ -1101,11 +1101,6 @@ body {
   width: 4px;
 }
 
-.block-regist.-first::before {
-  top: 0;
-  left: 0;
-}
-
 .block-regist.-event_date {
   overflow: hidden;
 }
@@ -1160,6 +1155,15 @@ body {
 .input-text.-mypage-edit.-regist_target {
   height: 30px;
   width: 140px;
+}
+
+.-mypage-edit.-regist_people {
+  height: 30px;
+  width: 80px;
+}
+
+.in_regist {
+  font-size: 1.6rem;
 }
 
 /* input text の中身 */
@@ -1416,7 +1420,7 @@ body {
 }
 
 .detail-main-body {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .detail-main-title {
@@ -1430,6 +1434,8 @@ body {
 
 .detail-main-article {
   line-height: 1.8;
+  margin: 0 auto;
+  width: 75%;
 }
 
 .detail-main-footer {
@@ -1479,6 +1485,7 @@ body {
 
 .return-top {
   background: #ccc;
+  border: 0px;
   border-radius: 50%;
   height: 50px;
   position: relative;
@@ -1510,22 +1517,29 @@ body {
 }
 
 /* イベント詳細ページ用フェードイン */
-@keyframes js-fadein {
+/* @keyframes fadein {
   0% {
     opacity: 0;
   }
   100% {
     opacity: 0.5;
   }
-}
+} */
+
 .js-fadein {
-  display: none;
+  /* display: none; */
+  opacity: 0;
+  transition: opacity 1s, visibility 0s ease 1s;
+  visibility: hidden;
 }
 
 .js-fadein.is-fadein {
-  display: block;
-  animation-name: js-fadein;
-  animation-duration: 1s;
+  /* display: block;
+  animation-name: fadein;
+  animation-duration: 1s; */
+  opacity: 0.5;
+  transition-delay: 0s;
+  visibility: visible;
 }
 
 /* サクセスメッセージ */

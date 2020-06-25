@@ -511,6 +511,12 @@ function sanitize($str)
     return htmlspecialchars($str, ENT_QUOTES);
 }
 
+// サニタイズ(改行あり)
+function sanitize_br($str)
+{
+    return nl2br(htmlspecialchars($str, ENT_QUOTES, 'UTF-8'));
+}
+
 // is-active呼び出し
 function addIsActive($str, $page_name)
 {
@@ -798,7 +804,7 @@ function prefNameCalled($str)
         '鹿児島県',
         '沖縄県'
     );
-    return $pref_array[$str];
+    return $pref_array[$str - 1];
 }
 
 // ページング
@@ -869,9 +875,59 @@ function appendGetParam($arr_del_key = array(), $flg = false)
     }
 }
 
-// GET呼び出し
-function calledGet($key, $val = '')
+// GETにキーが入っていたら、取得する
+function takeGetValue($key, $val = '')
 {
     $str = (!empty($_GET[$key])) ? $_GET[$key] : $val;
     return $str;
+}
+
+// イベント詳細用のイベント情報を取得
+function getEventOne($e_id)
+{
+    debug('***** イベント情報を取得 *****');
+    debug('イベントID→→→' . $e_id);
+    // 例外処理
+    try {
+        // DB接続
+        $dbh = dbConnect();
+        // SQL文作成
+        $sql = 'SELECT f.name, f.format, f.date_start, f.date_end, f.time_start, f.time_end, f.area, f.pref, f.place, f.addr, f.target_age, f.target_other, f.fee, f.pay, f.capacity, f.people, f.comment, f.contact, f.pic1, f.pic2, f.pic3, f.c_id, c.name AS category FROM festival AS f LEFT JOIN category as c ON f.c_id = c.id WHERE f.id = :e_id AND f.is_deleted = 0';
+        $data = array(':e_id' => $e_id);
+        // クエリ作成
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if ($stmt) {
+            // 成功の場合、1レコード返却
+            return  $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return false;
+        }
+    } catch (Exception $e) {
+        error_log('!!!!! エラーが発生しました !!!!!' . $e->getMessage());
+    }
+}
+
+// 曜日呼び出し
+function callDayOfWeek($date)
+{
+    $datetime = new DateTime("$date");
+    $week = array(
+        '日', //0
+        '月', //1
+        '火', //2
+        '水', //3
+        '木', //4
+        '金', //5
+        '土', //6
+    );
+    $w = (int) date_format($datetime, 'w');
+
+    return '(' . $week[$w] . ')';
+}
+
+// 時間フォーマット
+function callTime($time)
+{
+    return date('H:i', strtotime($time));
 }

@@ -63,12 +63,15 @@ if (!empty($_POST)) {
     $category = $_POST['category'];
     $pref = $_POST['pref'];
     $area = '';
-    $address = $_POST['address'];
+    $place = $_POST['place'];
+    $addr = $_POST['addr'];
     $format = (!empty($_POST['format'])) ? $_POST['format'] : '';
     $target = (isset($_POST['target']) && is_array($_POST['target'])) ? $_POST['target'] : '';
     $targetOther = $_POST['target-other'];
     $entry = (!empty($_POST['entry'])) ? $_POST['entry'] : '';
     $entryFee = $_POST['entry-fee'];
+    $capacity = (!empty($_POST['capacity'])) ? $_POST['capacity'] : '';
+    $people = $_POST['people'];
     $detail = $_POST['detail'];
     $organizer = $_POST['organizer'];
     // 画像をアップロードして、パスを格納
@@ -94,11 +97,14 @@ if (!empty($_POST)) {
         validSelectRequired($timeEnd, 'event_time', '時刻を');
         validSelectRequired($category, 'category');
         validSelectRequired($pref, 'pref');
-        validRequired($address, 'address');
+        validRequired($place, 'place');
+        validRequired($addr, 'addr');
         validSelectRequired($format, 'format');
         if (!empty($target[$targetOtherId])) validRequired($targetOther, 'target', 'その他の欄を');
         validSelectRequired($entry, 'entry');
         if ($entry == 2) validRequired($entryFee, 'entry', '金額を');
+        validSelectRequired($capacity, 'capacity');
+        if ($entry == 2) validRequired($people, 'capacity', '人数を');
         validRequired($detail, 'detail');
         validRequired($organizer, 'organizer');
 
@@ -120,7 +126,9 @@ if (!empty($_POST)) {
             // 都道府県チェック
             validPref($pref, 'pref');
             // 開催場所チェック
-            validMaxLen($address, 'address');
+            validMaxLen($place, 'place');
+            // 住所チェック
+            validMaxLen($addr, 'addr');
             // 会場形式チェック
             validSelect($format, 'format');
             // 参加対象チェック
@@ -136,6 +144,9 @@ if (!empty($_POST)) {
             validSelect($entry, 'entry');
             // 参加費（有料)文字数チェック
             if (!empty($entryFee)) validMaxLen($entryFee, 'entry');
+            // 定員形式チェック
+            validSelect($capacity, 'capacity');
+            if (!empty($people)) validMaxLen($people, 'capacity');
             // 詳細最大文字数チェック
             validMaxLen($detail, 'detail', 500);
             // 主催~最大文字数チェック
@@ -186,11 +197,18 @@ if (!empty($_POST)) {
             validPref($pref, 'pref');
         }
         // 開催場所
-        if ($dbInfo['address'] !== $address) {
+        if ($dbInfo['place'] !== $place) {
             // 未入力チェック
-            validRequired($address, 'address');
+            validRequired($place, 'place');
             // 最大文字数チェック
-            validMaxLen($address, 'address');
+            validMaxLen($place, 'place');
+        }
+        // 住所
+        if ($dbInfo['addr'] !== $addr) {
+            // 未入力チェック
+            validRequired($addr, 'addr');
+            // 最大文字数チェック
+            validMaxLen($addr, 'addr');
         }
         // 会場形式
         if ($dbInfo['format'] !== $format) {
@@ -218,6 +236,15 @@ if (!empty($_POST)) {
             // 最大文字数チェック
             validMaxLen($entryFee, 'entry');
         }
+        // 定員
+        if ($dbInfo['capacity'] !== $capacity) {
+            // 形式チェック
+            validSelect($capacity, 'capacity');
+        }
+        if ($dbInfo['people'] !== $people) {
+            // 最大文字数チェック
+            validMaxLen($people, 'capacity');
+        }
         // 詳細
         if ($dbInfo['comment'] !== $detail) {
             // 最大文字数チェック
@@ -242,13 +269,13 @@ if (!empty($_POST)) {
             if ($edit_flg) {
                 // 更新
                 debug('***** イベント更新 *****');
-                $sql = 'UPDATE festival SET name = :name, `format` = :format, c_id = :c_id, date_start = :dateStart, date_end = :dateEnd, time_start = :timeStart, time_end = :timeEnd, area = :area, pref = :pref, place = :address, target_age = :target, target_other = :targetOther, fee = :entry, pay = :pay, comment = :detail, contact = :contact, pic1 = :pic1, pic2 = :pic2, pic3 = :pic3 WHERE id = :id AND u_id = :u_id';
-                $data = array(':name' => $eventname, ':format' => $format, ':c_id' => $category, ':dateStart' => $eventStart, ':dateEnd'  => $eventEnd, ':timeStart' => $timeStart, ':timeEnd' => $timeEnd, ':area' => $area, ':pref' => $pref, ':address' => $address, ':target' => $target_separeted, ':targetOther' => $targetOther, ':entry' => $entry, ':pay' => $entryFee, ':detail' => $detail, ':contact' => $organizer, ':pic1' => $pic1, ':pic2' => $pic2, ':pic3' => $pic3, ':id' => $e_id, ':u_id' => $_SESSION['user_id']);
+                $sql = 'UPDATE festival SET name = :name, `format` = :format, c_id = :c_id, date_start = :dateStart, date_end = :dateEnd, time_start = :timeStart, time_end = :timeEnd, area = :area, pref = :pref, place = :place, addr = :addr, target_age = :target, target_other = :targetOther, fee = :entry, pay = :pay, capacity = ;capacity, people = :people, comment = :detail, contact = :contact, pic1 = :pic1, pic2 = :pic2, pic3 = :pic3 WHERE id = :id AND u_id = :u_id';
+                $data = array(':name' => $eventname, ':format' => $format, ':c_id' => $category, ':dateStart' => $eventStart, ':dateEnd'  => $eventEnd, ':timeStart' => $timeStart, ':timeEnd' => $timeEnd, ':area' => $area, ':pref' => $pref, ':place' => $place, ':addr' => $addr, ':target' => $target_separeted, ':targetOther' => $targetOther, ':entry' => $entry, ':pay' => $entryFee, 'c:capacity' => $capacity, ':people' => $people, ':detail' => $detail, ':contact' => $organizer, ':pic1' => $pic1, ':pic2' => $pic2, ':pic3' => $pic3, ':id' => $e_id, ':u_id' => $_SESSION['user_id']);
             } else {
                 // 新規
                 debug('***** イベント新規作成 *****');
-                $sql = 'INSERT INTO festival (name, `format`, c_id, date_start, date_end, time_start, time_end, area, pref, place, target_age, target_other, fee, pay, comment, contact, u_id, pic1, pic2, pic3, created_at) VALUES (:name, :format, :c_id, :dateStart, :dateEnd, :timeStart, :timeEnd, :area, :pref, :address, :target, :targetOther, :entry, :pay, :detail, :contact, :u_id, :pic1, :pic2, :pic3, :created)';
-                $data = array(':name' => $eventname, ':format' => $format, ':c_id' => $category, ':dateStart' => $eventStart, ':dateEnd'  => $eventEnd, ':timeStart' => $timeStart, ':timeEnd' => $timeEnd, ':area' => $area, ':pref' => $pref, ':address' => $address, ':target' => $target_separeted, ':targetOther' => $targetOther, ':entry' => $entry, ':pay' => $entryFee, ':detail' => $detail, ':contact' => $organizer, ':u_id' => $_SESSION['user_id'], ':pic1' => $pic1, ':pic2' => $pic2, ':pic3' => $pic3, ':created' => date('Y-m-d H:i:s'));
+                $sql = 'INSERT INTO festival (name, `format`, c_id, date_start, date_end, time_start, time_end, area, pref, place, addr, target_age, target_other, fee, pay, capacity, people, comment, contact, u_id, pic1, pic2, pic3, created_at) VALUES (:name, :format, :c_id, :dateStart, :dateEnd, :timeStart, :timeEnd, :area, :pref, :place, :addr, :target, :targetOther, :entry, :pay, :capacity, :people, :detail, :contact, :u_id, :pic1, :pic2, :pic3, :created)';
+                $data = array(':name' => $eventname, ':format' => $format, ':c_id' => $category, ':dateStart' => $eventStart, ':dateEnd'  => $eventEnd, ':timeStart' => $timeStart, ':timeEnd' => $timeEnd, ':area' => $area, ':pref' => $pref, ':place' => $place, ':addr' => $addr, ':target' => $target_separeted, ':targetOther' => $targetOther, ':entry' => $entry, ':pay' => $entryFee, ':capacity' => $capacity, ':people' => $people, ':detail' => $detail, ':contact' => $organizer, ':u_id' => $_SESSION['user_id'], ':pic1' => $pic1, ':pic2' => $pic2, ':pic3' => $pic3, ':created' => date('Y-m-d H:i:s'));
             }
             debug('SQL→→→' . $sql);
             debug('流し込みデータ→→→' . print_r($data, true));
@@ -366,44 +393,44 @@ require('head.php');
                             <label class="label block-regist">
                                 開催地<span class="mypage-edit-caution">*必須</span><br>
                                 <div class="selectbox -mypage-edit -regist">
-                                    <select class="select select-mypage-edit" name="pref">
+                                    <select id="js-pref" class="select select-mypage-edit" name="pref" onchange="changePref(this);">
                                         <option value="0" <?php if (empty($pref) || $pref == '') echo 'selected'; ?>>選択してください</option>
                                         <optgroup label="北海道">
                                             <option value="1" <?php optionSelectedCall('pref', 1); ?>>北海道</option>
                                         </optgroup>
                                         <optgroup label="東北">
                                             <?php for ($i = 2; $i <= 7; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="関東">
                                             <?php for ($i = 8; $i <= 14; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="中部">
                                             <?php for ($i = 15; $i <= 23; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="近畿">
                                             <?php for ($i = 24; $i <= 30; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="中国">
                                             <?php for ($i = 31; $i <= 35; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="四国">
                                             <?php for ($i = 36; $i <= 39; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="九州・沖縄">
                                             <?php for ($i = 40; $i <= 47; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                     </select>
@@ -411,12 +438,21 @@ require('head.php');
                             </label>
                             <div class="area-msg">
                                 <?php
-                                errorMsgCall('address');
+                                errorMsgCall('place');
                                 ?>
                             </div>
                             <label class="label block-regist -first">
                                 開催場所<span class="mypage-edit-caution">*必須</span><br>
-                                <input type="text" class="input-text -mypage-edit -regist <?php classErrorCall('address'); ?>" name="address" value="<?php echo getFormData('address'); ?>">
+                                <input type="text" class="input-text -mypage-edit -regist <?php classErrorCall('place'); ?>" name="place" value="<?php echo getFormData('place'); ?>">
+                            </label>
+                            <div class="area-msg">
+                                <?php
+                                errorMsgCall('addr');
+                                ?>
+                            </div>
+                            <label class="label block-regist -first">
+                                住所<span class="mypage-edit-caution">*必須</span><br>
+                                <input type="text" id="js-addr" class="input-text -mypage-edit -regist <?php classErrorCall('addr'); ?>" name="addr" value="<?php echo getFormData('addr'); ?>">
                             </label>
                             <div class="area-msg -regist">
                                 <?php
@@ -453,6 +489,17 @@ require('head.php');
                                 <label><input type="radio" class="radio" name="entry" value="1" onclick="payChange();" <?php if (!empty($entry) && $entry == 1) echo 'checked'; ?>><span class="regist-checkbox-font">無料</span></label>
                                 <label><input type="radio" id="js-radio-pay" class="radio" name="entry" value="2" onclick="payChange();" <?php if (!empty($entry) && $entry == 2) echo 'checked'; ?>><span class="regist-checkbox-font">有料</span></label>
                                 <textarea name="entry-fee" cols="50" rows="4" id="js-text-pay" class="textarea-regist no-display <?php classErrorCall('entry-fee'); ?>" placeholder="入力例：大人 1,000円&#13;&#10;　　　　中学生 800円"><?php echo getFormData('entry-fee'); ?></textarea>
+                            </div>
+                            <div class="area-msg -regist">
+                                <?php
+                                errorMsgCall('capacity');
+                                ?>
+                            </div>
+                            <div class="block-regist">
+                                定員<span class="mypage-edit-caution">*必須</span><br>
+                                <label><input type="radio" class="radio" name="capacity" value="1" <?php if (!empty($capacity) && $capacity == 1) echo 'checked'; ?>><span class="regist-checkbox-font">無し</span></label>
+                                <label><input type="radio" class="radio" name="capacity" value="2" <?php if (!empty($capacity) && $capacity == 2) echo 'checked'; ?>><span class="regist-checkbox-font">有り</span></label>
+                                <input type="text" class="input-text -mypage-edit -regist_people" name="people" value="<?php echo getFormData('people'); ?>"><span class="in_regist">名</span>
                             </div>
                             <div class="area-msg -regist">
                                 <?php
