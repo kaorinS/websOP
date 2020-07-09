@@ -22,7 +22,7 @@ $(window).scroll(function () {
 
 // ===== エリア選択or都道府県選択 =====
 // エリアの選択をした場合
-function AreaChange(value) {
+function areaChange(value) {
   // 都道府県のセレクトボックス要素を取得
   const pref_select = document.getElementById("js-pref-select");
   // エリア選択が0以外の場合、都道府県セレクトボックスを未選択にする
@@ -31,7 +31,7 @@ function AreaChange(value) {
   }
 }
 // 都道府県の選択をした場合
-function PrefChange(value) {
+function prefChange(value) {
   // エリアのセレクトボックス要素を取得
   const area_select = document.getElementById("js-area-select");
   // 都道府県が選択された場合、エリアのセレクトボックスを未選択にする

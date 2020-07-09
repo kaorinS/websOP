@@ -154,7 +154,7 @@ require('head.php');
                 </div>
             </main>
             <div class="back-index-eventDetail">
-                <a href="index.php">
+                <a href="index.php<?= appendGetParam(array('e_id')); ?>">
                     << TOPに戻る</a> </div> <div class="return-top-wrap">
                         <button id="js-return-top" class="return-top js-fadein"></button>
             </div>

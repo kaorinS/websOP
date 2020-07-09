@@ -395,13 +395,45 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
         // SQL作成
         $sql = 'SELECT id FROM festival';
         if (!empty($cat)) $sql .= ' WHERE c_id = ' . $cat;
-        if (!empty($area)) $sql .= ' WHERE area = ' . $area;
-        if (!empty($pref)) $sql .= ' WHERE pref = ' . $pref;
-        if (!empty($start) && empty($end)) $sql .= ' WHERE date_start >= ' . $start;
-        if (!empty($start) && !empty($end)) $sql .= ' WHERE date_start >= ' . $start . ' AND date_end <= ' . $end;
-        if (empty($start) && !empty($end)) $sql .= ' WHERE date_end <= ' . $end;
-        if (!empty($format)) $sql  .= ' WHERE format = ' . $format;
+
+        if ((int) $area !== 0 && empty($cat)) {
+            $sql .= ' WHERE area = ' . $area;
+        } elseif ((int) $area !== 0 && !empty($cat)) {
+            $sql .= ' AND area = ' . $area;
+        }
+
+        if ((int) $pref !== 0 && empty($cat) && (int) $area === 0) {
+            $sql .= ' WHERE pref = ' . $pref;
+        } elseif ((int) $pref !== 0 && (!empty($cat) || (int) $area !== 0)) {
+            $sql .= ' AND pref = ' . $pref;
+        }
+
+        if (!empty($start) && empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
+            $sql .= ' WHERE date_start >= ' . $start;
+        } elseif (!empty($start) && empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
+            $sql .= ' AND date_start >= ' . $start;
+        }
+
+        if (!empty($start) && !empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
+            $sql .= ' WHERE date_start >= ' . $start . ' AND date_end <= ' . $end;
+        } elseif (!empty($start) && !empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
+            $sql .= ' AND date_start >= ' . $start . ' AND date_end <= ' . $end;
+        }
+
+        if (empty($start) && !empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
+            $sql .= ' WHERE date_end <= ' . $end;
+        } elseif (empty($start) && !empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
+            $sql .= ' AND date_end <= ' . $end;
+        }
+
+        $format_array = explode(",", $format);
+        if (!empty($format_array[0]) && empty($format_array[1]) && empty($cat) && (int) $area === 0 && (int) $pref === 0 && empty($start) && empty($end)) {
+            $sql  .= ' WHERE format = ' . (int) $format_array[0];
+        } elseif (!empty($format_array[0]) && empty($format_array[1]) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0 || !empty($start) || !empty($end))) {
+            $sql  .= ' AND format = ' . (int) $format_array[0];
+        }
         $data = array();
+        debug('$sqlの中身→→→' . $sql);
         // クエリ実行
         $stmt = queryPost($dbh, $sql, $data);
         // 総レコード数をカウント
@@ -415,6 +447,44 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
 
         // ページング用のSQL文作成
         $sql = 'SELECT * FROM festival';
+        if (!empty($cat)) $sql .= ' WHERE c_id = ' . $cat;
+
+        if ((int) $area !== 0 && empty($cat)) {
+            $sql .= ' WHERE area = ' . $area;
+        } elseif ((int) $area !== 0 && !empty($cat)) {
+            $sql .= ' AND area = ' . $area;
+        }
+
+        if ((int) $pref !== 0 && empty($cat) && (int) $area === 0) {
+            $sql .= ' WHERE pref = ' . $pref;
+        } elseif ((int) $pref !== 0 && (!empty($cat) || (int) $area !== 0)) {
+            $sql .= ' AND pref = ' . $pref;
+        }
+
+        if (!empty($start) && empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
+            $sql .= ' WHERE date_start >= ' . $start;
+        } elseif (!empty($start) && empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
+            $sql .= ' AND date_start >= ' . $start;
+        }
+
+        if (!empty($start) && !empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
+            $sql .= ' WHERE date_start >= ' . $start . ' AND date_end <= ' . $end;
+        } elseif (!empty($start) && !empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
+            $sql .= ' AND date_start >= ' . $start . ' AND date_end <= ' . $end;
+        }
+
+        if (empty($start) && !empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
+            $sql .= ' WHERE date_end <= ' . $end;
+        } elseif (empty($start) && !empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
+            $sql .= ' AND date_end <= ' . $end;
+        }
+
+        $format_array = explode(",", $format);
+        if (!empty($format_array[0]) && empty($format_array[1]) && empty($cat) && (int) $area === 0 && (int) $pref === 0 && empty($start) && empty($end)) {
+            $sql  .= ' WHERE format = ' . (int) $format_array[0];
+        } elseif (!empty($format_array[0]) && empty($format_array[1]) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0 || !empty($start) || !empty($end))) {
+            $sql  .= ' AND format = ' . (int) $format_array[0];
+        }
         $sql .= ' LIMIT ' . $span . ' OFFSET ' . $currentMinNum;
         $data = array();
         debug('ページングSQLの中身→→→' . $sql);
@@ -865,12 +935,19 @@ function appendGetParam($arr_del_key = array(), $flg = false)
         $str = '?';
     }
     if (!empty($_GET)) {
+
+        if (!empty($_GET['format']) && empty($_GET['format'][1])) {
+            $_GET['format'] = $_GET['format'][0];
+        } elseif (!empty($_GET['format'][1])) {
+            array_push($arr_del_key, 'format');
+        }
+
         foreach ($_GET as $key => $val) {
             if (!in_array($key, $arr_del_key, true)) {
                 $str .= $key . '=' . $val . '&';
             }
         }
-        $str = mb_strlen($str, 0, -1, "UTF=8");
+        $str = mb_substr($str, 0, -1, "UTF-8");
         return $str;
     }
 }
