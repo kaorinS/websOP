@@ -744,6 +744,9 @@ body {
 .sort-li {
   float: left;
 }
+.sort-li:hover {
+  text-decoration: underline;
+}
 
 .sort-li + .sort-li {
   padding-left: 10px;

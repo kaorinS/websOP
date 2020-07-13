@@ -25,12 +25,14 @@ $start = takeGetValue('date_starg');
 $end = takeGetValue('date_end');
 // 会場形式
 $format = (isset($_GET['format']) && is_array($_GET['format'])) ? implode(",", $_GET['format']) : '';
+// ソート
+$sort = (int) takeGetValue('sort', 1);
 // 表示件数(今回は20)
 $listSpan = 20;
 // 現在ページの表示レコードの先頭を表示(◯件/●●件中 の◯部分)
 $currentMinNum = (($currentPageNum - 1) * $listSpan);
 // DBから商品データを取得
-$dbEventData = getEventList($currentMinNum, $category, $area, $pref, $start, $end, $format);
+$dbEventData = getEventList($currentMinNum, $category, $area, $pref, $start, $end, $format, $sort);
 // debug('$dbEventData(商品データ）の中身→→→' . print_r($dbEventData, true));
 debug('イベント総数($dbEventData[total])→→→' . $dbEventData['total']);
 debug('ページ総数($dbEventData[total_page])→→→' . $dbEventData['total_page']) . 'ページ';
@@ -192,10 +194,26 @@ require('head.php');
         <!-- ソート -->
         <div class="sort-list">
           <ul class="sort-ul">
-            <li class="sort-li">新着順</li>
-            <li class="sort-li">開催日時順</li>
-            <li class="sort-li">終了日が近い順</li>
-            <li class="sort-li">お気に入りが多い順</li>
+            <li class="sort-li" style="<?php if ($sort === 1) echo 'font-weight: bold;'; ?>"><a href="index.php<?= appendGetParam(array('sort')) ?><?php if (empty($_GET) || !empty($_GET['sort'])) {
+                                                                                                                                                      echo '?';
+                                                                                                                                                    } else {
+                                                                                                                                                      echo '&';
+                                                                                                                                                    } ?>sort=1">新着順</a></li>
+            <li class="sort-li" style="<?php if ($sort === 2) echo 'font-weight: bold;'; ?>"><a href="index.php<?= appendGetParam(array('sort')) ?><?php if (empty($_GET) || !empty($_GET['sort'])) {
+                                                                                                                                                      echo '?';
+                                                                                                                                                    } else {
+                                                                                                                                                      echo '&';
+                                                                                                                                                    } ?>sort=2">登録順</a></li>
+            <li class="sort-li" style="<?php if ($sort === 3) echo 'font-weight: bold;'; ?>"><a href="index.php<?= appendGetParam(array('sort')) ?><?php if (empty($_GET) || !empty($_GET['sort'])) {
+                                                                                                                                                      echo '?';
+                                                                                                                                                    } else {
+                                                                                                                                                      echo '&';
+                                                                                                                                                    } ?>sort=3">開催日順</a></li>
+            <li class="sort-li" style="<?php if ($sort === 4) echo 'font-weight: bold;'; ?>"><a href="index.php<?= appendGetParam(array('sort')) ?><?php if (empty($_GET) || !empty($_GET['sort'])) {
+                                                                                                                                                      echo '?';
+                                                                                                                                                    } else {
+                                                                                                                                                      echo '&';
+                                                                                                                                                    } ?>sort=4">終了日が近い順</a></li>
           </ul>
         </div>
         <!-- イベント一覧 -->
@@ -209,7 +227,11 @@ require('head.php');
                 <div class="panel-body">
                   <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
                   <p class="panel-title">
-                    <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) '〜' . date("n月j日", strtotime($val['date_end'])) ?></span><br>
+                    <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) {
+                                                                                                    echo '〜' . date("n月j日", strtotime($val['date_end']));
+                                                                                                  } elseif ($val['date_start'] !== $val['date_end'] && date("Y", strtotime($val['date_start'])) !== date("Y", strtotime($val['dte_end']))) {
+                                                                                                    echo '〜' . date("Y年n月j日", strtotime($val['date_end']));
+                                                                                                  } ?></span><br>
                     <?= $val['name'] ?>
                   </p>
                 </div>

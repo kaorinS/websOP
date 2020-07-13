@@ -385,7 +385,7 @@ function getEventData($u_id, $e_id)
 }
 
 // イベント情報
-function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $format, $span = 20)
+function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $format, $sort = 1, $span = 20)
 {
     debug('***** イベント情報を取得 *****');
     // 例外処理
@@ -432,6 +432,21 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
         } elseif (!empty($format_array[0]) && empty($format_array[1]) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0 || !empty($start) || !empty($end))) {
             $sql  .= ' AND format = ' . (int) $format_array[0];
         }
+
+        if ($sort === 1) {
+            // 新着順
+            $sql .= ' ORDER BY id DESC';
+        } elseif ($sort === 2) {
+            // 登録順
+            $sql .= ' ORDER BY id ASC';
+        } elseif ($sort === 3) {
+            // 開催日時順
+            $sql .= ' ORDER BY date_start ASC';
+        } elseif ($sort === 4) {
+            // 終了日が近い順
+            $sql .= ' ORDER BY date_end ASC';
+        }
+
         $data = array();
         debug('$sqlの中身→→→' . $sql);
         // クエリ実行
@@ -485,6 +500,21 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
         } elseif (!empty($format_array[0]) && empty($format_array[1]) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0 || !empty($start) || !empty($end))) {
             $sql  .= ' AND format = ' . (int) $format_array[0];
         }
+
+        if ($sort === 1) {
+            // 新着順
+            $sql .= ' ORDER BY id DESC';
+        } elseif ($sort === 2) {
+            // 登録順
+            $sql .= ' ORDER BY id ASC';
+        } elseif ($sort === 3) {
+            // 開催日時順
+            $sql .= ' ORDER BY id DESC, date_start ASC';
+        } elseif ($sort === 4) {
+            // 終了日が近い順
+            $sql .= ' ORDER BY id DESC, date_end ASC';
+        }
+
         $sql .= ' LIMIT ' . $span . ' OFFSET ' . $currentMinNum;
         $data = array();
         debug('ページングSQLの中身→→→' . $sql);
