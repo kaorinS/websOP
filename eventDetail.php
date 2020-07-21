@@ -11,7 +11,7 @@ debugLogStart();
 // 画面処理
 // ================================
 // *****データ取得*****
-// GET
+// GETの中身を取得
 debug('$_GETの中身→→→' . print_r($_GET, true));
 // イベントIDを取得
 $e_id = takeGetValue('e_id');
@@ -47,6 +47,7 @@ require('head.php');
                 <a href="index.php?area=<?= sanitize($viewData['area']) ?>" class="a a-under"><?= sanitize(areaNameCalled($viewData['area'])) ?></a> > <a href="index.php?pref=<?= sanitize($viewData['pref']) ?>"><span class="span-pref <?= sanitize(areaClassCalled($viewData['area'])) ?>"><?= sanitize(prefNameCalled($viewData['pref'])) ?></span></a>
             </div>
             <main class="main eventDetail-main">
+                <button type="button" id="js-like" class="add-like js-click-like <?php if (isLike($_SESSION['user_id'], $viewData['id'])) echo 'active'; ?>" data-eventid="<?= sanitize($viewData['id']) ?>"><i class="fas fa-heart icn-like"></i><span class="btn-text">お気に入りに追加</span></button>
                 <div class="detail-header">
                     <div class="detail-header-heading">
                         <h1 class="detail-header-title"><?= sanitize($viewData['name']) ?></h1>
@@ -159,6 +160,7 @@ require('head.php');
                         <button id="js-return-top" class="return-top js-fadein"></button>
             </div>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script type="text/javascript" src="js/eventDetail.js"></script>
         <?php
         require('footer.php');

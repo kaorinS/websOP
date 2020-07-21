@@ -292,6 +292,30 @@ function validDateOrder($start, $end, $key)
 }
 
 // ================================
+// ログイン認証
+// ================================
+function isLogin()
+{
+    // ログインしている場合
+    if (!empty($_SESSION['login_date'])) {
+        debug('***** ログイン済ユーザー *****');
+        // 現在日時が最終ログイン日時＋有効期限を超えていた場合
+        if (($_SESSION['login_date'] + $_SESSION['login_limit']) < time()) {
+            debug('!!!!! ログイン有効期限オーバー !!!!!');
+            // セッション削除
+            session_destroy();
+            return false;
+        } else {
+            debug('***** ログイン有効時間内 *****');
+            return true;
+        }
+    } else {
+        debug('!!!!! 未ログインユーザー !!!!!');
+        return false;
+    }
+}
+
+// ================================
 // DB関係
 // ================================
 // DB接続関数
@@ -580,6 +604,36 @@ function getTargetData()
         error_log('!!!!! エラー発生 !!!!!' . $e->getMessage());
     }
 }
+
+// お気に入り情報
+function isLike($u_id, $e_id)
+{
+    debug('***** お気に入り情報の確認 *****');
+    debug('ユーザーID→→→' . $u_id);
+    debug('イベントID→→→' . $e_id);
+    // 例外処理
+    try {
+        // DBヘ接続
+        $dbh = dbConnect();
+        // SQL文作成
+        $sql = 'SELECT * FROM favo WHERE f_id = :f_id AND u_id = :u_id';
+        $data = array(':f_id' => $e_id, ':u_id' => $u_id);
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+
+        // 判定
+        if ($stmt->rowCount()) {
+            debug('***** お気に入り *****');
+            return true;
+        } else {
+            debug('***** notお気に入り *****');
+            return false;
+        }
+    } catch (Exception $e) {
+        error_log('!!!!! エラー発生→→→' . $e->getMessage() . ' !!!!!');
+    }
+}
+
 
 //================================
 // メール送信
@@ -999,7 +1053,7 @@ function getEventOne($e_id)
         // DB接続
         $dbh = dbConnect();
         // SQL文作成
-        $sql = 'SELECT f.name, f.format, f.date_start, f.date_end, f.time_start, f.time_end, f.area, f.pref, f.place, f.addr, f.target_age, f.target_other, f.fee, f.pay, f.capacity, f.people, f.comment, f.contact, f.pic1, f.pic2, f.pic3, f.c_id, c.name AS category FROM festival AS f LEFT JOIN category as c ON f.c_id = c.id WHERE f.id = :e_id AND f.is_deleted = 0';
+        $sql = 'SELECT f.id, f.name, f.format, f.date_start, f.date_end, f.time_start, f.time_end, f.area, f.pref, f.place, f.addr, f.target_age, f.target_other, f.fee, f.pay, f.capacity, f.people, f.comment, f.contact, f.pic1, f.pic2, f.pic3, f.c_id, c.name AS category FROM festival AS f LEFT JOIN category as c ON f.c_id = c.id WHERE f.id = :e_id AND f.is_deleted = 0';
         $data = array(':e_id' => $e_id);
         // クエリ作成
         $stmt = queryPost($dbh, $sql, $data);

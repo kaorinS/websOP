@@ -1345,6 +1345,10 @@ body {
   margin-top: 20px;
 }
 
+.detail-header {
+  margin-top: 5px;
+}
+
 .detail-header-heading {
   border-bottom: solid 1px #ccc;
 }
@@ -1509,6 +1513,40 @@ body {
   left: 50%;
   transform: translateX(-50%) rotate(+45deg);
   width: 20px;
+}
+
+/* お気に入り */
+.add-like {
+  background: #fff;
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(#fff),
+    to(#eee)
+  );
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  box-shadow: inset 1px 1px 1px #fff;
+  color: #555;
+  font-size: 1.3rem;
+  padding: 2px 10px;
+}
+
+.add-like:hover {
+  cursor: pointer;
+}
+
+.icn-like {
+  color: #ccc;
+}
+
+.add-like.active > .icn-like {
+  color: #f69;
+}
+
+.btn-text {
+  padding-left: 10px;
 }
 
 /*--------------------------------

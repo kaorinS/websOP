@@ -54,3 +54,42 @@ for (let i = 0; i < subImgs.length; i++) {
     false
   );
 }
+
+// ***** お気に入り追加・削除
+let $like, likeEventId;
+$like = $(".js-click-like") || null;
+likeEventId = $like.data("eventid") || null;
+
+if (likeEventId !== undefined && likeEventId !== null) {
+  $like.on("click", function () {
+    const $this = $(this);
+    $.ajax({
+      type: "POST",
+      url: "ajaxLike.php",
+      data: { eventId: likeEventId },
+    })
+      .done(function (data) {
+        console.log("Ajax Success");
+        // クラス属性をtoggleで付け外し
+        $this.toggleClass("active");
+        btnText();
+      })
+      .fail(function (msg) {
+        console.log("Ajax Error");
+      });
+  });
+}
+
+// ***** 「お気に入りに追加」「お気に入りから削除」の設定 *****
+// buttonのクラス名にactiveがあるかどうか
+function btnText() {
+  let isActive = $("#js-like").hasClass("active");
+  console.log("buttonのクラスにactiveがあるかどうか→→→", isActive);
+  if (isActive) {
+    $(".btn-text").text("お気に入りから削除");
+  } else {
+    $(".btn-text").text("お気に入りに追加");
+  }
+}
+// 読み込み時のチェック
+btnText();
