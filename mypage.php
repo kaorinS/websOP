@@ -10,6 +10,28 @@ debugLogStart();
 
 // ログイン認証
 require('auth.php');
+
+// ================================
+// 画面処理
+// ================================
+// 画面表示用データ取得
+// ================================
+// ユーザーIDを取得
+$u_id = $_SESSION['user_id'];
+// ユーザー情報を取得
+$u_info = getUser($u_id);
+// 都道府県情報があった場合、代入する
+$u_pref = (!empty($u_info['pref'])) ? $u_info['pref'] : '';
+// 都道府県情報があった場合、イベントを取得
+$prefEventData = getMyPrefEvent($u_pref);
+debug('$prefEventDataの中身→→→' . print_r($prefEventData, true));
+// 自分が作成したイベント情報を取得
+$myCreated = getMyEventData($u_id);
+$myEventData = $myCreated['data'];
+debug('$myEventData' . print_r($myEventData, true));
+// お気に入りデータを取得
+$myFavoData = getMyLike($u_id);
+
 ?>
 <?php
 $title = 'マイページ　|　イベ探';
@@ -35,120 +57,124 @@ require('head.php');
             ?>
             <!-- メイン -->
             <main class="main">
-                <section class="sec-mypage -area">
-                    <div class="mypage-title-wrap">
-                        <h2 class="mypage-title -area">
-                            関東エリアの新着イベント
-                        </h2>
-                        <div class="mypage-title-jump -area">
-                            <a href="index.php" class="a-mypage-main -more">>> 一覧を見る</a>
+                <!-- 新着イベント -->
+                <?php if (!empty($u_info['pref'])) : ?>
+                    <section class="sec-mypage -area">
+                        <div class="mypage-title-wrap">
+                            <h2 class="mypage-title -area">
+                                <?= prefNameCalled($u_info['pref']) ?>の新着イベント
+                            </h2>
+                            <?php if (!empty($prefEventData[2])) : ?>
+                                <div class="mypage-title-jump -area">
+                                    <a href="index.php" class="a-mypage-main -more">>> 一覧を見る</a>
+                                </div>
+                            <?php endif; ?>
                         </div>
-                    </div>
-                    <div class="panel-list">
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/coffee1.jpg" class="img -index" alt="">
-                                <p class="panel-pref kanto">千葉県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    コーヒー試飲会
-                                </p>
+                        <?php if (!empty($prefEventData)) : ?>
+                            <div class="panel-list">
+                                <?php foreach ($prefEventData as $key => $val) : ?>
+                                    <div class="panel">
+                                        <a href="index.php<?= '?pref=' . $val['pref'] ?>">
+                                            <span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= prefNameCalled($val['pref']) ?></span>
+                                        </a>
+                                        <a href="eventDetail.php<?= "?e_id=" . $val['id'] ?>">
+                                            <div class="panel-body">
+                                                <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
+                                                <p class="panel-title">
+                                                    <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) {
+                                                                                                                                        echo '〜' . date("n月j日", strtotime($val['date_end']));
+                                                                                                                                    } elseif ($val['date_start'] !== $val['date_end'] && date("Y", strtotime($val['date_start'])) !== date("Y", strtotime($val['dte_end']))) {
+                                                                                                                                        echo '〜' . date("Y年n月j日", strtotime($val['date_end']));
+                                                                                                                                    } ?></span><br>
+                                                    <?= $val['name'] ?>
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/bread1.jpg" class="img -index">
-                                <p class="panel-pref kanto">神奈川県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    親子パン教室
-                                </p>
-                            </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/pflower1.jpg" class="img -index" alt="">
-                                <p class="panel-pref kanto">東京都</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    プリザーブドフラワーレッスン
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                </section>
-                <section class="sec-mypage -created">
-                    <div class="mypage-title-wrap">
-                        <h2 class="mypage-title -created">
-                            作成したイベント
-                        </h2>
-                    </div>
-                    <div class="panel-list">
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/bread1.jpg" class="img -index">
-                                <p class="panel-pref kanto">神奈川県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    親子パン教室
-                                </p>
-                            </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/coffee1.jpg" class="img -index" alt="">
-                                <p class="panel-pref tokai">愛知県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    コーヒー試飲会
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                </section>
+                        <?php endif; ?>
+                    </section>
+                <?php endif; ?>
+                <!-- 作成したイベント -->
+                <?php if (!empty($myEventData)) : ?>
+                    <section class="sec-mypage -created">
+                        <div class="mypage-title-wrap">
+                            <h2 class="mypage-title -created">
+                                作成したイベント
+                            </h2>
+                            <?php if (!empty($myEventData[2])) : ?>
+                                <div class="mypage-title-jump -created">
+                                    <a href="index.php" class="a-mypage-main -more">>> 一覧を見る</a>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="panel-list">
+                            <?php foreach ($myEventData as $key => $val) : ?>
+                                <div class="panel">
+                                    <a href="index.php<?= '?pref=' . $val['pref'] ?>">
+                                        <span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= prefNameCalled($val['pref']) ?></span>
+                                    </a>
+                                    <a href="eventDetail.php<?= "?e_id=" . $val['id'] ?>">
+                                        <div class="panel-body">
+                                            <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
+                                            <p class="panel-title">
+                                                <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) {
+                                                                                                                                    echo '〜' . date("n月j日", strtotime($val['date_end']));
+                                                                                                                                } elseif ($val['date_start'] !== $val['date_end'] && date("Y", strtotime($val['date_start'])) !== date("Y", strtotime($val['dte_end']))) {
+                                                                                                                                    echo '〜' . date("Y年n月j日", strtotime($val['date_end']));
+                                                                                                                                } ?></span><br>
+                                                <?= $val['name'] ?>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </section>
+                <?php endif; ?>
+                <!-- お気に入り -->
                 <section class="sec-mypage -favo">
                     <div class="mypage-title-wrap">
                         <h2 class="mypage-title -favo">
                             お気に入り
                         </h2>
-                        <div class="mypage-title-jump -favo">
-                            <a href="mypageFavo.php" class="a-mypage-main -more">>> 一覧を見る</a>
-                        </div>
+                        <?php if (!empty($myFavoData[2])) : ?>
+                            <div class="mypage-title-jump -favo">
+                                <a href="mypageFavo.php" class="a-mypage-main -more">>> 一覧を見る</a>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="panel-list">
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/pflower1.jpg" class="img -index" alt="">
-                                <p class="panel-pref kyusyu">鹿児島県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    プリザーブドフラワーレッスン
-                                </p>
+                        <?php if (!empty($myFavoData)) : ?>
+                            <?php foreach ($myFavoData as $key => $val) : ?>
+                                <div class="panel">
+                                    <a href="index.php<?= '?pref=' . $val['pref'] ?>">
+                                        <span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= prefNameCalled($val['pref']) ?></span>
+                                    </a>
+                                    <a href="eventDetail.php<?= "?e_id=" . $val['id'] ?>">
+                                        <div class="panel-body">
+                                            <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
+                                            <p class="panel-title">
+                                                <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) {
+                                                                                                                                    echo '〜' . date("n月j日", strtotime($val['date_end']));
+                                                                                                                                } elseif ($val['date_start'] !== $val['date_end'] && date("Y", strtotime($val['date_start'])) !== date("Y", strtotime($val['dte_end']))) {
+                                                                                                                                    echo '〜' . date("Y年n月j日", strtotime($val['date_end']));
+                                                                                                                                } ?></span><br>
+                                                <?= $val['name'] ?>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <div class="no-favo-msg">
+                                お気に入りに登録されたイベントがありません
                             </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/yukata1.jpg" class="img -index" alt="">
-                                <p class="panel-pref kinki">滋賀県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    浴衣着付けレッスン
-                                </p>
-                            </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/bread1.jpg" class="img -index" alt="">
-                                <p class="panel-pref kinki">京都府</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    親子パン教室
-                                </p>
-                            </div>
-                        </a>
+                        <?php endif; ?>
                     </div>
                 </section>
-                <section class="sec-mypage -comment">
+                <!-- <section class="sec-mypage -comment">
                     <div class="mypage-title-wrap">
                         <h2 class="mypage-title -comment">
                             コメントしたイベント
@@ -166,7 +192,7 @@ require('head.php');
                             </div>
                         </a>
                     </div>
-                </section>
+                </section> -->
             </main>
         </div>
         <?php

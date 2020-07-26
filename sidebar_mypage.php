@@ -21,12 +21,14 @@
         </div>
         <div class="side-group-mypage group-fes">
             <ul class="ul ul-mypage-side">
-                <li class="li li-mypage-side">
-                    <a href="mypageCreated.php" class="a-side-group-mypage <?php addIsActive($pageName, 'created'); ?>">作成したイベント</a></li>
+                <?php if (!empty($myEventData)) : ?>
+                    <li class="li li-mypage-side">
+                        <a href="mypageCreated.php" class="a-side-group-mypage <?php addIsActive($pageName, 'created'); ?>">作成したイベント</a></li>
+                <?php endif; ?>
                 <li class="li li-mypage-side">
                     <a href="mypageFavo.php" class="a-side-group-mypage <?php addIsActive($pageName, 'favo'); ?>">お気に入り</a></li>
-                <li class="li li-mypage-side">
-                    <a href="mypageComment.php" class="a-side-group-mypage <?php addIsActive($pageName, 'comment'); ?>">コメントしたイベント</a></li>
+                <!-- <li class="li li-mypage-side">
+                    <a href="mypageComment.php" class="a-side-group-mypage <?php addIsActive($pageName, 'comment'); ?>">コメントしたイベント</a></li> -->
             </ul>
             <div class="side-group-line"></div>
         </div>

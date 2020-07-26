@@ -1,6 +1,30 @@
 <?php
 // 共通変数・関数を読み込む
 require('function.php');
+
+// デバッグ
+debug('**********************************************');
+debug('********** マイページ(作成したイベント) **********');
+debug('**********************************************');
+debugLogStart();
+
+// ログイン認証
+require('auth.php');
+
+// ================================
+// 画面処理
+// ================================
+// ユーザーIDを代入
+$u_id = $_SESSION['user_id'];
+// 現在何ページ目か取得(デフォは１)
+$currentPangeNum = takeGetValue('p', 1);
+// 1ページに表示するイベント数
+$span = 20;
+// 表示されるイベントの先頭(OFFSET後の数値)
+$startNumber = (($currentPangeNum - 1) * $span);
+// 作成したイベント情報を取得
+$myCreatedData = getMyEventData($u_id, $span, $startNumber);
+debug('$myCreatedDataの中身→→→' . print_r($myCreatedData, true));
 ?>
 <?php
 $title = '作成したイベント　|　イベ探';
@@ -28,10 +52,10 @@ require('head.php');
                             作成したイベント
                         </h2>
                         <div class="mypage-number-display">
-                            全2件中 2件
+                            全 <?= $myCreatedData['total'] ?> 件中 <?php echo (!empty($myCreatedData['data'])) ? $startNumber + 1 : 0; ?> <?php if (!empty($myCreatedData['data']) && !empty($myCreatedData['data'][1])) echo ' - ' . ($startNumber + count($myCreatedData['data'])); ?> 件
                         </div>
                     </div>
-                    <div class="selectbox -mypage">
+                    <!-- <div class="selectbox -mypage">
                         <select name="sort" id="" class="select -mypage">
                             <option value="0">並び替え</option>
                             <option value="1">登録順（昇順）</option>
@@ -39,30 +63,29 @@ require('head.php');
                             <option value="3">開催日（昇順）</option>
                             <option value="4">開催日（降順）</option>
                         </select>
-                    </div>
+                    </div> -->
                     <div class="panel-list">
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/bread1.jpg" class="img -index">
-                                <p class="panel-pref kanto">神奈川県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    親子パン教室
-                                </p>
+                        <?php foreach ($myCreatedData['data'] as $key => $val) : ?>
+                            <div class="panel">
+                                <a href="index.php<?= '?pref=' . $val['pref'] ?>"><span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= prefNameCalled($val['pref']) ?></span></a>
+                                <a href="eventDetail.php<?php echo (!empty(appendGetParam())) ? appendGetParam() . '&e_id=' . $val['id'] : '?e_id=' . $val['id']; ?>">
+                                    <div class="panel-body">
+                                        <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
+                                        <p class="panel-title">
+                                            <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) {
+                                                                                                                                echo '〜' . date("n月j日", strtotime($val['date_end']));
+                                                                                                                            } elseif ($val['date_start'] !== $val['date_end'] && date("Y", strtotime($val['date_start'])) !== date("Y", strtotime($val['dte_end']))) {
+                                                                                                                                echo '〜' . date("Y年n月j日", strtotime($val['date_end']));
+                                                                                                                            } ?></span><br>
+                                            <?= $val['name'] ?>
+                                        </p>
+                                    </div>
+                                </a>
                             </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/coffee1.jpg" class="img -index" alt="">
-                                <p class="panel-pref tokai">愛知県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    コーヒー試飲会
-                                </p>
-                            </div>
-                        </a>
+                        <?php endforeach; ?>
                     </div>
                 </section>
+                <?php if ((int) $myCreatedData['total_page'] !== 1 || !empty($myCreatedData['data'])) pagination($currentPangeNum, $myCreatedData['total_page']); ?>
             </main>
         </div>
         <?php

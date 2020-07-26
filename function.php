@@ -457,6 +457,12 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
             $sql  .= ' AND format = ' . (int) $format_array[0];
         }
 
+        if (empty($cat) && (int) $area === 0 && (int) $pref === 0 && empty($start) && empty($end) && empty($format)) {
+            $sql .= ' WHERE is_deleted = 0';
+        } else {
+            $sql .= ' AND is_deleted = 0';
+        }
+
         if ($sort === 1) {
             // 新着順
             $sql .= ' ORDER BY id DESC';
@@ -475,12 +481,14 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
         debug('$sqlの中身→→→' . $sql);
         // クエリ実行
         $stmt = queryPost($dbh, $sql, $data);
-        // 総レコード数をカウント
-        $rst['total'] = $stmt->rowCount();
-        // 総ページ数を取得
-        $rst['total_page'] = ceil($rst['total'] / $span);
-        debug('$rstの中身→→→' . print_r($rst, true));
-        if (!$stmt) {
+
+        if (!empty($stmt)) {
+            // 総レコード数をカウント
+            $rst['total'] = $stmt->rowCount();
+            // 総ページ数を取得
+            $rst['total_page'] = ceil($rst['total'] / $span);
+            debug('$rstの中身→→→' . print_r($rst, true));
+        } elseif (!$stmt) {
             return false;
         }
 
@@ -525,6 +533,12 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
             $sql  .= ' AND format = ' . (int) $format_array[0];
         }
 
+        if (empty($cat) && (int) $area === 0 && (int) $pref === 0 && empty($start) && empty($end) && empty($format)) {
+            $sql .= ' WHERE is_deleted = 0';
+        } else {
+            $sql .= ' AND is_deleted = 0';
+        }
+
         if ($sort === 1) {
             // 新着順
             $sql .= ' ORDER BY id DESC';
@@ -557,6 +571,30 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
     }
 }
 
+// マイページ用の都道府県イベントデータの取得
+function getMyPrefEvent($pref)
+{
+    debug('***** ユーザーの都道府県イベント情報を取得 *****');
+    // 例外処理
+    try {
+        // DB接続
+        $dbh = dbConnect();
+        // SQL文作成
+        $sql = 'SELECT * FROM festival WHERE pref = :pref AND is_deleted = 0 ORDER by id DESC LIMIT 3';
+        $data = array(':pref' => $pref);
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+        if ($stmt) {
+            // クエリ結果の全データを返却
+            return $stmt->fetchAll();
+        } else {
+            return false;
+        }
+    } catch (Exception $e) {
+        error_log('!!!!! エラー発生 !!!!!' . $e->getMessage());
+    }
+}
+
 // カテゴリーデータの取得
 function getCategoryData()
 {
@@ -574,6 +612,7 @@ function getCategoryData()
         if ($stmt) {
             // クエリ結果の全データを返却
             return $stmt->fetchAll();
+        } else {
             return false;
         }
     } catch (Exception $e) {
@@ -634,6 +673,72 @@ function isLike($u_id, $e_id)
     }
 }
 
+// 自分の作成したイベント情報の取得
+function getMyEventData($u_id, $span = 3, $startnumber = 0)
+{
+    debug('***** 自分の作成したイベント情報を取得(getMyEventData実行) *****');
+    debug('***** ユーザーID→→→' . $u_id . ' *****');
+    // 例外処理
+    try {
+        // DB接続
+        $dbh = dbConnect();
+        // SQL文作成①(作成したイベントを全て取得)
+        $sql = 'SELECT id FROM festival WHERE u_id = :u_id AND is_deleted = 0 ORDER by id DESC';
+        $data = array(':u_id' => $u_id);
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+        if ($stmt) {
+            // 総レコード数をカウント
+            $rst['total'] = $stmt->rowCount();
+            // 総ページ数を取得(切り上げ)
+            $rst['total_page'] = ceil($rst['total'] / $span);
+        } elseif (!$stmt) {
+            return false;
+        }
+
+        // SQL文作成②(１画面に表示するページング用)
+        $sql = 'SELECT * FROM festival WHERE u_id = :u_id AND is_deleted = 0 ORDER by id DESC LIMIT ' . $span . ' OFFSET ' . $startnumber;
+        $data = array(':u_id' => $u_id);
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if ($stmt) {
+            // クエリ結果のデータを全レコード返却
+            $rst['data'] = $stmt->fetchAll();
+            return $rst;
+        } else {
+            return false;
+        }
+    } catch (Exception $e) {
+        error_log('!!!!! エラー発生 ' . $e->getMessage() . ' !!!!!');
+    }
+}
+
+// 自分のお気に入り情報を取得
+function getMyLike($u_id)
+{
+    debug('***** 自分のお気に入り情報を取得(getMyLike実行) *****');
+    debug('***** 自分のID→→→ ' . $u_id . ' *****');
+    // 例外処理
+    try {
+        // DB接続
+        $dbh = dbConnect();
+        // SQL文作成
+        $sql = 'SELECT * FROM favo AS fa LEFT JOIN festival AS fe ON fa.f_id = fe.id WHERE fa.u_id = :u_id AND fe.is_deleted = 0 ORDER by id DESC LIMIT 3';
+        $data = array(':u_id' => $u_id);
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if ($stmt) {
+            // クエリ結果を全て返却
+            return $stmt->fetchAll();
+        } else {
+            return false;
+        }
+    } catch (Exception $e) {
+        error_log('!!!!! エラー発生 ' . $e->getMessage() . ' !!!!!');
+    }
+}
 
 //================================
 // メール送信

@@ -949,6 +949,7 @@ body {
 }
 
 .mypage-title {
+  border-radius: 10px;
   font-size: 1.8rem;
   height: 40px;
   letter-spacing: 0.03em;
@@ -995,13 +996,17 @@ body {
   background: #36c;
 }
 
+.mypage-title-jump.-created {
+  background: #f63;
+}
+
 .mypage-title-jump.-favo {
   background: #c36;
 }
 
 .mypage-number-display {
   font-size: 1.4rem;
-  padding-right: 10px;
+  padding-right: 15px;
   position: absolute;
   top: 50%;
   right: 0;
@@ -1325,6 +1330,11 @@ body {
 /* display非表示 */
 .no-display {
   display: none;
+}
+
+/* ソートのセレクト */
+.select.-mypage {
+  border-radius: 5px;
 }
 
 /*--------------------------------

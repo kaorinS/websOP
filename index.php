@@ -31,8 +31,8 @@ $sort = (int) takeGetValue('sort', 1);
 $listSpan = 20;
 // 現在ページの表示レコードの先頭を表示(◯件/●●件中 の◯部分)
 $currentMinNum = (($currentPageNum - 1) * $listSpan);
-// DBから商品データを取得
-$dbEventData = getEventList($currentMinNum, $category, $area, $pref, $start, $end, $format, $sort);
+// DBからイベントデータを取得
+$dbEventData = getEventList($currentMinNum, $category, $area, $pref, $start, $end, $format, $sort, $listSpan);
 // debug('$dbEventData(商品データ）の中身→→→' . print_r($dbEventData, true));
 debug('イベント総数($dbEventData[total])→→→' . $dbEventData['total']);
 debug('ページ総数($dbEventData[total_page])→→→' . $dbEventData['total_page']) . 'ページ';
@@ -220,8 +220,8 @@ require('head.php');
         <div class="panel-list">
           <?php foreach ($dbEventData['data'] as $key => $val) : ?>
             <div class="panel">
-              <a href="#">
-                <span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= areaNameCalled($val['area']) ?></span>
+              <a href="index.php<?= '?pref=' . $val['pref'] ?>">
+                <span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= prefNameCalled($val['pref']) ?></span>
               </a>
               <a href="eventDetail.php<?php echo (!empty(appendGetParam())) ? appendGetParam() . '&e_id=' . $val['id'] : '?e_id=' . $val['id']; ?>">
                 <div class="panel-body">

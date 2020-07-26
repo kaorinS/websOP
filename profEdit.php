@@ -159,37 +159,37 @@ require('head.php');
                                         </optgroup>
                                         <optgroup label="東北">
                                             <?php for ($i = 2; $i <= 7; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="関東">
                                             <?php for ($i = 8; $i <= 14; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="中部">
                                             <?php for ($i = 15; $i <= 23; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="近畿">
                                             <?php for ($i = 24; $i <= 30; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="中国">
                                             <?php for ($i = 31; $i <= 35; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="四国">
                                             <?php for ($i = 36; $i <= 39; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                         <optgroup label="九州・沖縄">
                                             <?php for ($i = 40; $i <= 47; $i++) : ?>
-                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i - 1) ?></option>
+                                                <option value="<?= $i ?>" <?php optionSelectedCall('pref', $i); ?>><?= prefNameCalled($i) ?></option>
                                             <?php endfor; ?>
                                         </optgroup>
                                     </select>
