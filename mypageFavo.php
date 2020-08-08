@@ -1,6 +1,34 @@
 <?php
 // 共通変数・関数を読み込む
 require('function.php');
+
+// デバッグ
+debug('**********************************************');
+debug('********* マイページ(お気に入りイベント) *********');
+debug('**********************************************');
+debugLogStart();
+
+// ログイン認証
+require('auth.php');
+
+// ================================
+// 画面処理
+// ================================
+// ユーザーIDを代入
+$u_id = $_SESSION['user_id'];
+// ユーザー情報を取得(サイドバー用)
+$u_info = getUser($u_id);
+// 現在何ページ目か取得(デフォは１)
+$currentPangeNum = takeGetValue('p', 1);
+// 1ページに表示するイベント数
+$span = 20;
+// 表示されるイベントの先頭(OFFSET後の数値)
+$startNumber = (($currentPangeNum - 1) * $span);
+// お気に入りデータ取得
+$myFavo = getMyLike($u_id, $span, $startNumber);
+// debug('$myFavoの中身→→→' . print_r($myFavo, true));
+// 自分が作成したイベント情報を取得(サイドバー用)
+$myCreatedData = getMyEventData($u_id);
 ?>
 <?php
 $title = 'マイページ　|　イベ探';
@@ -28,10 +56,10 @@ require('head.php');
                             お気に入り
                         </h2>
                         <div class="mypage-number-display">
-                            全4件中 4件
+                            全 <?= $myFavo['total'] ?> 件中 <?php echo (!empty($myFavo['data'])) ? $startNumber + 1 : 0; ?> <?php if (!empty($myFavo['data']) && !empty($myFavo['data'][1])) echo ' - ' . ($startNumber + count($myFavo['data'])); ?> 件
                         </div>
                     </div>
-                    <div class="selectbox -mypage">
+                    <!-- <div class="selectbox -mypage">
                         <select name="sort" id="" class="select -mypage">
                             <option value="0">並び替え</option>
                             <option value="1">登録順（昇順）</option>
@@ -39,48 +67,11 @@ require('head.php');
                             <option value="3">開催日（昇順）</option>
                             <option value="4">開催日（降順）</option>
                         </select>
-                    </div>
+                    </div> -->
                     <div class="panel-list">
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/pflower1.jpg" class="img -index" alt="">
-                                <p class="panel-pref kyusyu">鹿児島県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    プリザーブドフラワーレッスン
-                                </p>
-                            </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/yukata1.jpg" class="img -index" alt="">
-                                <p class="panel-pref kinki">滋賀県</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    浴衣着付けレッスン
-                                </p>
-                            </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/bread1.jpg" class="img -index" alt="">
-                                <p class="panel-pref kinki">京都府</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    親子パン教室
-                                </p>
-                            </div>
-                        </a>
-                        <a href="eventDetail.php" class="panel">
-                            <div class="panel-body">
-                                <img src="images/coffee1.jpg" class="img -index" alt="">
-                                <p class="panel-pref hokkaido">北海道</p>
-                                <p class="panel-title">
-                                    <span class="panel-date">2020年4月1日</span><br>
-                                    コーヒー試飲会
-                                </p>
-                            </div>
-                        </a>
+                        <?php foreach ($myCreatedData['data'] as $key => $val) {
+                            require('panel.php');
+                        } ?>
                     </div>
                 </section>
             </main>

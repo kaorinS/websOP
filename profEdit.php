@@ -15,8 +15,10 @@ require('auth.php');
 // 画面処理
 // ================================
 // ユーザー情報を取得
-$dbInfo = getUser($_SESSION['user_id']);
-debug('$dbInfo(DB情報)の中身→→→' . print_r($dbInfo, true));
+$dbInfo  = getUser($_SESSION['user_id']);
+debug('$dbInfo (DB情報)の中身→→→' . print_r($dbInfo, true));
+// サイドバー用変数
+$u_info = $dbInfo;
 
 // POST送信されてるか
 if (!empty($_POST)) {

@@ -412,6 +412,7 @@ function getEventData($u_id, $e_id)
 function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $format, $sort = 1, $span = 20)
 {
     debug('***** イベント情報を取得 *****');
+    debug('***** getEventList 開始 *****');
     // 例外処理
     try {
         // DBヘ接続
@@ -433,21 +434,21 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
         }
 
         if (!empty($start) && empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
-            $sql .= ' WHERE date_start >= ' . $start;
+            $sql .= ' WHERE date_start >= "' . $start . '"';
         } elseif (!empty($start) && empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
-            $sql .= ' AND date_start >= ' . $start;
+            $sql .= ' AND date_start >= "' . $start . '"';
         }
 
         if (!empty($start) && !empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
-            $sql .= ' WHERE date_start >= ' . $start . ' AND date_end <= ' . $end;
+            $sql .= ' WHERE date_start >= "' . $start . '" AND date_end <= "' . $end . '"';
         } elseif (!empty($start) && !empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
-            $sql .= ' AND date_start >= ' . $start . ' AND date_end <= ' . $end;
+            $sql .= ' AND date_start >= "' . $start . '" AND date_end <= "' . $end . '"';
         }
 
         if (empty($start) && !empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
-            $sql .= ' WHERE date_end <= ' . $end;
+            $sql .= ' WHERE date_end <= "' . $end . '"';
         } elseif (empty($start) && !empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
-            $sql .= ' AND date_end <= ' . $end;
+            $sql .= ' AND date_end <= "' . $end . '"';
         }
 
         $format_array = explode(",", $format);
@@ -463,16 +464,16 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
             $sql .= ' AND is_deleted = 0';
         }
 
-        if ($sort === 1) {
+        if ((int) $sort === 1) {
             // 新着順
             $sql .= ' ORDER BY id DESC';
-        } elseif ($sort === 2) {
+        } elseif ((int) $sort === 2) {
             // 登録順
             $sql .= ' ORDER BY id ASC';
-        } elseif ($sort === 3) {
+        } elseif ((int) $sort === 3) {
             // 開催日時順
             $sql .= ' ORDER BY date_start ASC';
-        } elseif ($sort === 4) {
+        } elseif ((int) $sort === 4) {
             // 終了日が近い順
             $sql .= ' ORDER BY date_end ASC';
         }
@@ -509,21 +510,21 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
         }
 
         if (!empty($start) && empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
-            $sql .= ' WHERE date_start >= ' . $start;
+            $sql .= ' WHERE date_start >= "' . $start . '"';
         } elseif (!empty($start) && empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
-            $sql .= ' AND date_start >= ' . $start;
+            $sql .= ' AND date_start >= "' . $start . '"';
         }
 
         if (!empty($start) && !empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
-            $sql .= ' WHERE date_start >= ' . $start . ' AND date_end <= ' . $end;
+            $sql .= ' WHERE date_start >= "' . $start . '" AND date_end <= "' . $end . '"';
         } elseif (!empty($start) && !empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
-            $sql .= ' AND date_start >= ' . $start . ' AND date_end <= ' . $end;
+            $sql .= ' AND date_start >= "' . $start . '" AND date_end <= "' . $end . '"';
         }
 
         if (empty($start) && !empty($end) && empty($cat) && (int) $area === 0 && (int) $pref === 0) {
-            $sql .= ' WHERE date_end <= ' . $end;
+            $sql .= ' WHERE date_end <= "' . $end . '"';
         } elseif (empty($start) && !empty($end) && (!empty($cat) || (int) $area !== 0 || (int) $pref !== 0)) {
-            $sql .= ' AND date_end <= ' . $end;
+            $sql .= ' AND date_end <= "' . $end . '"';
         }
 
         $format_array = explode(",", $format);
@@ -547,7 +548,7 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
             $sql .= ' ORDER BY id ASC';
         } elseif ($sort === 3) {
             // 開催日時順
-            $sql .= ' ORDER BY id DESC, date_start ASC';
+            $sql .= ' ORDER BY date_start ASC';
         } elseif ($sort === 4) {
             // 終了日が近い順
             $sql .= ' ORDER BY id DESC, date_end ASC';
@@ -682,7 +683,7 @@ function getMyEventData($u_id, $span = 3, $startnumber = 0)
     try {
         // DB接続
         $dbh = dbConnect();
-        // SQL文作成①(作成したイベントを全て取得)
+        // SQL文作成①(作成したイベントを全て取得し、ページング用の総ページ数を取得)
         $sql = 'SELECT id FROM festival WHERE u_id = :u_id AND is_deleted = 0 ORDER by id DESC';
         $data = array(':u_id' => $u_id);
         // クエリ実行
@@ -696,7 +697,7 @@ function getMyEventData($u_id, $span = 3, $startnumber = 0)
             return false;
         }
 
-        // SQL文作成②(１画面に表示するページング用)
+        // SQL文作成②(１画面に表示するイベント)
         $sql = 'SELECT * FROM festival WHERE u_id = :u_id AND is_deleted = 0 ORDER by id DESC LIMIT ' . $span . ' OFFSET ' . $startnumber;
         $data = array(':u_id' => $u_id);
         // クエリ実行
@@ -715,7 +716,7 @@ function getMyEventData($u_id, $span = 3, $startnumber = 0)
 }
 
 // 自分のお気に入り情報を取得
-function getMyLike($u_id)
+function getMyLike($u_id, $span = 3, $startnumber = 0)
 {
     debug('***** 自分のお気に入り情報を取得(getMyLike実行) *****');
     debug('***** 自分のID→→→ ' . $u_id . ' *****');
@@ -723,15 +724,31 @@ function getMyLike($u_id)
     try {
         // DB接続
         $dbh = dbConnect();
-        // SQL文作成
-        $sql = 'SELECT * FROM favo AS fa LEFT JOIN festival AS fe ON fa.f_id = fe.id WHERE fa.u_id = :u_id AND fe.is_deleted = 0 ORDER by id DESC LIMIT 3';
+        // SQL文作成①(お気に入りに登録したイベントを取得 & 総ページ数カウント)
+        $sql = 'SELECT * FROM favo AS fa LEFT JOIN festival AS fe ON fa.f_id = fe.id WHERE fa.u_id = :u_id AND fe.is_deleted = 0 ORDER by id DESC';
+        $data = array(':u_id' => $u_id);
+        // クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if ($stmt) {
+            // 総レコード数をカウント
+            $rst['total'] = $stmt->rowCount();
+            // 総ページ数を取得(切り上げ)
+            $rst['total_page'] = ceil($rst['total'] / $span);
+        } elseif (!$stmt) {
+            return false;
+        }
+
+        // SQL文作成②(１画面に表示するお気に入りイベント)
+        $sql = 'SELECT * FROM favo AS fa LEFT JOIN festival AS fe ON fa.f_id = fe.id WHERE fa.u_id = :u_id AND fe.is_deleted = 0 ORDER by id DESC LIMIT ' . $span . ' OFFSET ' . $startnumber;
         $data = array(':u_id' => $u_id);
         // クエリ実行
         $stmt = queryPost($dbh, $sql, $data);
 
         if ($stmt) {
             // クエリ結果を全て返却
-            return $stmt->fetchAll();
+            $rst['data'] = $stmt->fetchAll();
+            return $rst;
         } else {
             return false;
         }
@@ -820,16 +837,16 @@ function getFormData($str, $flg = false)
 
     global $dbInfo;
     global $err_msg;
-    // ユーザー情報があるか
+    // DB情報があるか
     if (!empty($dbInfo)) {
         // フォームにエラーがあるか
         if (!empty($err_msg[$str])) {
             // $_POSTにデータがあるか
             if (isset($method[$str])) {
-                // ユーザー情報「有」、フォームエラー「有」、POSTにデータ「有」
+                // DB情報「有」、フォームエラー「有」、POSTにデータ「有」
                 return sanitize($method[$str]);
             } else {
-                // ユーザー情報「有」、フォームエラー「有」、POSTにデータ「無」
+                // DB情報「有」、フォームエラー「有」、POSTにデータ「無」
                 return sanitize($dbInfo[$str]);
             }
         } else {
@@ -844,7 +861,7 @@ function getFormData($str, $flg = false)
     } else {
         // POST送信の有無
         if (!empty($method[$str])) {
-            // ユーザー情報「無」、POSTデータ「有」
+            // DB情報「無」、POSTデータ「有」
             return sanitize($method[$str]);
         }
     }
@@ -889,7 +906,7 @@ function makeRandKey($length = 8)
 // 画像処理
 function uploadImg($file, $key)
 {
-    debug('***** 画像アップロード処理開始 *****');
+    debug('***** 画像アップロード(uploadimg) 処理開始 *****');
     debug('FILE情報→→→' . print_r($file, true));
 
     if (isset($file['error']) && is_int($file['error'])) {
@@ -1158,7 +1175,7 @@ function getEventOne($e_id)
         // DB接続
         $dbh = dbConnect();
         // SQL文作成
-        $sql = 'SELECT f.id, f.name, f.format, f.date_start, f.date_end, f.time_start, f.time_end, f.area, f.pref, f.place, f.addr, f.target_age, f.target_other, f.fee, f.pay, f.capacity, f.people, f.comment, f.contact, f.pic1, f.pic2, f.pic3, f.c_id, c.name AS category FROM festival AS f LEFT JOIN category as c ON f.c_id = c.id WHERE f.id = :e_id AND f.is_deleted = 0';
+        $sql = 'SELECT f.id, f.u_id, f.name, f.format, f.date_start, f.date_end, f.time_start, f.time_end, f.area, f.pref, f.place, f.addr, f.target_age, f.target_other, f.fee, f.pay, f.capacity, f.people, f.comment, f.contact, f.pic1, f.pic2, f.pic3, f.c_id, c.name AS category FROM festival AS f LEFT JOIN category as c ON f.c_id = c.id WHERE f.id = :e_id AND f.is_deleted = 0';
         $data = array(':e_id' => $e_id);
         // クエリ作成
         $stmt = queryPost($dbh, $sql, $data);
@@ -1196,4 +1213,14 @@ function callDayOfWeek($date)
 function callTime($time)
 {
     return date('H:i', strtotime($time));
+}
+
+// イベント登録・編集の入力保持
+function callRegistName($dbInfo, $info, $name)
+{
+    if (!empty($dbInfo)) {
+        echo getFormData($info);
+    } else {
+        echo getFormData($name);
+    }
 }

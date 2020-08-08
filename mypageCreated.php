@@ -16,6 +16,8 @@ require('auth.php');
 // ================================
 // ユーザーIDを代入
 $u_id = $_SESSION['user_id'];
+// ユーザー情報を取得(サイドバー用)
+$u_info = getUser($u_id);
 // 現在何ページ目か取得(デフォは１)
 $currentPangeNum = takeGetValue('p', 1);
 // 1ページに表示するイベント数
@@ -24,7 +26,7 @@ $span = 20;
 $startNumber = (($currentPangeNum - 1) * $span);
 // 作成したイベント情報を取得
 $myCreatedData = getMyEventData($u_id, $span, $startNumber);
-debug('$myCreatedDataの中身→→→' . print_r($myCreatedData, true));
+// debug('$myCreatedDataの中身→→→' . print_r($myCreatedData, true));
 ?>
 <?php
 $title = '作成したイベント　|　イベ探';
@@ -65,24 +67,9 @@ require('head.php');
                         </select>
                     </div> -->
                     <div class="panel-list">
-                        <?php foreach ($myCreatedData['data'] as $key => $val) : ?>
-                            <div class="panel">
-                                <a href="index.php<?= '?pref=' . $val['pref'] ?>"><span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= prefNameCalled($val['pref']) ?></span></a>
-                                <a href="eventDetail.php<?php echo (!empty(appendGetParam())) ? appendGetParam() . '&e_id=' . $val['id'] : '?e_id=' . $val['id']; ?>">
-                                    <div class="panel-body">
-                                        <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
-                                        <p class="panel-title">
-                                            <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) {
-                                                                                                                                echo '〜' . date("n月j日", strtotime($val['date_end']));
-                                                                                                                            } elseif ($val['date_start'] !== $val['date_end'] && date("Y", strtotime($val['date_start'])) !== date("Y", strtotime($val['dte_end']))) {
-                                                                                                                                echo '〜' . date("Y年n月j日", strtotime($val['date_end']));
-                                                                                                                            } ?></span><br>
-                                            <?= $val['name'] ?>
-                                        </p>
-                                    </div>
-                                </a>
-                            </div>
-                        <?php endforeach; ?>
+                        <?php foreach ($myCreatedData['data'] as $key => $val) {
+                            require('panel.php');
+                        } ?>
                     </div>
                 </section>
                 <?php if ((int) $myCreatedData['total_page'] !== 1 || !empty($myCreatedData['data'])) pagination($currentPangeNum, $myCreatedData['total_page']); ?>

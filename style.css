@@ -511,6 +511,10 @@ a {
   width: 60px;
 }
 
+.sidebar-submit:hover {
+  cursor: pointer;
+}
+
 /* 画像 */
 .img.-mypage-profile-img {
   width: 100%;
@@ -1018,6 +1022,11 @@ body {
   width: 150px;
 }
 
+.no-favo-msg {
+  margin-left: 15px;
+  margin-top: 29px;
+}
+
 /* mypage-edit
 --------------------------------*/
 .mypage-edit-title {
@@ -1340,9 +1349,47 @@ body {
 /*--------------------------------
   eventDetail
 --------------------------------*/
+.display-header {
+  overflow: hidden;
+}
 .display-category {
+  float: left;
   font-size: 1.4rem;
   line-height: 2;
+}
+
+.display-edit {
+  color: #fff;
+  float: right;
+  overflow: hidden;
+}
+
+.display-event {
+  border-width: 4px;
+  border-style: solid;
+  border-radius: 10px;
+  float: left;
+  font-size: 1.8rem;
+  padding: 5px 30px;
+}
+
+.display-event:not(:last-child) {
+  margin-right: 30px;
+}
+
+.display-event.event-edit {
+  background: #fc0;
+  border-color: #fa3;
+}
+
+.display-event.event-delete {
+  background: #f69;
+  border-color: #f36;
+}
+
+.icn-edit {
+  color: #fff;
+  padding-right: 1rem;
 }
 
 .span-pref {

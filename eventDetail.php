@@ -17,6 +17,8 @@ debug('$_GETの中身→→→' . print_r($_GET, true));
 $e_id = takeGetValue('e_id');
 // DBからイベントデータを取得
 $viewData = getEventOne($e_id);
+// ユーザーIDを取得
+$u_id = $_SESSION['user_id'];
 
 // ***** 処理 *****
 // イベントデータの有無を確認
@@ -42,9 +44,21 @@ require('head.php');
         ?>
         <!-- メインコンテンツ  -->
         <div class="main-container site-width">
-            <div class="display-category">
-                <a href="index.php" class="a a-under">イベ探 TOP</a> > <a href="index.php?category=<?= sanitize($viewData['c_id']) ?>" class="a a-under"><?= sanitize($viewData['category']) ?></a><br>
-                <a href="index.php?area=<?= sanitize($viewData['area']) ?>" class="a a-under"><?= sanitize(areaNameCalled($viewData['area'])) ?></a> > <a href="index.php?pref=<?= sanitize($viewData['pref']) ?>"><span class="span-pref <?= sanitize(areaClassCalled($viewData['area'])) ?>"><?= sanitize(prefNameCalled($viewData['pref'])) ?></span></a>
+            <div class="display-header">
+                <div class="display-category">
+                    <a href="index.php" class="a a-under">イベ探 TOP</a> > <a href="index.php?category=<?= sanitize($viewData['c_id']) ?>" class="a a-under"><?= sanitize($viewData['category']) ?></a><br>
+                    <a href="index.php?area=<?= sanitize($viewData['area']) ?>" class="a a-under"><?= sanitize(areaNameCalled($viewData['area'])) ?></a> > <a href="index.php?pref=<?= sanitize($viewData['pref']) ?>"><span class="span-pref <?= sanitize(areaClassCalled($viewData['area'])) ?>"><?= sanitize(prefNameCalled($viewData['pref'])) ?></span></a>
+                </div>
+                <?php if ((int) $u_id === (int) $viewData['u_id']) : ?>
+                    <div class="display-edit">
+                        <a href="registEvent.php?e_id=<?= $viewData['id'] ?>" class="display-event event-edit">
+                            <i class="fas fa-edit icn-edit"></i>編集する
+                        </a>
+                        <div class="display-event event-delete">
+                            <i class="fas fa-trash-alt icn-edit"></i>削除する
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
             <main class="main eventDetail-main">
                 <button type="button" id="js-like" class="add-like js-click-like <?php if (isLike($_SESSION['user_id'], $viewData['id'])) echo 'active'; ?>" data-eventid="<?= sanitize($viewData['id']) ?>"><i class="fas fa-heart icn-like"></i><span class="btn-text">お気に入りに追加</span></button>
@@ -57,7 +71,7 @@ require('head.php');
                             <div class="detail-header-box-icon">
                                 <span class="span-detail-header-open">開催期間</span>
                             </div>
-                            <span class="span-detail-header-text"><?= sanitize(date("Y年n月j日", strtotime($viewData['date_start']))) . callDayOfWeek($viewData['date_start']) ?><?php if ($viewData['date_start'] !== $viewData['date_end']) echo ' 〜 ' . $viewData['date_end'] . callDayOfWeek(($viewData['date_end']));  ?></span>
+                            <span class="span-detail-header-text"><?= sanitize(date("Y年n月j日", strtotime($viewData['date_start']))) . callDayOfWeek($viewData['date_start']) ?><?php if ($viewData['date_start'] !== $viewData['date_end']) echo ' 〜 ' . sanitize(date("Y年n月j日", strtotime($viewData['date_end']))) . callDayOfWeek(($viewData['date_end']));  ?></span>
                         </div>
                         <div class="detail-header-box-period">
                             <div class="detail-header-box-icon">

@@ -4,10 +4,10 @@
             <a href="mypage.php" class="a-group-user">
                 <div class="group-user-profile">
                     <div class="group-user-profile-media">
-                        <img src="images/hedgehog.jpg" class="img -mypage-profile-img">
+                        <img src="<?php echo (!empty($u_info['pic'])) ? $u_info['pic'] : 'images/noimage.png'; ?>" class="img -mypage-profile-img">
                     </div>
                     <div class="group-user-profile-body">
-                        <p class="p-group-user-profile -username">名前</p>
+                        <p class="p-group-user-profile -username"><?= sanitize($u_info['username']) ?></p>
                         <p class="p-group-user-profile -label">マイページTOP</p>
                     </div>
                 </div>
@@ -21,7 +21,7 @@
         </div>
         <div class="side-group-mypage group-fes">
             <ul class="ul ul-mypage-side">
-                <?php if (!empty($myEventData)) : ?>
+                <?php if (!empty($myCreatedData['data'])) : ?>
                     <li class="li li-mypage-side">
                         <a href="mypageCreated.php" class="a-side-group-mypage <?php addIsActive($pageName, 'created'); ?>">作成したイベント</a></li>
                 <?php endif; ?>

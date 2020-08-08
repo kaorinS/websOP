@@ -20,17 +20,20 @@ require('auth.php');
 $u_id = $_SESSION['user_id'];
 // ユーザー情報を取得
 $u_info = getUser($u_id);
+// debug('$u_info' . print_r($u_info, true));
 // 都道府県情報があった場合、代入する
 $u_pref = (!empty($u_info['pref'])) ? $u_info['pref'] : '';
 // 都道府県情報があった場合、イベントを取得
 $prefEventData = getMyPrefEvent($u_pref);
-debug('$prefEventDataの中身→→→' . print_r($prefEventData, true));
+// debug('$prefEventDataの中身→→→' . print_r($prefEventData, true));
 // 自分が作成したイベント情報を取得
-$myCreated = getMyEventData($u_id);
-$myEventData = $myCreated['data'];
-debug('$myEventData' . print_r($myEventData, true));
+$myCreatedData = getMyEventData($u_id);
+$myEventData = $myCreatedData['data'];
+debug('$myCreatedDataの中身→→→' . print_r($myCreatedData, true));
+// debug('$myEventData' . print_r($myEventData, true));
 // お気に入りデータを取得
-$myFavoData = getMyLike($u_id);
+$myFavo = getMyLike($u_id);
+$myFavoData = $myFavo['data'];
 
 ?>
 <?php
@@ -72,26 +75,9 @@ require('head.php');
                         </div>
                         <?php if (!empty($prefEventData)) : ?>
                             <div class="panel-list">
-                                <?php foreach ($prefEventData as $key => $val) : ?>
-                                    <div class="panel">
-                                        <a href="index.php<?= '?pref=' . $val['pref'] ?>">
-                                            <span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= prefNameCalled($val['pref']) ?></span>
-                                        </a>
-                                        <a href="eventDetail.php<?= "?e_id=" . $val['id'] ?>">
-                                            <div class="panel-body">
-                                                <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
-                                                <p class="panel-title">
-                                                    <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) {
-                                                                                                                                        echo '〜' . date("n月j日", strtotime($val['date_end']));
-                                                                                                                                    } elseif ($val['date_start'] !== $val['date_end'] && date("Y", strtotime($val['date_start'])) !== date("Y", strtotime($val['dte_end']))) {
-                                                                                                                                        echo '〜' . date("Y年n月j日", strtotime($val['date_end']));
-                                                                                                                                    } ?></span><br>
-                                                    <?= $val['name'] ?>
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </div>
-                                <?php endforeach; ?>
+                                <?php foreach ($prefEventData as $key => $val) {
+                                    require('panel.php');
+                                } ?>
                             </div>
                         <?php endif; ?>
                     </section>
@@ -110,26 +96,9 @@ require('head.php');
                             <?php endif; ?>
                         </div>
                         <div class="panel-list">
-                            <?php foreach ($myEventData as $key => $val) : ?>
-                                <div class="panel">
-                                    <a href="index.php<?= '?pref=' . $val['pref'] ?>">
-                                        <span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= prefNameCalled($val['pref']) ?></span>
-                                    </a>
-                                    <a href="eventDetail.php<?= "?e_id=" . $val['id'] ?>">
-                                        <div class="panel-body">
-                                            <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
-                                            <p class="panel-title">
-                                                <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) {
-                                                                                                                                    echo '〜' . date("n月j日", strtotime($val['date_end']));
-                                                                                                                                } elseif ($val['date_start'] !== $val['date_end'] && date("Y", strtotime($val['date_start'])) !== date("Y", strtotime($val['dte_end']))) {
-                                                                                                                                    echo '〜' . date("Y年n月j日", strtotime($val['date_end']));
-                                                                                                                                } ?></span><br>
-                                                <?= $val['name'] ?>
-                                            </p>
-                                        </div>
-                                    </a>
-                                </div>
-                            <?php endforeach; ?>
+                            <?php foreach ($myEventData as $key => $val) {
+                                require('panel.php');
+                            } ?>
                         </div>
                     </section>
                 <?php endif; ?>
@@ -147,26 +116,9 @@ require('head.php');
                     </div>
                     <div class="panel-list">
                         <?php if (!empty($myFavoData)) : ?>
-                            <?php foreach ($myFavoData as $key => $val) : ?>
-                                <div class="panel">
-                                    <a href="index.php<?= '?pref=' . $val['pref'] ?>">
-                                        <span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= prefNameCalled($val['pref']) ?></span>
-                                    </a>
-                                    <a href="eventDetail.php<?= "?e_id=" . $val['id'] ?>">
-                                        <div class="panel-body">
-                                            <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
-                                            <p class="panel-title">
-                                                <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) {
-                                                                                                                                    echo '〜' . date("n月j日", strtotime($val['date_end']));
-                                                                                                                                } elseif ($val['date_start'] !== $val['date_end'] && date("Y", strtotime($val['date_start'])) !== date("Y", strtotime($val['dte_end']))) {
-                                                                                                                                    echo '〜' . date("Y年n月j日", strtotime($val['date_end']));
-                                                                                                                                } ?></span><br>
-                                                <?= $val['name'] ?>
-                                            </p>
-                                        </div>
-                                    </a>
-                                </div>
-                            <?php endforeach; ?>
+                            <?php foreach ($myFavoData as $key => $val) {
+                                require('panel.php');
+                            } ?>
                         <?php else : ?>
                             <div class="no-favo-msg">
                                 お気に入りに登録されたイベントがありません

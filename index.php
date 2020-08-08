@@ -21,8 +21,8 @@ $area = takeGetValue('area');
 // 都道府県
 $pref = takeGetValue('pref');
 // 日時
-$start = takeGetValue('date_starg');
-$end = takeGetValue('date_end');
+$start = takeGetValue('start');
+$end = takeGetValue('end');
 // 会場形式
 $format = (isset($_GET['format']) && is_array($_GET['format'])) ? implode(",", $_GET['format']) : '';
 // ソート
@@ -93,10 +93,10 @@ require('head.php');
                 <div class="selectbox -index">
                   <select id="js-area-select" class="select side-border" name="area" onclick="areaChange(this.value);">
                     <option value="0" <?php if (getFormData('area', true) === 0) echo 'selected'; ?>>未選択</option>
-                    <option value="1" <?php if ((int) getFormData('area', true) === 1) echo 'selected'; ?>>北海道・東北</option>
-                    <option value="2" <?php if ((int) getFormData('area', true) === 2) echo 'selected'; ?>>甲信越・北陸</option>
+                    <option value="1" <?php if ((int) getFormData('area', true) === 1) echo 'selected'; ?>>北海道</option>
+                    <option value="2" <?php if ((int) getFormData('area', true) === 2) echo 'selected'; ?>>東北</option>
                     <option value="3" <?php if ((int) getFormData('area', true) === 3) echo 'selected'; ?>>関東</option>
-                    <option value="4" <?php if ((int) getFormData('area', true) === 4) echo 'selected'; ?>>東海</option>
+                    <option value="4" <?php if ((int) getFormData('area', true) === 4) echo 'selected'; ?>>中部</option>
                     <option value="5" <?php if ((int) getFormData('area', true) === 5) echo 'selected'; ?>>近畿</option>
                     <option value="6" <?php if ((int) getFormData('area', true) === 6) echo 'selected'; ?>>中国</option>
                     <option value="7" <?php if ((int) getFormData('area', true) === 7) echo 'selected'; ?>>四国</option>
@@ -218,26 +218,9 @@ require('head.php');
         </div>
         <!-- イベント一覧 -->
         <div class="panel-list">
-          <?php foreach ($dbEventData['data'] as $key => $val) : ?>
-            <div class="panel">
-              <a href="index.php<?= '?pref=' . $val['pref'] ?>">
-                <span class="panel-pref <?= areaClassCalled($val['area']) ?>"><?= prefNameCalled($val['pref']) ?></span>
-              </a>
-              <a href="eventDetail.php<?php echo (!empty(appendGetParam())) ? appendGetParam() . '&e_id=' . $val['id'] : '?e_id=' . $val['id']; ?>">
-                <div class="panel-body">
-                  <img src="<?= sanitize($val['pic1']) ?>" class="img -index">
-                  <p class="panel-title">
-                    <span class="panel-date"><?= date("Y年n月j日", strtotime($val['date_start'])) ?><?php if ($val['date_start'] !== $val['date_end']) {
-                                                                                                    echo '〜' . date("n月j日", strtotime($val['date_end']));
-                                                                                                  } elseif ($val['date_start'] !== $val['date_end'] && date("Y", strtotime($val['date_start'])) !== date("Y", strtotime($val['dte_end']))) {
-                                                                                                    echo '〜' . date("Y年n月j日", strtotime($val['date_end']));
-                                                                                                  } ?></span><br>
-                    <?= $val['name'] ?>
-                  </p>
-                </div>
-              </a>
-            </div>
-          <?php endforeach; ?>
+          <?php foreach ($dbEventData['data'] as $key => $val) {
+            require('panel.php');
+          } ?>
         </div>
         <?php pagination($currentPageNum, $dbEventData['total_page']); ?>
       </main>
