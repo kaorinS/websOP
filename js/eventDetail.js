@@ -93,3 +93,16 @@ function btnText() {
 }
 // 読み込み時のチェック
 btnText();
+
+// ***** イベント削除の確認メッセージ *****
+function check() {
+  if (window.confirm("本当にイベントを削除してもよろしいですか？")) {
+    //確認ダイアログの表示
+    // 「OK」の時は送信を実行する
+    return true;
+  } else {
+    window.alert("キャンセルされました"); // 警告ダイアログの表示
+    // 送信の中止
+    return false;
+  }
+}

@@ -1,4 +1,5 @@
 <?php
+// 共通変数・関数を読み込む
 require('function.php');
 
 // デバッグ
@@ -19,6 +20,8 @@ $e_id = takeGetValue('e_id');
 $viewData = getEventOne($e_id);
 // ユーザーIDを取得
 $u_id = $_SESSION['user_id'];
+debug('$u_idの中身→→→' . $u_id);
+debug('$viewData[u_id]の中身→→→' . $viewData['u_id']);
 
 // ***** 処理 *****
 // イベントデータの有無を確認
@@ -29,10 +32,47 @@ if (empty($viewData)) {
     header("Location:index.php");
     exit;
 }
-debug('$viewData(DBデータ)の中身→→→' . print_r($viewData, true));
+// debug('$viewData(DBデータ)の中身→→→' . print_r($viewData, true));
+
+// ================================
+// イベント消去の処理
+// ================================
+// POST送信されているか
+if (!empty($_POST)) {
+    debug('***** POST送信されました *****');
+    if ((int) $u_id === (int) $viewData['u_id']) {
+        // 例外処理
+        try {
+            // DB接続
+            $dbh = dbConnect();
+            // SQL文作成
+            $sql = 'UPDATE festival SET is_deleted = 1 WHERE u_id = :u_id AND id = :f_id';
+            $data = array(':u_id' => $u_id, ':f_id' => $viewData['id']);
+            // クエリ実行
+            $stmt = queryPost($dbh, $sql, $data);
+            // クエリ成功
+            if ($stmt) {
+                debug('***** イベント削除処理 クエリ成功 *****');
+                $_SESSION['msg_success'] = SUC05;
+                // マイページへ遷移
+                debug('***** マイページへ遷移 *****');
+                header("Location:mypage.php");
+                exit();
+            } else {
+                debug('!!!!! イベント削除処理 クエリ失敗 !!!!!');
+                $err_msg['common'] = MSG07;
+            }
+        } catch (Exception $e) {
+            error_log('!!!!! エラー発生 !!!!!' . $e->getMessage());
+            $err_msg['common'] = MSG07;
+        }
+    } else {
+        debug('!!!!! 作成者と接続者が異なります !!!!!');
+    }
+}
 ?>
 <?php
-$title = 'イベント詳細 | イベ探';
+$title = $viewData['name'] . ' | イベ探';
 require('head.php');
 ?>
 
@@ -44,6 +84,11 @@ require('head.php');
         ?>
         <!-- メインコンテンツ  -->
         <div class="main-container site-width">
+            <div class="area-msg">
+                <?php
+                errorMsgCall('common');
+                ?>
+            </div>
             <div class="display-header">
                 <div class="display-category">
                     <a href="index.php" class="a a-under">イベ探 TOP</a> > <a href="index.php?category=<?= sanitize($viewData['c_id']) ?>" class="a a-under"><?= sanitize($viewData['category']) ?></a><br>
@@ -51,11 +96,13 @@ require('head.php');
                 </div>
                 <?php if ((int) $u_id === (int) $viewData['u_id']) : ?>
                     <div class="display-edit">
-                        <a href="registEvent.php?e_id=<?= $viewData['id'] ?>" class="display-event event-edit">
+                        <a href="registEvent.php?e_id=<?= $viewData['id'] ?>" class="display-event event-edit display-event-border">
                             <i class="fas fa-edit icn-edit"></i>編集する
                         </a>
-                        <div class="display-event event-delete">
-                            <i class="fas fa-trash-alt icn-edit"></i>削除する
+                        <div class="display-event">
+                            <form method="post" onSubmit="return check()">
+                                <input type="submit" value="&#xf2ed;  削除する" class="submit fas icn-edit -delete display-event-border event-delete" name="submit">
+                            </form>
                         </div>
                     </div>
                 <?php endif; ?>

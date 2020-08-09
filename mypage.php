@@ -91,7 +91,7 @@ require('head.php');
                             </h2>
                             <?php if (!empty($myEventData[2])) : ?>
                                 <div class="mypage-title-jump -created">
-                                    <a href="index.php" class="a-mypage-main -more">>> 一覧を見る</a>
+                                    <a href="mypageCreated.php" class="a-mypage-main -more">>> 一覧を見る</a>
                                 </div>
                             <?php endif; ?>
                         </div>
