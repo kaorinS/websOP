@@ -465,7 +465,7 @@ require('head.php');
                                 ?>
                             </div>
                             <label class="label block-regist -first">
-                                開催場所<span class="mypage-edit-caution">*必須</span><br>
+                                開催場所・会場<span class="mypage-edit-caution">*必須</span><br>
                                 <input type="text" class="input-text -mypage-edit -regist <?php classErrorCall('place'); ?>" name="place" value="<?php echo getFormData('place'); ?>">
                             </label>
                             <div class="area-msg">
