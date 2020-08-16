@@ -286,7 +286,7 @@ function validEndDate($date, $key)
 // 日付順序チェック
 function validDateOrder($start, $end, $key)
 {
-    if (strtotime($start) >= strtotime($end)) {
+    if (strtotime($start) > strtotime($end)) {
         global $err_msg;
         $err_msg[$key] = MSG17;
     }
@@ -552,7 +552,7 @@ function getEventList($currentMinNum = 1, $cat, $area, $pref, $start, $end, $for
             $sql .= ' ORDER BY date_start ASC';
         } elseif ($sort === 4) {
             // 終了日が近い順
-            $sql .= ' ORDER BY id DESC, date_end ASC';
+            $sql .= ' ORDER BY date_end ASC';
         }
 
         $sql .= ' LIMIT ' . $span . ' OFFSET ' . $currentMinNum;
@@ -967,28 +967,28 @@ function uploadImg($file, $key)
 // エリア判定
 function areaDecided($str)
 {
-    if ($str === 1) {
+    if ((int)$str === 1) {
         // 北海道
         return 1;
-    } elseif ($str >= 2 && $str <= 7) {
+    } elseif ((int)$str >= 2 && (int)$str <= 7) {
         // 東北
         return 2;
-    } elseif ($str >= 8 && $str <= 14) {
+    } elseif ((int)$str >= 8 && (int)$str <= 14) {
         // 関東
         return 3;
-    } elseif ($str >= 15 && $str <= 23) {
+    } elseif ((int)$str >= 15 && (int)$str <= 23) {
         // 中部
         return 4;
-    } elseif ($str >= 24 && $str <= 30) {
+    } elseif ((int)$str >= 24 && (int)$str <= 30) {
         // 近畿
         return 5;
-    } elseif ($str >= 31 && $str <= 35) {
+    } elseif ((int)$str >= 31 && (int)$str <= 35) {
         // 中国
         return 6;
-    } elseif ($str >= 36 && $str <= 39) {
+    } elseif ((int)$str >= 36 && (int)$str <= 39) {
         // 四国
         return 7;
-    } elseif ($str >= 40 && $str <= 47) {
+    } elseif ((int)$str >= 40 && (int)$str <= 47) {
         // 九州・沖縄
         return 8;
     }

@@ -29,7 +29,7 @@ $prefEventData = getMyPrefEvent($u_pref);
 // 自分が作成したイベント情報を取得
 $myCreatedData = getMyEventData($u_id);
 $myEventData = $myCreatedData['data'];
-debug('$myCreatedDataの中身→→→' . print_r($myCreatedData, true));
+// debug('$myCreatedDataの中身→→→' . print_r($myCreatedData, true));
 // debug('$myEventData' . print_r($myEventData, true));
 // お気に入りデータを取得
 $myFavo = getMyLike($u_id);
@@ -69,7 +69,7 @@ require('head.php');
                             </h2>
                             <?php if (!empty($prefEventData[2])) : ?>
                                 <div class="mypage-title-jump -area">
-                                    <a href="index.php" class="a-mypage-main -more">>> 一覧を見る</a>
+                                    <a href="index.php?pref=<?= $u_info['pref'] ?>" class="a-mypage-main -more">>> 一覧を見る</a>
                                 </div>
                             <?php endif; ?>
                         </div>

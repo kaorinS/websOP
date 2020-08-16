@@ -278,6 +278,7 @@ if (!empty($_POST)) {
     debug('$err_msgの中身→→→' . print_r($err_msg, true));
     if (empty($err_msg)) {
         $area = areaDecided($pref);
+        debug('$prefの中身→→→' . $pref);
         debug('$areaの中身→→→' . $area);
 
         // 例外処理
@@ -512,7 +513,7 @@ require('head.php');
                                 ?>
                             </div>
                             <div class="label block-regist">
-                                参加費・入場料など<span class="mypage-edit-caution">*必須</span><br>
+                                料金（参加費・入場料など）<span class="mypage-edit-caution">*必須</span><br>
                                 <label><input type="radio" class="radio" name="entry" value="1" onclick="payChange();" <?php if (!empty($entry) && $entry === 1 || !empty($dbInfo) && (int) $dbInfo['fee'] === 1) echo 'checked'; ?>><span class="regist-checkbox-font">無料</span></label>
                                 <label><input type="radio" id="js-radio-pay" class="radio" name="entry" value="2" onclick="payChange();" <?php if (!empty($entry) && $entry === 2 || !empty($dbInfo) && (int) $dbInfo['fee'] === 2) echo 'checked'; ?>><span class="regist-checkbox-font">有料</span></label>
                                 <textarea name="entry-fee" cols="50" rows="4" id="js-text-pay" class="textarea-regist <?php if (empty($entry) || $entry !== 2) echo 'no-display' ?> <?php classErrorCall('entry-fee'); ?>" placeholder="入力例：大人 1,000円&#13;&#10;　　　　中学生 800円"><?= callRegistName($dbInfo, 'pay', 'entry-fee') ?></textarea>

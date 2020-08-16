@@ -27,8 +27,8 @@ $end = takeGetValue('end');
 $format = (isset($_GET['format']) && is_array($_GET['format'])) ? implode(",", $_GET['format']) : '';
 // ソート
 $sort = (int) takeGetValue('sort', 1);
-// 表示件数(今回は20)
-$listSpan = 20;
+// 表示件数(今回は12)
+$listSpan = 12;
 // 現在ページの表示レコードの先頭を表示(◯件/●●件中 の◯部分)
 $currentMinNum = (($currentPageNum - 1) * $listSpan);
 // DBからイベントデータを取得

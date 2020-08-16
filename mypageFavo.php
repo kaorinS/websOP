@@ -21,7 +21,7 @@ $u_info = getUser($u_id);
 // 現在何ページ目か取得(デフォは１)
 $currentPangeNum = takeGetValue('p', 1);
 // 1ページに表示するイベント数
-$span = 20;
+$span = 12;
 // 表示されるイベントの先頭(OFFSET後の数値)
 $startNumber = (($currentPangeNum - 1) * $span);
 // お気に入りデータ取得

@@ -30,7 +30,6 @@ if (!empty($_POST)) {
     $pref = $_POST['pref'];
     $age = $_POST['age'];
     $email = $_POST['email'];
-    $pic = $_POST['pic'];
     // 画像をアップロードして、パスを格納
     $pic = (!empty($_FILES['pic']['name'])) ? uploadImg($_FILES['pic'], 'pic') : '';
     // 画像をPOSTしていないが、すでにDBに登録されてる場合、DBのパスを格納
@@ -142,7 +141,7 @@ require('head.php');
                             </div>
                             <label class="label img-drop -prof_edit">
                                 <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
-                                <input type="file" class="regist-input-file input-file" name="pic1">
+                                <input type="file" class="regist-input-file input-file" name="pic">
                                 <img src="<?php  ?>" class="prev-img -prof_edit <?php if (empty(getFormData('pic'))) echo "no-display"; ?>">
                                 ドラッグ＆ドロップ
                             </label>
