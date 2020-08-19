@@ -15,7 +15,7 @@ require('auth.php');
 // 画面処理
 // ================================
 // 自分が作成したイベント情報を取得(サイドバー用)
-$myCreatedData = getMyEventData($u_id);
+$myCreatedData = getMyEventData($_SESSION['user_id']);
 // ========= 画面表示用データ取得 =========
 // イベントIDがある場合、イベントID(GETデータ）を格納
 $e_id = (!empty($_GET['e_id'])) ? $_GET['e_id'] : '';
