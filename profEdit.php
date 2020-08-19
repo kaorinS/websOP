@@ -19,6 +19,8 @@ $dbInfo  = getUser($_SESSION['user_id']);
 debug('$dbInfo (DB情報)の中身→→→' . print_r($dbInfo, true));
 // サイドバー用変数
 $u_info = $dbInfo;
+// 自分が作成したイベント情報を取得(サイドバー用)
+$myCreatedData = getMyEventData($_SESSION['user_id']);
 
 // POST送信されてるか
 if (!empty($_POST)) {
@@ -142,7 +144,11 @@ require('head.php');
                             <label class="label img-drop -prof_edit">
                                 <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
                                 <input type="file" class="regist-input-file input-file" name="pic">
-                                <img src="<?php  ?>" class="prev-img -prof_edit <?php if (empty(getFormData('pic'))) echo "no-display"; ?>">
+                                <img src="<?php if (!empty($pic)) {
+                                                echo sanitize($pic);
+                                            } elseif (!empty($dbInfo['pic'])) {
+                                                echo sanitize($dbInfo['pic']);
+                                            } ?>" class="prev-img -prof_edit <?php if (empty(getFormData('pic'))) echo "no-display"; ?>">
                                 ドラッグ＆ドロップ
                             </label>
                             <label class="label label-mypage-edit">

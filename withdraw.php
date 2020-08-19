@@ -14,6 +14,13 @@ require('auth.php');
 // ================================
 // 画面処理
 // ================================
+// DBからユーザー情報を取得
+$u_info  = getUser($_SESSION['user_id']);
+debug('***** ユーザー情報を取得 *****');
+debug('$u_info の中身→→→' . print_r($u_info, true));
+// 自分が作成したイベント情報を取得(サイドバー用)
+$myCreatedData = getMyEventData($_SESSION['user_id']);
+
 // POST送信されているか
 if (!empty($_POST)) {
     debug('$_POSTの中身→→→' . print_r($_POST, true));

@@ -15,7 +15,7 @@ ini_set('date.timezone', 'Asia/Tokyo');
 // デバッグ
 // ================================
 // デバッグフラグ（開発中のみtrue)
-$debug_flg = true;
+$debug_flg = false;
 // デバッグログ関数
 function debug($str)
 {
